@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;600;700&family=Urbanist:wght@300;400;500;600;700&display=swap");
+
+* {
+	margin: 0;
+	padding: 0;
+	border: none;
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	line-height: 1.4;
+	font-family: var(--kt-body-font);
+	font-weight: 400;
+	font-size: 15px;
+	color: #2e3440;
+	background-color: var(--kt-background-body);
+}
+
+html,
+body {
+	height: 100%;
+	width: 100%;
+}
+
+a {
+	color: inherit;
+}
+
+ul {
+	list-style: none;
+}

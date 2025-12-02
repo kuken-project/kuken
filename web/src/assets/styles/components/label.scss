@@ -1,0 +1,31 @@
+.label {
+  font-family: var(--kt-headline-font);
+  color: var(--kt-content-neutral);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 21.75px;
+  letter-spacing: 0.285px;
+  text-transform: uppercase;
+  user-select: none;
+  margin-bottom: 0.2rem;
+
+  &:not(:first-child) {
+    margin-top: 16px;
+  }
+}
+
+.label--high {
+  color: var(--kt-content-neutral-high);
+}
+
+.label--onColor {
+  color: var(--kt-content-primary-oncolor);
+}
+
+.label--required::after {
+  content: "*";
+  position: relative;
+  display: inline-block;
+  color: var(--kt-content-negative);
+  font-size: 14px;
+}

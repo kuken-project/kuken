@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&display=swap");
+
+.cm-content {
+	font-family: "DM Mono", monospace;
+}
+
+.cm-gutters {
+	background-color: transparent !important;
+	color: var(--kt-content-neutral-low) !important;
+	border-right: none !important;
+
+	.cm-foldGutter span {
+		padding: 0 4px !important;
+		cursor: pointer !important;
+	}
+
+	.cm-activeLineGutter {
+		background-color: var(--kt-content-primary-overlay) !important;
+	}
+}
+
+.cm-lineNumbers {
+	user-select: none;
+}
+
+.cm-foldPlaceholder {
+	background-color: var(--kt-background-surface-high) !important;
+	border: 1px solid var(--kt-border-low) !important;
+	color: var(--kt-content-neutral-low) !important;
+	border-radius: 4px !important;
+	padding: 0 3px !important;
+	cursor: pointer !important;
+}
+
+.cm-activeLine {
+	background-color: var(--kt-background-surface-hover) !important;
+}
+
+.cm-lintPoint-error::after {
+	border-bottom-color: var(--kt-content-negative) !important;
+}
+
+.cm-tooltip {
+	background-color: transparent !important;
+	border: none !important;
+	border-radius: 8px;
+}
+
+.cm-diagnostic {
+	padding: 0.8rem 1.2rem !important;
+	border: 1px solid transparent;
+	border-radius: 8px;
+
+	&.cm-diagnostic-error {
+		background-color: #fff2f3 !important;
+		border: none;
+		box-shadow: 2px 2px 4px 1px rgb(0 0 0 / 12%);
+	}
+
+	.cm-diagnosticText {
+		font-family: var(--kt-body-font) !important;
+		font-weight: 400;
+		font-size: 14px;
+		color: var(--kt-content-neutral-high) !important;
+	}
+}
+
+.cm-lint-marker {
+	display: flex;
+	align-items: center;
+
+	&.cm-lint-marker-error:before {
+		content: "";
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		background-color: rgba(252, 92, 101, 1) !important;
+		border-radius: 50%;
+	}
+}

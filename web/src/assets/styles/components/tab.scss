@@ -1,0 +1,40 @@
+.tab-list {
+  position: relative;
+  top: -1px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2.4rem;
+  border-bottom: 1px solid var(--kt-border-medium);
+}
+
+.tab {
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0.8rem 0.4rem;
+  margin: 0 2.4rem;
+  color: var(--kt-content-neutral);
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 1px solid transparent;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  span {
+    position: relative;
+  }
+}
+
+.tab--active {
+  top: 1px;
+  padding-bottom: 0.9rem;
+  font-weight: 600;
+  color: var(--kt-content-neutral-high);
+  border-color: var(--kt-content-primary);
+
+  span {
+    top: -1px;
+  }
+}

@@ -1,0 +1,23 @@
+:root {
+	--kt-headline-font: "Urbanist", sans-serif;
+	--kt-body-font: -apple-system, BlinkMacSystemFont, "Lato", Helvetica, Arial, sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji";
+	--kt-border-medium: rgba(48, 55, 66, 0.1);
+	--kt-border-low: rgba(48, 55, 66, 0.05);
+}
+
+.dark-theme {
+	--kt-background-body: #252526;
+	--kt-background-surface: #1e1e1e;
+	--kt-background-surface-overlay: rgba(0, 0, 0, 0.1);
+	--kt-background-surface-hover: #161616;
+	--kt-background-surface-high: #2d2d30;
+	--kt-content-neutral: #b3b3b3;
+	--kt-content-neutral-low: #808080;
+	--kt-content-neutral-high: #fff;
+}
+
+hr {
+	border-top: 1px solid var(--kt-border-low);
+	margin: 3.2rem 0;
+}

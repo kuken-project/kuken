@@ -1,0 +1,9 @@
+.avatar {
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 4px 0 RGB(0 0 0 / 12%) inset;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--kt-background-surface-high);
+}

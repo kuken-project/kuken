@@ -1,0 +1,54 @@
+@function asset($base, $type, $path) {
+	@return url($base + $type + $path);
+}
+
+@function image($path, $base: $base-url) {
+	@return asset($base, "img/", $path);
+}
+
+@function font($path, $base: $base-url) {
+	@return asset($base, "fonts/", $path);
+}
+
+@function rgbaColor($color, $alpha: 1) {
+	@if ($color == "warning") {
+		@return rgba(254, 211, 48, $alpha);
+	} @else if ($color == "danger") {
+		@return rgba(235, 59, 90, $alpha);
+	} @else if ($color == "primary") {
+		@return rgba(75, 123, 236, $alpha);
+	}
+
+	@return "rgba(0, 0, 0, 1)";
+}
+
+$spaceamounts: (2, 5, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100);
+$sides: (all, x, y, top, bottom, left, right);
+
+@mixin spacer($prefix, $property) {
+	$property-prefix: #{str-slice($property, 0, 1)};
+
+	@each $space in $spaceamounts {
+		@each $side in $sides {
+			@if $side == "all" {
+				.#{$prefix}-#{$property-prefix}-#{$space} {
+					#{$property}: #{$space}px !important;
+				}
+			} @else if $side == "x" or $side == "y" {
+				.#{$prefix}-#{$property-prefix}#{$side}-#{$space} {
+					@if $side == "x" {
+						#{$property}-left: #{$space}px !important;
+						#{$property}-right: #{$space}px !important;
+					} @else {
+						#{$property}-top: #{$space}px !important;
+						#{$property}-bottom: #{$space}px !important;
+					}
+				}
+			} @else {
+				.#{$prefix}-#{$property-prefix}#{str-slice($side, 0, 1)}-#{$space} {
+					#{$property}-#{$side}: #{$space}px !important;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,77 @@
+.card {
+  border-radius: 8px;
+  padding: 2rem;
+  background-color: var(--kt-background-surface);
+  border: 1px solid var(--kt-border-medium);
+
+  &:not(:last-child) {
+    margin-bottom: 0.8rem;
+  }
+}
+
+.card--hoverable:hover {
+  cursor: pointer;
+  background-color: var(--kt-background-surface-hover);
+}
+
+.card--flat {
+  border-color: var(--kt-background-surface);
+}
+
+.card--onSurface {
+  background-color: var(--kt-background-surface-high);
+}
+
+.card--outlined {
+  background-color: transparent;
+}
+
+.card--reduced {
+  padding: 1.2rem;
+}
+
+.card--scrollable {
+  overflow-y: auto;
+  max-height: 540px;
+}
+
+.card__title {
+  font-weight: 600;
+}
+
+.card--selectable {
+  &[active="true"] .card--selectable__radio {
+      background-color: var(--kt-content-primary-hover);
+  }
+
+  .card--selectable__radio {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--kt-background-surface-high);
+    margin: 0 8px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .card--selectable__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 1.6rem;
+    flex-grow: 1;
+  }
+
+  .card--selectable__title {
+    font-weight: 500;
+    color: var(--kt-content-neutral-high);
+    font-size: 15px;
+  }
+
+  .card--selectable__description {
+    color: var(--kt-content-neutral-low);
+    font-size: 12px;
+  }
+}

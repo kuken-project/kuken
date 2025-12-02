@@ -1,0 +1,86 @@
+h1 {
+	font-family: var(--kt-headline-font);
+	font-weight: 300;
+	font-size: 86px;
+	letter-spacing: -1.5px;
+}
+
+h2 {
+	font-family: var(--kt-headline-font);
+	font-weight: 300;
+	font-size: 53px;
+	letter-spacing: -0.5px;
+}
+
+h3 {
+	font-family: var(--kt-headline-font);
+	font-weight: 400;
+	font-size: 43px;
+	letter-spacing: 0;
+}
+
+h4 {
+	font-family: var(--kt-headline-font);
+	font-weight: 600;
+	font-size: 30px;
+	letter-spacing: 0.25px;
+}
+
+h5 {
+	font-family: var(--kt-headline-font);
+	font-weight: 400;
+	font-size: 21px;
+	letter-spacing: 0;
+}
+
+h6 {
+	font-family: var(--kt-headline-font);
+	font-weight: 500;
+	font-size: 18px;
+	letter-spacing: 0.15px;
+}
+
+.text--body1 {
+	font-family: var(--kt-body-font);
+	font-weight: 400;
+	font-size: 16px;
+	letter-spacing: 0.5px;
+}
+
+.text--body2 {
+	font-family: var(--kt-body-font);
+	font-weight: 400;
+	font-size: 14px;
+	letter-spacing: 0;
+	color: var(--kt-content-neutral-low);
+	margin: 0 0 2rem;
+	user-select: none;
+}
+
+.text--caption {
+	font-family: var(--kt-body-font);
+	font-weight: 400;
+	font-size: 11px;
+	letter-spacing: 0.4px;
+}
+
+.text--overline {
+	font-family: var(--kt-body-font);
+	font-weight: 400;
+	font-size: 9px;
+	letter-spacing: 1.5px;
+}
+
+.text--subtitle1 {
+	font-family: var(--kt-headline-font);
+	font-weight: 400;
+	font-size: 14px;
+	letter-spacing: 0.15px;
+}
+
+.text--subtitle2 {
+	font-family: var(--kt-headline-font);
+	font-weight: 500;
+	font-size: 12px;
+	letter-spacing: 0.1px;
+}

@@ -1,0 +1,21 @@
+.stepper {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepper__step-list {
+  display: flex;
+  flex-direction: row;
+}
+
+.stepper__step {
+  flex-grow: 0;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    padding: 0 0.8rem;
+    height: 1px;
+    background-color: var(--kt-background-body);
+  }
+}

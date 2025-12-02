@@ -1,0 +1,11 @@
+$base-url: "/assets/" !default;
+
+$mq-sm: 320px;
+$mq-medium: 768px;
+$mq-large: 1024px;
+
+$breakpoints: (
+	"small": 320px,
+	"medium": 768px,
+	"large": 1024px
+) !default;
