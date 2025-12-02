@@ -109,6 +109,7 @@ function navigateToIndex() {
 <style lang="scss" module>
 h4 {
     margin-bottom: 0.8rem;
+    user-select: none;
 }
 
 form {
@@ -127,6 +128,7 @@ form {
     margin-top: 0.4rem;
     color: var(--kt-content-neutral);
     margin-bottom: 3.6rem;
+    user-select: none;
 }
 
 </style>
