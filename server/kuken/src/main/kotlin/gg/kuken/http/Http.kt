@@ -9,6 +9,9 @@ import io.ktor.server.cio.CIO
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.addShutdownHook
 import io.ktor.server.engine.embeddedServer
+import io.ktor.server.plugins.openapi.openAPI
+import io.ktor.server.plugins.swagger.swaggerUI
+import io.ktor.server.routing.routing
 import kotlinx.atomicfu.atomic
 import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
@@ -43,6 +46,11 @@ internal object Http : KoinComponent {
     }
 
     private fun Application.registerHttpModules() {
+        routing {
+            openAPI(path="openapi", swaggerFile = "openapi/generated.json")
+            swaggerUI(path = "swagger", swaggerFile = "openapi/generated.json")
+        }
+
         for (module in createHttpModules().sortedByDescending(HttpModule::priority)) {
             module.install(this)
 

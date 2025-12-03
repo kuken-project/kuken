@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlin.reflect.KClass
 
-public interface EventDispatcher : CoroutineScope {
+interface EventDispatcher : CoroutineScope {
 
-    public fun dispatch(event: Any)
+    fun dispatch(event: Any)
 
-    public fun <T : Any> listen(eventType: KClass<T>): Flow<T>
+    fun <T : Any> listen(eventType: KClass<T>): Flow<T>
 }
 
-public inline fun <reified T : Any> EventDispatcher.listen(): Flow<T> {
+inline fun <reified T : Any> EventDispatcher.listen(): Flow<T> {
     return listen(T::class)
 }
 

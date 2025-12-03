@@ -1,8 +1,11 @@
+import io.ktor.plugin.OpenApiPreview
+
 plugins {
     application
     alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.atomicfu)
+    alias(libs.plugins.ktor)
 }
 
 application {
@@ -36,5 +39,13 @@ tasks {
             attributes["Main-Class"] = application.mainClass.get()
             attributes["Implementation-Version"] = project.version
         }
+    }
+}
+
+ktor {
+    @OptIn(OpenApiPreview::class)
+    openApi {
+        title = "Kuken"
+        contact = "support@kuken.io"
     }
 }

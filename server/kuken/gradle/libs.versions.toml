@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.0"
+kotlin = "2.2.21"
 ktx-serialization = "1.9.0"
 ktx-coroutines = "1.10.2"
 ktx-atomicfu = "0.28.0"
@@ -44,6 +44,8 @@ ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor" }
 ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
 ktor-server-test = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor" }
+ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
 ktor-server-feature-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor" }
 ktor-server-feature-defaultHeaders = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
 ktor-server-feature-autoHeadResponse = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
@@ -86,7 +88,9 @@ ktor = ["ktor-server-core",
     "ktor-server-feature-contentNegotiation",
     "ktor-serialization-kotlinx-json",
     "ktor-server-auth",
-    "ktor-server-auth-jwt"
+    "ktor-server-auth-jwt",
+    "ktor-server-openapi",
+    "ktor-server-swagger",
 ]
 
 [plugins]
@@ -96,3 +100,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 shadowjar = { id = "com.gradleup.shadow", version.ref = "plugin-shadowjar" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "plugin-kotlinter" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktor = { id = "io.ktor.plugin", version = "3.3.3" }
