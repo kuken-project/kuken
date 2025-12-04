@@ -1,11 +1,11 @@
-package gg.kuken.http.modules.account.routes
+package gg.kuken.features.account.http.routes
 
 import io.ktor.server.resources.post
 import io.ktor.server.routing.Route
 import jakarta.validation.Validator
 import gg.kuken.features.account.AccountService
-import gg.kuken.http.modules.account.dto.RegisterRequest
-import gg.kuken.http.modules.account.dto.RegisterResponse
+import gg.kuken.features.account.http.dto.RegisterRequest
+import gg.kuken.features.account.http.dto.RegisterResponse
 import gg.kuken.http.util.receiveValidating
 import io.ktor.server.response.respond
 import org.koin.ktor.ext.inject

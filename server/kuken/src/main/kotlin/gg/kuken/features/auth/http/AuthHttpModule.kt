@@ -1,15 +1,15 @@
-package gg.kuken.http.modules.auth
+package gg.kuken.features.auth.http
 
 import com.auth0.jwt.interfaces.JWTVerifier
 import gg.kuken.KukenConfig
 import gg.kuken.features.auth.AuthService
 import gg.kuken.http.HttpError
 import gg.kuken.http.HttpModule
-import gg.kuken.http.modules.account.AccountKey
-import gg.kuken.http.modules.account.AccountPrincipal
-import gg.kuken.http.modules.auth.exception.InvalidAccessTokenException
-import gg.kuken.http.modules.auth.routes.login
-import gg.kuken.http.modules.auth.routes.verify
+import gg.kuken.features.account.http.AccountKey
+import gg.kuken.features.account.http.AccountPrincipal
+import gg.kuken.features.auth.http.exception.InvalidAccessTokenException
+import gg.kuken.features.auth.http.routes.login
+import gg.kuken.features.auth.http.routes.verify
 import gg.kuken.http.util.respondError
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline

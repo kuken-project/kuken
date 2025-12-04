@@ -1,4 +1,4 @@
-package gg.kuken.http.modules.auth.routes
+package gg.kuken.features.auth.http.routes
 
 import io.ktor.resources.Resource
 import kotlinx.serialization.Serializable

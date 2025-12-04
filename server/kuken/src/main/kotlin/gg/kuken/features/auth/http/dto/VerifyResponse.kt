@@ -1,27 +1,27 @@
 @file:OptIn(ExperimentalUuidApi::class)
 
-package gg.kuken.http.modules.account.dto
+package gg.kuken.features.auth.http.dto
 
+import gg.kuken.features.account.model.Account
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import gg.kuken.features.account.model.Account
 import kotlin.uuid.ExperimentalUuidApi
 
 @Serializable
-internal data class AccountResponse(
+data class VerifyResponse(
     @SerialName("accountId") val id: String,
-    @SerialName("displayName") val displayName: String?,
     @SerialName("email") val email: String,
     @SerialName("createdAt") val createdAt: Instant,
     @SerialName("updatedAt") val updatedAt: Instant,
+    @SerialName("lastLoggedInAt") val lastLoggedInAt: Instant?
 ) {
 
     constructor(account: Account) : this(
         id = account.id.toString(),
-        displayName = account.displayName,
         email = account.email,
         createdAt = account.createdAt,
-        updatedAt = account.updatedAt,
+        updatedAt = account.createdAt,
+        lastLoggedInAt = account.lastLoggedInAt
     )
 }

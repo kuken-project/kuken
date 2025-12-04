@@ -1,4 +1,4 @@
-package gg.kuken.http.modules.auth.dto
+package gg.kuken.features.auth.http.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

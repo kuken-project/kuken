@@ -1,10 +1,10 @@
-package gg.kuken.http.modules.auth.routes
+package gg.kuken.features.auth.http.routes
 
-import gg.kuken.http.modules.account.AccountPrincipal
+import gg.kuken.features.account.http.AccountPrincipal
+import gg.kuken.features.auth.http.dto.VerifyResponse
 import io.ktor.server.auth.principal
 import io.ktor.server.resources.get
 import io.ktor.server.routing.Route
-import gg.kuken.http.modules.auth.dto.VerifyResponse
 import io.ktor.server.response.respond
 
 fun Route.verify() {

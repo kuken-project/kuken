@@ -16,8 +16,8 @@ import gg.kuken.core.security.Hash
 import gg.kuken.features.account.AccountService
 import gg.kuken.features.account.model.Account
 import gg.kuken.features.auth.AuthService
-import gg.kuken.http.modules.account.exception.AccountNotFoundException
-import gg.kuken.http.modules.auth.exception.InvalidAccessTokenException
+import gg.kuken.features.account.http.exception.AccountNotFoundException
+import gg.kuken.features.auth.http.exception.InvalidAccessTokenException
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
 import kotlin.time.Duration

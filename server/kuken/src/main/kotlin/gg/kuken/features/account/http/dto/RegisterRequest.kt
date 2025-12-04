@@ -1,4 +1,4 @@
-package gg.kuken.http.modules.account.dto
+package gg.kuken.features.account.http.dto
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank

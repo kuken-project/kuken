@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalUuidApi::class)
 
-package gg.kuken.http.modules.account.dto
+package gg.kuken.features.account.http.dto
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable

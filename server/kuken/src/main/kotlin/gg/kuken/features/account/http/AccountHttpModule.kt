@@ -1,11 +1,11 @@
-package gg.kuken.http.modules.account
+package gg.kuken.features.account.http
 
+import gg.kuken.features.account.http.routes.listAccounts
+import gg.kuken.features.account.http.routes.register
 import gg.kuken.http.HttpModule
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.routing
-import gg.kuken.http.modules.account.routes.listAccounts
-import gg.kuken.http.modules.account.routes.register
 
 object AccountHttpModule : HttpModule() {
 

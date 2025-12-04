@@ -1,4 +1,4 @@
-package gg.kuken.http.modules.auth.dto
+package gg.kuken.features.auth.http.dto
 
 import jakarta.validation.constraints.NotBlank
 import kotlinx.serialization.SerialName

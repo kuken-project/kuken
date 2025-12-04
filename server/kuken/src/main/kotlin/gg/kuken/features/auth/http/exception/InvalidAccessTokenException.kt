@@ -1,4 +1,4 @@
-package gg.kuken.http.modules.auth.exception
+package gg.kuken.features.auth.http.exception
 
 import gg.kuken.http.HttpError
 import gg.kuken.http.exception.ResourceException

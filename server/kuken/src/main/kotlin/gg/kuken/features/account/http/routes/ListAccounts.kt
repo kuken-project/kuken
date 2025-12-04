@@ -1,9 +1,9 @@
-package gg.kuken.http.modules.account.routes
+package gg.kuken.features.account.http.routes
 
 import io.ktor.server.resources.get
 import io.ktor.server.routing.Route
 import gg.kuken.features.account.AccountService
-import gg.kuken.http.modules.account.dto.AccountResponse
+import gg.kuken.features.account.http.dto.AccountResponse
 import io.ktor.server.response.respond
 import org.koin.ktor.ext.inject
 
