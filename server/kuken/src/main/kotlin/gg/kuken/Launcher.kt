@@ -50,6 +50,7 @@ private fun loadConfig(): KukenConfig {
     val config = ConfigFactory.parseResources("kuken.local.conf")
         .withFallback(ConfigFactory.parseFile(File("kuken.conf"), parseOptions))
         .withFallback(ConfigFactory.parseResources("kuken.conf", parseOptions))
+        .resolve()
 
     return Hocon {}.decodeFromConfig(config)
 }
