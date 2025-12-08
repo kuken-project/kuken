@@ -10,6 +10,7 @@ services:
       - "8080:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/kuken/logs:/usr/kuken/logs"
     environment:
       DB_HOST: kuken_database
       DB_PASS: kuken
