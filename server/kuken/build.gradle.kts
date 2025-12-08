@@ -48,4 +48,6 @@ ktor {
         title = "Kuken"
         contact = "support@kuken.io"
     }
+
+    development = providers.environmentVariable("PRODUCTION").isPresent
 }

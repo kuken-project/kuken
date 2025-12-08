@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class KukenConfig(val http: HttpConfig, val db: DBConfig) {
 
-    val devMode: Boolean = true
+    val devMode: Boolean = System.getenv("PRODUCTION")?.toBoolean() ?: false
 
     @Serializable
     data class HttpConfig(
