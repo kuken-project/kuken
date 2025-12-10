@@ -1,102 +1,51 @@
 package gg.kuken
 
-import com.typesafe.config.ConfigFactory
-import com.typesafe.config.ConfigParseOptions
+import gg.kuken.core.CompositeEventDispatcher
 import gg.kuken.core.EventDispatcher
-import gg.kuken.core.EventDispatcherImpl
 import gg.kuken.core.security.BcryptHash
 import gg.kuken.core.security.Hash
 import gg.kuken.feature.account.AccountDI
 import gg.kuken.feature.auth.AuthDI
 import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.http.Http
+import gg.kuken.orchestrator.RedisEventDispatcher
+import gg.kuken.orchestrator.Orchestrator
+import io.lettuce.core.RedisClient
 import jakarta.validation.Validation
 import jakarta.validation.Validator
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.hocon.Hocon
-import kotlinx.serialization.hocon.decodeFromConfig
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.DatabaseConfig
-import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import java.io.File
-import java.sql.SQLException
-import kotlin.system.exitProcess
 
 internal fun main() {
-    val appConfig = loadConfig()
-    if (appConfig.devMode) { setupDevMode() }
+    val config = loadConfig()
+    if (config.devMode) {
+        setupDevMode()
+    }
 
-    val db = DatabaseFactory(appConfig).create()
-    configureDI(appConfig, db)
+    val database = DatabaseFactory(config).create()
+    val redis = setupRedis(config.redis)
+    configureDI(config, database, redis)
 
     runBlocking {
-        checkDatabaseConnection(
-            database = db,
-            appConfig = appConfig
-        )
-
-        Http.start()
+        checkDatabaseConnection(database)
+        Http(config).start()
     }
 }
 
-@OptIn(ExperimentalSerializationApi::class)
-private fun loadConfig(): KukenConfig {
-    val parseOptions = ConfigParseOptions.defaults().setAllowMissing(true)
-    val config = ConfigFactory.parseResources("kuken.local.conf")
-        .withFallback(ConfigFactory.parseFile(File("kuken.conf"), parseOptions))
-        .withFallback(ConfigFactory.parseResources("kuken.conf", parseOptions))
-        .resolve()
-
-    return Hocon {}.decodeFromConfig(config)
-}
-
-private fun setupDevMode() {
-    System.setProperty(
-        kotlinx.coroutines.DEBUG_PROPERTY_NAME,
-        kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON,
-    )
-}
-
-class DatabaseFactory(private val appConfig: KukenConfig) {
-
-
-    fun create(): Database = Database.connect(
-        url = "jdbc:postgresql://${appConfig.db.host}",
-        user = appConfig.db.user,
-        password = appConfig.db.password,
-        driver = "org.postgresql.Driver",
-        databaseConfig = DatabaseConfig {
-            useNestedTransactions = true
-            if (appConfig.devMode) {
-                sqlLogger = Slf4jSqlDebugLogger
-            }
-        }
-    )
-}
-
-
-private suspend fun checkDatabaseConnection(database: Database, appConfig: KukenConfig) {
-    try {
-        newSuspendedTransaction(db = database, readOnly = true) {
-            database.connector()
-        }
-    } catch (_: SQLException) {
-        error("Unable to establish database connection")
-    }
-}
-
-private fun configureDI(appConfig: KukenConfig, db: Database) {
+private fun configureDI(config: KukenConfig, db: Database, redis: RedisClient) {
     startKoin {
         val root = module {
-            single { appConfig }
-            single { db }
-            single<Hash> { BcryptHash }
-            single { IdentityGeneratorService() }
+            single(createdAtStart = true) { config }
+            single(createdAtStart = true) { db }
+            single(createdAtStart = true) { redis }
+
+            single<Hash> { BcryptHash() }
+
+            single<IdentityGeneratorService> { IdentityGeneratorService() }
+
             single<Validator> {
                 Validation.byDefaultProvider()
                     .configure()
@@ -104,7 +53,18 @@ private fun configureDI(appConfig: KukenConfig, db: Database) {
                     .buildValidatorFactory()
                     .validator
             }
-            single<EventDispatcher> { EventDispatcherImpl() }
+
+            single<EventDispatcher>(createdAtStart = true) {
+                CompositeEventDispatcher(
+                    dispatchers = listOf(
+                        RedisEventDispatcher(redisClient = get())
+                    )
+                )
+            }
+
+            single<Orchestrator> {
+                Orchestrator(redisClient = get())
+            }
         }
 
         modules(root, AccountDI, AuthDI)

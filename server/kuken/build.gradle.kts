@@ -16,6 +16,7 @@ dependencies {
     annotationProcessor(libs.validator.processor)
     implementation(libs.validator)
     implementation(libs.ktx.coroutines.core)
+    implementation(libs.ktx.coroutines.reactor)
     implementation(libs.ktx.atomicfu)
     implementation(libs.ktx.serialization.hocon)
     implementation(libs.ktx.serialization.json)
@@ -29,6 +30,7 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.bundles.exposed)
     implementation(libs.postgresql)
+    implementation(libs.lettuce)
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
 }

@@ -49,6 +49,7 @@ services:
     ports:
       - "6379:6379"
     environment:
+      REDIS_USERNAME: kuken
       REDIS_PASSWORD: kuken
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]

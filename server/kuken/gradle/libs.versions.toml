@@ -20,16 +20,16 @@ plugin-shadowjar = "8.3.6"
 plugin-kotlinter = "5.1.1"
 detekt = "1.23.8"
 hocon = "1.4.3"
+lettuce = "7.2.0.RELEASE"
 
 [libraries]
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 ktx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "ktx-atomicfu" }
 ktx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "ktx-datetime" }
 ktx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "ktx-serialization" }
 ktx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "ktx-serialization" }
 ktx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "ktx-serialization" }
 ktx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "ktx-coroutines" }
+ktx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "ktx-coroutines" }
 ktx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "ktx-coroutines" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
@@ -71,6 +71,7 @@ expressly = { module = "org.glassfish.expressly:expressly", version.ref = "expre
 validator = { module = "org.hibernate.validator:hibernate-validator", version.ref = "validator" }
 validator-processor = { module = "org.hibernate.validator:hibernate-validator-annotation-processor", version.ref = "validator" }
 hocon = { module = "com.typesafe:config", version.ref = "hocon" }
+lettuce = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
 
 [bundles]
 exposed = ["exposed-core", "exposed-dao", "exposed-jdbc", "exposed-kotlin-datetime"]
