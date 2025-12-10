@@ -10,24 +10,19 @@ import kotlinx.coroutines.flow.merge
 import kotlin.reflect.KClass
 
 interface EventDispatcher : CoroutineScope {
-
     suspend fun dispatch(event: Any)
 
     suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T>
 }
 
-suspend inline fun <reified T : Any> EventDispatcher.listen(): Flow<T> {
-    return listen(T::class)
-}
+suspend inline fun <reified T : Any> EventDispatcher.listen(): Flow<T> = listen(T::class)
 
 internal class EventDispatcherImpl :
     EventDispatcher,
     CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
-
     private val publisher = MutableSharedFlow<Any>(extraBufferCapacity = 1)
 
-    override suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T> =
-        publisher.filterIsInstance(eventType)
+    override suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T> = publisher.filterIsInstance(eventType)
 
     override suspend fun dispatch(event: Any) {
         publisher.tryEmit(event)
@@ -35,9 +30,8 @@ internal class EventDispatcherImpl :
 }
 
 internal class CompositeEventDispatcher(
-    private val dispatchers: List<EventDispatcher>
+    private val dispatchers: List<EventDispatcher>,
 ) : EventDispatcher {
-
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     override suspend fun dispatch(event: Any) {
@@ -45,6 +39,7 @@ internal class CompositeEventDispatcher(
     }
 
     override suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T> =
-        dispatchers.map { it.listen(eventType) }
+        dispatchers
+            .map { it.listen(eventType) }
             .merge()
 }

@@ -14,14 +14,13 @@ data class VerifyResponse(
     @SerialName("email") val email: String,
     @SerialName("createdAt") val createdAt: Instant,
     @SerialName("updatedAt") val updatedAt: Instant,
-    @SerialName("lastLoggedInAt") val lastLoggedInAt: Instant?
+    @SerialName("lastLoggedInAt") val lastLoggedInAt: Instant?,
 ) {
-
     constructor(account: Account) : this(
         id = account.id.toString(),
         email = account.email,
         createdAt = account.createdAt,
         updatedAt = account.createdAt,
-        lastLoggedInAt = account.lastLoggedInAt
+        lastLoggedInAt = account.lastLoggedInAt,
     )
 }

@@ -9,7 +9,6 @@ class WebSocketSession internal constructor(
     val connection: DefaultWebSocketServerSession,
     @Transient private val json: Json,
 ) {
-
     suspend fun send(message: WebSocketResponse<*>) {
         connection.outgoing.send(Frame.Text(json.encodeToString(message)))
     }

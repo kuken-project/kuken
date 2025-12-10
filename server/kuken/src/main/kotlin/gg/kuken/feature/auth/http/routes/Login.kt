@@ -14,10 +14,11 @@ fun Route.login() {
 
     post<AuthRoutes.Login> {
         val req = call.receiveValid<LoginRequest>()
-        val token = authService.auth(
-            username = req.username,
-            password = req.password,
-        )
+        val token =
+            authService.auth(
+                username = req.username,
+                password = req.password,
+            )
 
         call.respond(LoginResponse(token))
     }

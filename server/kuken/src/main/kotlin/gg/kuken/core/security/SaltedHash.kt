@@ -9,6 +9,5 @@ package gg.kuken.core.security
  * By using salt, hash methods from this interface are generally safer.
  */
 public interface SaltedHash : Hash {
-
     public val saltLength: Int
 }

@@ -6,8 +6,9 @@ import gg.kuken.orchestrator.model.NodeState
 import io.lettuce.core.RedisClient
 import org.apache.commons.lang3.mutable.Mutable
 
-class Orchestrator(val redisClient: RedisClient) {
-
+class Orchestrator(
+    val redisClient: RedisClient,
+) {
     private val _connectedNodes = mutableMapOf<String, Node>()
     val connectedNodes get() = _connectedNodes.toList()
 

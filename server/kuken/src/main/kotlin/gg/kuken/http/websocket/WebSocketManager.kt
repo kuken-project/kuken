@@ -18,10 +18,11 @@ import java.nio.channels.ClosedChannelException
 import java.util.Collections
 import kotlin.reflect.jvm.jvmName
 
-internal class WebSocketManager(val json: Json) : CoroutineScope by CoroutineScope(
-    SupervisorJob() + CoroutineName(WebSocketManager::class.jvmName)
-) {
-
+internal class WebSocketManager(
+    val json: Json,
+) : CoroutineScope by CoroutineScope(
+        SupervisorJob() + CoroutineName(WebSocketManager::class.jvmName),
+    ) {
     private val logger = LogManager.getLogger(WebSocketManager::class.java)
     private val sessions = Collections.synchronizedSet<WebSocketSession>(linkedSetOf())
     private val generatedId = atomic(0)
@@ -33,7 +34,7 @@ internal class WebSocketManager(val json: Json) : CoroutineScope by CoroutineSco
         logger.debug(
             "WebSocket session {} connected @ {}",
             session.id,
-            session.connection.call.request.local.remoteHost
+            session.connection.call.request.local.remoteHost,
         )
 
         try {
@@ -58,11 +59,14 @@ internal class WebSocketManager(val json: Json) : CoroutineScope by CoroutineSco
         }
     }
 
-    private suspend fun packetReceived(packet: WebSocketPacket, session: WebSocketSession) {
+    private suspend fun packetReceived(
+        packet: WebSocketPacket,
+        session: WebSocketSession,
+    ) {
         val context = WebSocketPacketContext(packet, session)
 
         handlers[packet.op]?.forEach { handler ->
-            with (handler) {
+            with(handler) {
                 context.handle()
             }
         }
@@ -77,13 +81,17 @@ internal class WebSocketManager(val json: Json) : CoroutineScope by CoroutineSco
         sessions.remove(session)
     }
 
-    fun register(op: WebSocketOp, handler: WebSocketPacketEventHandler) {
-        handler.coroutineContext = Job() + CoroutineName(
-            "%s-%s".format(
-                op,
-                handler::class.simpleName ?: "unknown-websocket-handler"
+    fun register(
+        op: WebSocketOp,
+        handler: WebSocketPacketEventHandler,
+    ) {
+        handler.coroutineContext = Job() +
+            CoroutineName(
+                "%s-%s".format(
+                    op,
+                    handler::class.simpleName ?: "unknown-websocket-handler",
+                ),
             )
-        )
         handlers.computeIfAbsent(op) { mutableListOf() }.add(handler)
     }
 }

@@ -2,10 +2,10 @@
 
 package gg.kuken.feature.account.http.dto
 
+import gg.kuken.feature.account.model.Account
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import gg.kuken.feature.account.model.Account
 import kotlin.uuid.ExperimentalUuidApi
 
 @Serializable
@@ -16,7 +16,6 @@ internal data class AccountResponse(
     @SerialName("createdAt") val createdAt: Instant,
     @SerialName("updatedAt") val updatedAt: Instant,
 ) {
-
     constructor(account: Account) : this(
         id = account.id.toString(),
         displayName = account.displayName,

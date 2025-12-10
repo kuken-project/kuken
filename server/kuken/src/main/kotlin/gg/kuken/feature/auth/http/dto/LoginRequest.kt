@@ -9,8 +9,7 @@ data class LoginRequest(
     @field:NotBlank(message = "Username must be provided")
     @SerialName("username")
     val username: String,
-
     @field:NotBlank(message = "Password must be provided")
     @SerialName("password")
-    val password: String
+    val password: String,
 )

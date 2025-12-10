@@ -3,8 +3,11 @@ package gg.kuken
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class KukenConfig(val http: HttpConfig, val db: DBConfig, val redis: RedisConfig) {
-
+data class KukenConfig(
+    val http: HttpConfig,
+    val db: DBConfig,
+    val redis: RedisConfig,
+) {
     val devMode: Boolean = System.getenv("PRODUCTION")?.toBoolean() ?: false
 
     @Serializable
@@ -21,5 +24,7 @@ data class KukenConfig(val http: HttpConfig, val db: DBConfig, val redis: RedisC
     )
 
     @Serializable
-    data class RedisConfig(val url: String)
+    data class RedisConfig(
+        val url: String,
+    )
 }

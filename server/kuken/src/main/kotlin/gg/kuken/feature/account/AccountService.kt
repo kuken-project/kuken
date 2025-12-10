@@ -4,16 +4,15 @@ package gg.kuken.feature.account
 
 import gg.kuken.core.EventDispatcher
 import gg.kuken.core.security.Hash
+import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.account.entity.toDomain
-import kotlinx.datetime.Clock
 import gg.kuken.feature.account.model.Account
 import gg.kuken.feature.account.repository.AccountRepository
-import gg.kuken.feature.account.IdentityGeneratorService
+import kotlinx.datetime.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 interface AccountService {
-
     suspend fun listAccounts(): List<Account>
 
     suspend fun getAccount(id: Uuid): Account?
@@ -22,7 +21,10 @@ interface AccountService {
 
     suspend fun getAccountAndHash(email: String): Pair<Account, String>?
 
-    suspend fun createAccount(email: String, password: String): Account
+    suspend fun createAccount(
+        email: String,
+        password: String,
+    ): Account
 
     suspend fun deleteAccount(id: Uuid)
 }
@@ -31,20 +33,13 @@ internal class AccountServiceImpl(
     private val identityGeneratorService: IdentityGeneratorService,
     private val accountsRepository: AccountRepository,
     private val hashAlgorithm: Hash,
-    private val eventDispatcher: EventDispatcher
+    private val eventDispatcher: EventDispatcher,
 ) : AccountService {
+    override suspend fun listAccounts(): List<Account> = accountsRepository.findAll().map { entity -> entity.toDomain() }
 
-    override suspend fun listAccounts(): List<Account> {
-        return accountsRepository.findAll().map { entity -> entity.toDomain() }
-    }
+    override suspend fun getAccount(id: Uuid): Account? = accountsRepository.findById(id)?.toDomain()
 
-    override suspend fun getAccount(id: Uuid): Account? {
-        return accountsRepository.findById(id)?.toDomain()
-    }
-
-    override suspend fun getAccountByEmail(email: String): Account? {
-        return accountsRepository.findByEmail(email)?.toDomain()
-    }
+    override suspend fun getAccountByEmail(email: String): Account? = accountsRepository.findByEmail(email)?.toDomain()
 
     override suspend fun getAccountAndHash(email: String): Pair<Account, String>? {
         // TODO optimize it
@@ -56,22 +51,23 @@ internal class AccountServiceImpl(
 
     override suspend fun createAccount(
         email: String,
-        password: String
+        password: String,
     ): Account {
         if (accountsRepository.existsByEmail(email)) {
             error("Conflict") // TODO Conflict exception
         }
 
         val now = Clock.System.now()
-        val account = Account(
-            id = identityGeneratorService.generate(),
-            displayName = null,
-            email = email,
-            createdAt = now,
-            updatedAt = now,
-            lastLoggedInAt = null,
-            avatar = null,
-        )
+        val account =
+            Account(
+                id = identityGeneratorService.generate(),
+                displayName = null,
+                email = email,
+                createdAt = now,
+                updatedAt = now,
+                lastLoggedInAt = null,
+                avatar = null,
+            )
 
         val hash = hashAlgorithm.hash(password.toCharArray())
         accountsRepository.addAccount(account, hash)

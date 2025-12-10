@@ -8,7 +8,6 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 internal interface AccountRepository {
-
     suspend fun findAll(): List<AccountEntity>
 
     suspend fun findById(id: Uuid): AccountEntity?
@@ -17,7 +16,10 @@ internal interface AccountRepository {
 
     suspend fun findHashByEmail(email: String): String?
 
-    suspend fun addAccount(account: Account, hash: String)
+    suspend fun addAccount(
+        account: Account,
+        hash: String,
+    )
 
     suspend fun deleteAccount(id: Uuid)
 

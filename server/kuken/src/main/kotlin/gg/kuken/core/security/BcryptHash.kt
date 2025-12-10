@@ -11,16 +11,19 @@ private const val HASH_COST = 12
  * Bcrypt salted hash implementation.
  */
 internal class BcryptHash : SaltedHash {
-
     override val name: String = "Bcrypt"
     override val saltLength: Int = SALT_LENGTH
     private val random: Random = SecureRandom()
 
-    private fun generateSalt(): ByteArray = ByteArray(saltLength).also { bytes ->
-        random.nextBytes(bytes)
-    }
+    private fun generateSalt(): ByteArray =
+        ByteArray(saltLength).also { bytes ->
+            random.nextBytes(bytes)
+        }
 
     override fun hash(value: CharArray): String = OpenBSDBCrypt.generate(value, generateSalt(), HASH_COST)
 
-    override fun compare(value: CharArray, hash: String): Boolean = OpenBSDBCrypt.checkPassword(hash, value)
+    override fun compare(
+        value: CharArray,
+        hash: String,
+    ): Boolean = OpenBSDBCrypt.checkPassword(hash, value)
 }

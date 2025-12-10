@@ -14,41 +14,45 @@ import kotlin.reflect.full.findAnnotation
 data class ValidationErrorResponse(
     val code: Int,
     val message: String,
-    val details: Set<ValidationConstraintViolation>
+    val details: Set<ValidationConstraintViolation>,
 )
 
 @Serializable
 data class ValidationConstraintViolation(
     val property: String,
-    val info: List<String>
+    val info: List<String>,
 )
 
 internal data class ValidationException(
-    val data: ValidationErrorResponse
+    val data: ValidationErrorResponse,
 ) : RuntimeException()
 
 fun Validator.validateOrThrow(value: Any) {
     val violations = validate(value).ifEmpty { return }
-    val mappedViolations = violations.groupBy { violation ->
-        val propValue = violation.propertyPath.toString()
-        val serialName =
-            violation.rootBeanClass.kotlin.declaredMemberProperties.firstOrNull { property ->
-                property.name.equals(propValue, ignoreCase = false)
-            }?.findAnnotation<SerialName>()?.value
+    val mappedViolations =
+        violations
+            .groupBy { violation ->
+                val propValue = violation.propertyPath.toString()
+                val serialName =
+                    violation.rootBeanClass.kotlin.declaredMemberProperties
+                        .firstOrNull { property ->
+                            property.name.equals(propValue, ignoreCase = false)
+                        }?.findAnnotation<SerialName>()
+                        ?.value
 
-        serialName ?: propValue
-    }.map { (path, violation) ->
-        ValidationConstraintViolation(
-            property = path,
-            info = violation.map(ConstraintViolation<*>::getMessage)
-        )
-    }.toSet()
+                serialName ?: propValue
+            }.map { (path, violation) ->
+                ValidationConstraintViolation(
+                    property = path,
+                    info = violation.map(ConstraintViolation<*>::getMessage),
+                )
+            }.toSet()
 
     throw ValidationException(
         ValidationErrorResponse(
             code = FailedToParseRequestBody.code,
             message = FailedToParseRequestBody.message,
-            details = mappedViolations
-        )
+            details = mappedViolations,
+        ),
     )
 }

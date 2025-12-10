@@ -16,43 +16,49 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RedisEventDispatcher(redisClient: RedisClient) : EventDispatcher {
-
+class RedisEventDispatcher(
+    redisClient: RedisClient,
+) : EventDispatcher {
     private val logger: Logger = LogManager.getLogger(RedisEventDispatcher::class.java)
     private val json: Json = Json { ignoreUnknownKeys = true }
     private val connection = redisClient.connectPubSub().reactive()
 
-    override val coroutineContext: CoroutineContext get() = Dispatchers.IO +
+    override val coroutineContext: CoroutineContext get() =
+        Dispatchers.IO +
             CoroutineName(RedisEventDispatcher::class.qualifiedName!!)
 
     override suspend fun dispatch(event: Any) {
         logger.info("Event sent: ${event::class.jvmName}")
 
-        val json = json.encodeToString(
-            serializer = serializer(event::class.java),
-            value = event
-        )
+        val json =
+            json.encodeToString(
+                serializer = serializer(event::class.java),
+                value = event,
+            )
         connection.publish(event::class.qualifiedName, json).awaitSingle()
     }
 
-    override suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T> = callbackFlow {
-        connection.subscribe(eventType.qualifiedName)
+    override suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T> =
+        callbackFlow {
+            connection.subscribe(eventType.qualifiedName)
 
-        val codec = serializer(eventType.java)
-        val observer = connection.observeChannels().subscribe { message ->
-            logger.info("Event received: ${eventType.jvmName}")
+            val codec = serializer(eventType.java)
+            val observer =
+                connection.observeChannels().subscribe { message ->
+                    logger.info("Event received: ${eventType.jvmName}")
 
-            @Suppress("UNCHECKED_CAST")
-            val json = json.decodeFromString(
-                deserializer = codec,
-                string = message.message
-            ) as T
+                    @Suppress("UNCHECKED_CAST")
+                    val json =
+                        json.decodeFromString(
+                            deserializer = codec,
+                            string = message.message,
+                        ) as T
 
-            trySend(json)
+                    trySend(json)
+                }
+
+            awaitClose {
+                observer.dispose()
+            }
         }
-
-        awaitClose {
-            observer.dispose()
-        }
-    }
 }

@@ -8,18 +8,16 @@ class HttpException(
     message: String?,
     val details: String?,
     val status: HttpStatusCode,
-    cause: Throwable?
+    cause: Throwable?,
 ) : RuntimeException(message, cause)
 
 @Serializable
 data class HttpError(
     val code: Int,
     val message: String,
-    val details: String?
+    val details: String?,
 ) {
-
     companion object {
-
         val Conflict = error(0, "Conflict")
         val NotFound = error(0, "Not Found")
         val Generic: (String) -> HttpError = { message -> error(0, message) }
@@ -38,15 +36,19 @@ data class HttpError(
             { error(1012, "Failed to parse blueprint file", it) }
         val InvalidAccessToken = error(2001, "Invalid or missing access token")
         val AccountInvalidCredentials = error(2002, "Invalid account credentials")
-        val AccountLoginConflict = error(
-            2003,
-            "An account with that username or email already exists"
-        )
+        val AccountLoginConflict =
+            error(
+                2003,
+                "An account with that username or email already exists",
+            )
         val InvalidInstanceUpdateCode = error(3001, "Invalid instance update code")
         val FailedToParseRequestBody = error(3002, "Failed to handle request")
         val InvalidRequestBody = error(3003, "Invalid request body")
 
-        fun error(code: Int, message: String, details: String? = null) =
-            HttpError(code, message, details)
+        fun error(
+            code: Int,
+            message: String,
+            details: String? = null,
+        ) = HttpError(code, message, details)
     }
 }

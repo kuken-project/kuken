@@ -1,13 +1,13 @@
 package gg.kuken.feature.account.http.routes
 
-import io.ktor.server.resources.post
-import io.ktor.server.routing.Route
-import jakarta.validation.Validator
 import gg.kuken.feature.account.AccountService
 import gg.kuken.feature.account.http.dto.RegisterRequest
 import gg.kuken.feature.account.http.dto.RegisterResponse
 import gg.kuken.http.util.receiveValidating
+import io.ktor.server.resources.post
 import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import jakarta.validation.Validator
 import org.koin.ktor.ext.inject
 
 fun Route.register() {
@@ -16,10 +16,11 @@ fun Route.register() {
 
     post<AccountRoutes.Register> {
         val payload = call.receiveValidating<RegisterRequest>(validator)
-        val account = accountService.createAccount(
-            email = payload.email,
-            password = payload.password
-        )
+        val account =
+            accountService.createAccount(
+                email = payload.email,
+                password = payload.password,
+            )
 
         call.respond(RegisterResponse(account))
     }

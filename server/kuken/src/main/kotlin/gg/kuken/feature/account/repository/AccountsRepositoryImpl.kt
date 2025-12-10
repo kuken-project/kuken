@@ -13,37 +13,47 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 
-internal class AccountsRepositoryImpl(private val database: Database) : AccountRepository {
-
+internal class AccountsRepositoryImpl(
+    private val database: Database,
+) : AccountRepository {
     init {
         transaction(db = database) {
             SchemaUtils.create(AccountTable)
         }
     }
 
-    override suspend fun findAll(): List<AccountEntity> = newSuspendedTransaction(db = database) {
-        AccountEntity.all().notForUpdate().toList()
-    }
+    override suspend fun findAll(): List<AccountEntity> =
+        newSuspendedTransaction(db = database) {
+            AccountEntity.all().notForUpdate().toList()
+        }
 
-    override suspend fun findById(id: Uuid): AccountEntity? = newSuspendedTransaction(db = database) {
-        AccountEntity.findById(id.toJavaUuid())
-    }
+    override suspend fun findById(id: Uuid): AccountEntity? =
+        newSuspendedTransaction(db = database) {
+            AccountEntity.findById(id.toJavaUuid())
+        }
 
     override suspend fun findByEmail(email: String): AccountEntity? =
         newSuspendedTransaction(db = database) {
-            AccountEntity.find {
-                AccountTable.email eq email
-            }.firstOrNull()
+            AccountEntity
+                .find {
+                    AccountTable.email eq email
+                }.firstOrNull()
         }
 
-    override suspend fun findHashByEmail(email: String): String? = newSuspendedTransaction(db = database) {
-        AccountEntity.find {
-            AccountTable.email eq email
-        }.firstOrNull()?.hash
-    }
+    override suspend fun findHashByEmail(email: String): String? =
+        newSuspendedTransaction(db = database) {
+            AccountEntity
+                .find {
+                    AccountTable.email eq email
+                }.firstOrNull()
+                ?.hash
+        }
 
     @OptIn(ExperimentalUuidApi::class)
-    override suspend fun addAccount(account: Account, hash: String) {
+    override suspend fun addAccount(
+        account: Account,
+        hash: String,
+    ) {
         newSuspendedTransaction(db = database) {
             AccountEntity.new(account.id.toJavaUuid()) {
                 this.email = account.email

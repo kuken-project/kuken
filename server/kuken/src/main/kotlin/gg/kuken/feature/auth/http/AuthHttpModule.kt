@@ -2,14 +2,14 @@ package gg.kuken.feature.auth.http
 
 import com.auth0.jwt.interfaces.JWTVerifier
 import gg.kuken.KukenConfig
-import gg.kuken.feature.auth.AuthService
-import gg.kuken.http.HttpError
-import gg.kuken.http.HttpModule
 import gg.kuken.feature.account.http.AccountKey
 import gg.kuken.feature.account.http.AccountPrincipal
+import gg.kuken.feature.auth.AuthService
 import gg.kuken.feature.auth.http.exception.InvalidAccessTokenException
 import gg.kuken.feature.auth.http.routes.login
 import gg.kuken.feature.auth.http.routes.verify
+import gg.kuken.http.HttpError
+import gg.kuken.http.HttpModule
 import gg.kuken.http.util.respondError
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -26,23 +26,24 @@ import org.koin.ktor.ext.inject
 import kotlin.getValue
 
 object AuthHttpModule : HttpModule() {
-
     // Needed to Ktor's [Authentication] plugin to be installed before services try to hook on it
     override val priority: Int get() = 1
 
-    override fun install(app: Application): Unit = with(app) {
-        installAuthentication()
-        routing {
-            login()
-            authenticate { verify() }
-            addAccountAttributeIfNeeded()
+    override fun install(app: Application): Unit =
+        with(app) {
+            installAuthentication()
+            routing {
+                login()
+                authenticate { verify() }
+                addAccountAttributeIfNeeded()
+            }
         }
-    }
 
     private fun Routing.addAccountAttributeIfNeeded() {
         intercept(ApplicationCallPipeline.Call) {
-            val account = call.principal<AccountPrincipal>()?.account
-                ?: return@intercept
+            val account =
+                call.principal<AccountPrincipal>()?.account
+                    ?: return@intercept
             call.attributes.put(AccountKey, account)
         }
     }
@@ -61,10 +62,11 @@ object AuthHttpModule : HttpModule() {
                 }
 
                 validate { credentials ->
-                    val account = runCatching { authService.verify(credentials.subject) }
-                        .onFailure { exception ->
-                            if (appConfig.devMode) exception.printStackTrace()
-                        }.getOrNull() ?: respondError(HttpError.NotFound)
+                    val account =
+                        runCatching { authService.verify(credentials.subject) }
+                            .onFailure { exception ->
+                                if (appConfig.devMode) exception.printStackTrace()
+                            }.getOrNull() ?: respondError(HttpError.NotFound)
 
                     AccountPrincipal(account)
                 }

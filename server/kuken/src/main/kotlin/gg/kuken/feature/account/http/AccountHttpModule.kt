@@ -8,7 +8,6 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.routing
 
 object AccountHttpModule : HttpModule() {
-
     override fun install(app: Application) {
         app.routing {
             authenticate {

@@ -19,8 +19,9 @@ import org.koin.core.component.KoinComponent
 private const val STOP_GRACE_PERIOD_MILLIS: Long = 1000
 private const val TIMEOUT_MILLIS: Long = 5000
 
-internal class Http(val appConfig: KukenConfig) : KoinComponent {
-
+internal class Http(
+    val appConfig: KukenConfig,
+) : KoinComponent {
     private var shutdownPending = atomic(false)
     private val engine: EmbeddedServer<*, *> = createServer()
     private val webSocketManager = WebSocketManager(json = Json)
@@ -57,26 +58,30 @@ internal class Http(val appConfig: KukenConfig) : KoinComponent {
         for (module in createHttpModules().sortedByDescending(HttpModule::priority)) {
             module.install(this)
 
-            for ((op, handler) in module.webSocketHandlers())
+            for ((op, handler) in module.webSocketHandlers()) {
                 webSocketManager.register(op, handler)
+            }
         }
     }
 
-    private fun configureApplication(app: Application): Unit = with(app) {
-        installDefaultFeatures(appConfig)
-        registerHttpModules()
-    }
+    private fun configureApplication(app: Application): Unit =
+        with(app) {
+            installDefaultFeatures(appConfig)
+            registerHttpModules()
+        }
 
-    private fun createServer() = embeddedServer(
-        factory = CIO,
-        host = appConfig.http.host,
-        port = appConfig.http.port,
-        watchPaths = listOf("classes").takeIf { appConfig.devMode }.orEmpty(),
-        module = { configureApplication(this) },
-    )
+    private fun createServer() =
+        embeddedServer(
+            factory = CIO,
+            host = appConfig.http.host,
+            port = appConfig.http.port,
+            watchPaths = listOf("classes").takeIf { appConfig.devMode }.orEmpty(),
+            module = { configureApplication(this) },
+        )
 
-    fun createHttpModules() = setOf(
-        AuthHttpModule,
-        AccountHttpModule
-    )
+    fun createHttpModules() =
+        setOf(
+            AuthHttpModule,
+            AccountHttpModule,
+        )
 }

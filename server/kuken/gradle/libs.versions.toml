@@ -17,7 +17,6 @@ bcprov = "1.81"
 validator = "9.0.1.Final"
 expressly = "6.0.0"
 plugin-shadowjar = "8.3.6"
-plugin-kotlinter = "5.1.1"
 detekt = "1.23.8"
 hocon = "1.4.3"
 lettuce = "7.2.0.RELEASE"
@@ -97,6 +96,6 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-atomicfu = { id = "org.jetbrains.kotlin.plugin.atomicfu", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 shadowjar = { id = "com.gradleup.shadow", version.ref = "plugin-shadowjar" }
-kotlinter = { id = "org.jmailen.kotlinter", version.ref = "plugin-kotlinter" }
+kotlinter = { id = "org.jmailen.kotlinter", version = "5.3.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktor = { id = "io.ktor.plugin", version = "3.3.3" }

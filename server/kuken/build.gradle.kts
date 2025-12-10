@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.atomicfu)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.kotlinter)
 }
 
 application {

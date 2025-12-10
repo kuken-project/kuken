@@ -14,11 +14,10 @@ import org.koin.ktor.ext.inject
 
 suspend inline fun PipelineContext<*, ApplicationCall>.respond(
     response: Any,
-    status: HttpStatusCode = HttpStatusCode.OK
+    status: HttpStatusCode = HttpStatusCode.OK,
 ): Unit = call.respond(status, response)
 
-suspend inline fun <reified T : Any> ApplicationCall.receiveValid(): T =
-    receiveValidating(get<Validator>())
+suspend inline fun <reified T : Any> ApplicationCall.receiveValid(): T = receiveValidating(get<Validator>())
 
 suspend inline fun <reified T : Any> ApplicationCall.receiveValidating(validator: Validator): T =
     receiveNullable<T>()?.also(validator::validateOrThrow).let(::requireNotNull)
@@ -26,5 +25,5 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveValidating(validator
 fun respondError(
     error: HttpError,
     status: HttpStatusCode = HttpStatusCode.BadRequest,
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ): Nothing = throw HttpException(error.code, error.message, error.details, status, cause)

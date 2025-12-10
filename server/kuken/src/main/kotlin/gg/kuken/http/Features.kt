@@ -44,23 +44,25 @@ internal fun Application.installDefaultFeatures(config: KukenConfig) {
     }
 
     install(ContentNegotiation) {
-        json(Json {
-            explicitNulls = false
-        })
+        json(
+            Json {
+                explicitNulls = false
+            },
+        )
     }
 
     install(StatusPages) {
         exception<ResourceException> { call, exception ->
             call.respond(
                 status = exception.code,
-                message = exception.error
+                message = exception.error,
             )
         }
 
         exception<ValidationException> { call, exception ->
             call.respond(
                 status = HttpStatusCode.UnprocessableEntity,
-                message = exception.data
+                message = exception.data,
             )
         }
 
@@ -77,7 +79,7 @@ internal fun Application.installDefaultFeatures(config: KukenConfig) {
             call.application.log.error("Unhandled exception", exception)
             call.respond(
                 HttpStatusCode.InternalServerError,
-                exception.message.toString()
+                exception.message.toString(),
             )
         }
     }

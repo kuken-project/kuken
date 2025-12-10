@@ -5,11 +5,11 @@ import gg.kuken.core.EventDispatcher
 import gg.kuken.core.security.BcryptHash
 import gg.kuken.core.security.Hash
 import gg.kuken.feature.account.AccountDI
-import gg.kuken.feature.auth.AuthDI
 import gg.kuken.feature.account.IdentityGeneratorService
+import gg.kuken.feature.auth.AuthDI
 import gg.kuken.http.Http
-import gg.kuken.orchestrator.RedisEventDispatcher
 import gg.kuken.orchestrator.Orchestrator
+import gg.kuken.orchestrator.RedisEventDispatcher
 import io.lettuce.core.RedisClient
 import jakarta.validation.Validation
 import jakarta.validation.Validator
@@ -35,37 +35,44 @@ internal fun main() {
     }
 }
 
-private fun configureDI(config: KukenConfig, db: Database, redis: RedisClient) {
+private fun configureDI(
+    config: KukenConfig,
+    db: Database,
+    redis: RedisClient,
+) {
     startKoin {
-        val root = module {
-            single(createdAtStart = true) { config }
-            single(createdAtStart = true) { db }
-            single(createdAtStart = true) { redis }
+        val root =
+            module {
+                single(createdAtStart = true) { config }
+                single(createdAtStart = true) { db }
+                single(createdAtStart = true) { redis }
 
-            single<Hash> { BcryptHash() }
+                single<Hash> { BcryptHash() }
 
-            single<IdentityGeneratorService> { IdentityGeneratorService() }
+                single<IdentityGeneratorService> { IdentityGeneratorService() }
 
-            single<Validator> {
-                Validation.byDefaultProvider()
-                    .configure()
-                    .messageInterpolator(ParameterMessageInterpolator())
-                    .buildValidatorFactory()
-                    .validator
-            }
+                single<Validator> {
+                    Validation
+                        .byDefaultProvider()
+                        .configure()
+                        .messageInterpolator(ParameterMessageInterpolator())
+                        .buildValidatorFactory()
+                        .validator
+                }
 
-            single<EventDispatcher>(createdAtStart = true) {
-                CompositeEventDispatcher(
-                    dispatchers = listOf(
-                        RedisEventDispatcher(redisClient = get())
+                single<EventDispatcher>(createdAtStart = true) {
+                    CompositeEventDispatcher(
+                        dispatchers =
+                            listOf(
+                                RedisEventDispatcher(redisClient = get()),
+                            ),
                     )
-                )
-            }
+                }
 
-            single<Orchestrator> {
-                Orchestrator(redisClient = get())
+                single<Orchestrator> {
+                    Orchestrator(redisClient = get())
+                }
             }
-        }
 
         modules(root, AccountDI, AuthDI)
     }

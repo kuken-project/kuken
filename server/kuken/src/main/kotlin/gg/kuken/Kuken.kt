@@ -16,10 +16,12 @@ import java.sql.SQLException
 @OptIn(ExperimentalSerializationApi::class)
 internal fun loadConfig(): KukenConfig {
     val parseOptions = ConfigParseOptions.defaults().setAllowMissing(true)
-    val config = ConfigFactory.parseResources("kuken.local.conf")
-        .withFallback(ConfigFactory.parseFile(File("kuken.conf"), parseOptions))
-        .withFallback(ConfigFactory.parseResources("kuken.conf", parseOptions))
-        .resolve()
+    val config =
+        ConfigFactory
+            .parseResources("kuken.local.conf")
+            .withFallback(ConfigFactory.parseFile(File("kuken.conf"), parseOptions))
+            .withFallback(ConfigFactory.parseResources("kuken.conf", parseOptions))
+            .resolve()
 
     return Hocon {}.decodeFromConfig(config)
 }
@@ -38,22 +40,24 @@ internal fun setupRedis(config: KukenConfig.RedisConfig): RedisClient {
     return client
 }
 
-internal class DatabaseFactory(private val appConfig: KukenConfig) {
-
-    fun create(): Database = Database.connect(
-        url = "jdbc:postgresql://${appConfig.db.host}",
-        user = appConfig.db.user,
-        password = appConfig.db.password,
-        driver = "org.postgresql.Driver",
-        databaseConfig = DatabaseConfig {
-            useNestedTransactions = true
-            if (appConfig.devMode) {
-                sqlLogger = Slf4jSqlDebugLogger
-            }
-        }
-    )
+internal class DatabaseFactory(
+    private val appConfig: KukenConfig,
+) {
+    fun create(): Database =
+        Database.connect(
+            url = "jdbc:postgresql://${appConfig.db.host}",
+            user = appConfig.db.user,
+            password = appConfig.db.password,
+            driver = "org.postgresql.Driver",
+            databaseConfig =
+                DatabaseConfig {
+                    useNestedTransactions = true
+                    if (appConfig.devMode) {
+                        sqlLogger = Slf4jSqlDebugLogger
+                    }
+                },
+        )
 }
-
 
 internal suspend fun checkDatabaseConnection(database: Database) {
     try {

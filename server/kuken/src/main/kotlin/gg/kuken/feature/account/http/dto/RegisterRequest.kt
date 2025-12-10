@@ -10,11 +10,10 @@ internal data class RegisterRequest(
     @field:NotBlank(message = "Email cannot be blank")
     @field:Email
     val email: String = "",
-
     @field:NotBlank(message = "Password cannot be blank")
     @field:Size(
         min = 8,
-        message = "Password must have a minimum length of 8"
+        message = "Password must have a minimum length of 8",
     )
-    val password: String = ""
+    val password: String = "",
 )

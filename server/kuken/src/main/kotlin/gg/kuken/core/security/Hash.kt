@@ -7,9 +7,7 @@ package gg.kuken.core.security
  * been applied to hashing functions. See [SaltedHash] for salted hashes.
  */
 public interface Hash {
-
     public companion object {
-
         public val SHA1: Hash = SHA1Hash
         public val Bcrypt: Hash = BcryptHash
     }
@@ -31,5 +29,8 @@ public interface Hash {
      * @param value The input.
      * @param hash The hash (obtained through [Hash.hash])
      */
-    public fun compare(value: CharArray, hash: String): Boolean
+    public fun compare(
+        value: CharArray,
+        hash: String,
+    ): Boolean
 }

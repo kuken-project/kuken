@@ -5,6 +5,5 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 class IdentityGeneratorService {
-
     fun generate(): Uuid = Uuid.Companion.random()
 }
