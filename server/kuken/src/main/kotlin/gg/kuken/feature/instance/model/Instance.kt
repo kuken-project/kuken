@@ -16,7 +16,7 @@ class Instance(
     val updatePolicy: ImageUpdatePolicy,
     val connection: HostPort?,
     val runtime: InstanceRuntime?,
-    val blueprintId: Uuid,
+    val blueprintId: UInt,
     val createdAt: Instant,
     val nodeId: String,
 )

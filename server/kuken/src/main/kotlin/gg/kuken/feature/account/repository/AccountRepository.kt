@@ -7,7 +7,7 @@ import gg.kuken.feature.account.model.Account
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-internal interface AccountRepository {
+interface AccountRepository {
     suspend fun findAll(): List<AccountEntity>
 
     suspend fun findById(id: Uuid): AccountEntity?

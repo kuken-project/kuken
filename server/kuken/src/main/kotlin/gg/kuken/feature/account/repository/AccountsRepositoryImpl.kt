@@ -13,7 +13,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 
-internal class AccountsRepositoryImpl(
+class AccountsRepositoryImpl(
     private val database: Database,
 ) : AccountRepository {
     init {

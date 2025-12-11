@@ -7,6 +7,7 @@ import gg.kuken.core.security.Hash
 import gg.kuken.feature.account.AccountDI
 import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.auth.AuthDI
+import gg.kuken.feature.instance.InstancesDI
 import gg.kuken.http.Http
 import gg.kuken.orchestrator.Orchestrator
 import gg.kuken.orchestrator.RedisEventDispatcher
@@ -74,6 +75,6 @@ private fun configureDI(
                 }
             }
 
-        modules(root, AccountDI, AuthDI)
+        modules(root, AccountDI, AuthDI, InstancesDI)
     }
 }

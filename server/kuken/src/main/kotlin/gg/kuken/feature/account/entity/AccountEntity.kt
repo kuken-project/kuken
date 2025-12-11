@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.toKotlinUuid
 
-internal class AccountEntity(
+class AccountEntity(
     id: EntityID<UUID>,
 ) : UUIDEntity(id) {
     internal companion object : UUIDEntityClass<AccountEntity>(AccountTable)
@@ -26,7 +26,7 @@ internal class AccountEntity(
     val avatar by AccountTable.avatar
 }
 
-internal object AccountTable : UUIDTable("accounts") {
+object AccountTable : UUIDTable("accounts") {
     val email = varchar("email", length = 255)
     val displayName = varchar("display_name", length = 255).nullable()
     val hash = varchar("hash", length = 255)
@@ -36,7 +36,7 @@ internal object AccountTable : UUIDTable("accounts") {
     val avatar = long("avatar").nullable()
 }
 
-internal fun AccountEntity.toDomain(): Account =
+fun AccountEntity.toDomain(): Account =
     Account(
         id = id.value.toKotlinUuid(),
         email = email,
