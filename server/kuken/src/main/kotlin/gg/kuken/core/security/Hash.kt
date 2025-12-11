@@ -9,7 +9,7 @@ package gg.kuken.core.security
 public interface Hash {
     public companion object {
         public val SHA1: Hash = SHA1Hash
-        public val Bcrypt: Hash = BcryptHash
+        public val Bcrypt: Hash = BcryptHash()
     }
 
     public val name: String
