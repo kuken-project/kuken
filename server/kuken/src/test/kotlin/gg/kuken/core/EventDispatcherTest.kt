@@ -15,7 +15,7 @@ private data class TestEvent<T>(
 )
 
 @ExperimentalCoroutinesApi
-internal class EventsDispatcherTest {
+class EventsDispatcherTest {
     @Test
     fun `listen to a publication of a primitive type`() =
         runTest {
