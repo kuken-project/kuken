@@ -32,7 +32,11 @@ internal fun main() {
             DatabaseFactory(config).create().also { db -> checkDatabaseConnection(db) }
         }
 
-    val docker = DockerClient()
+    val docker =
+        DockerClient {
+            debugHttpCalls(debugHttpCalls = config.devMode)
+        }
+
     val redis = setupRedis(config.redis)
     configureDI(config, database, redis, docker)
 
