@@ -3,6 +3,7 @@ package gg.kuken.http
 import gg.kuken.KukenConfig
 import gg.kuken.feature.account.http.AccountHttpModule
 import gg.kuken.feature.auth.http.AuthHttpModule
+import gg.kuken.feature.blueprint.http.BlueprintHttpModule
 import gg.kuken.feature.instance.http.InstanceHttpModule
 import gg.kuken.http.websocket.WebSocketManager
 import io.ktor.server.application.Application
@@ -85,5 +86,6 @@ class Http(
             AuthHttpModule,
             AccountHttpModule,
             InstanceHttpModule,
+            BlueprintHttpModule,
         )
 }
