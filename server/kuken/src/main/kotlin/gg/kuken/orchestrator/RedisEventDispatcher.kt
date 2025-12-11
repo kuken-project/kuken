@@ -16,8 +16,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-class RedisEventDispatcher(redisClient: RedisClient) : EventDispatcher {
-
+class RedisEventDispatcher(
+    redisClient: RedisClient,
+) : EventDispatcher {
     private val logger: Logger = LogManager.getLogger(RedisEventDispatcher::class.java)
     private val json: Json = Json { ignoreUnknownKeys = true }
     private val connection = redisClient.connectPubSub().reactive()
