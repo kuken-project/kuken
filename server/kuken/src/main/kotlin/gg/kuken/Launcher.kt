@@ -11,7 +11,6 @@ import gg.kuken.feature.instance.InstancesDI
 import gg.kuken.http.Http
 import gg.kuken.orchestrator.Orchestrator
 import gg.kuken.orchestrator.RedisEventDispatcher
-import io.lettuce.core.RedisClient
 import jakarta.validation.Validation
 import jakarta.validation.Validator
 import kotlinx.coroutines.runBlocking
@@ -27,37 +26,30 @@ internal fun main() {
         setupDevMode()
     }
 
-    val database =
-        runBlocking {
-            DatabaseFactory(config).create().also { db -> checkDatabaseConnection(db) }
-        }
-
-    val docker =
-        DockerClient {
-            debugHttpCalls(debugHttpCalls = config.devMode)
-        }
-
-    val redis = setupRedis(config.redis)
-    configureDI(config, database, redis, docker)
-
+    val di = configureDependencyInjection(config)
     runBlocking {
+        val database = di.koin.get<Database>()
+        checkDatabaseConnection(database)
+
         Http(config).start()
     }
 }
 
-private fun configureDI(
-    config: KukenConfig,
-    db: Database,
-    redis: RedisClient,
-    docker: DockerClient,
-) {
+private fun configureDependencyInjection(config: KukenConfig) =
     startKoin {
         val root =
             module {
-                single(createdAtStart = true) { config }
-                single(createdAtStart = true) { db }
-                single(createdAtStart = true) { redis }
-                single(createdAtStart = true) { docker }
+                single { config }
+
+                single { DatabaseFactory(config).create() }
+
+                single { setupRedis(config.redis) }
+
+                single {
+                    DockerClient {
+                        debugHttpCalls(debugHttpCalls = config.devMode)
+                    }
+                }
 
                 single<Hash> { BcryptHash() }
 
@@ -88,4 +80,3 @@ private fun configureDI(
 
         modules(root, AccountDI, AuthDI, InstancesDI)
     }
-}
