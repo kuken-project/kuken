@@ -7,6 +7,8 @@ data class KukenConfig(
     val http: HttpConfig,
     val db: DBConfig,
     val redis: RedisConfig,
+    val node: String,
+    val docker: DockerConfig,
 ) {
     val devMode: Boolean = System.getenv("PRODUCTION")?.toBoolean() ?: false
 
@@ -27,4 +29,14 @@ data class KukenConfig(
     data class RedisConfig(
         val url: String,
     )
+
+    @Serializable
+    data class DockerConfig(
+        val network: Network,
+    ) {
+        @Serializable
+        data class Network(
+            val name: String,
+        )
+    }
 }
