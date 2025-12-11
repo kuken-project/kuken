@@ -3,6 +3,7 @@ package gg.kuken.http
 import gg.kuken.KukenConfig
 import gg.kuken.feature.account.http.AccountHttpModule
 import gg.kuken.feature.auth.http.AuthHttpModule
+import gg.kuken.feature.instance.http.InstanceHttpModule
 import gg.kuken.http.websocket.WebSocketManager
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
@@ -83,5 +84,6 @@ internal class Http(
         setOf(
             AuthHttpModule,
             AccountHttpModule,
+            InstanceHttpModule,
         )
 }
