@@ -9,9 +9,9 @@ internal object InstanceHttpModule : HttpModule() {
     override fun install(app: Application): Unit =
         with(app) {
             routing {
-                // authenticate {
-                getInstanceDetails()
-                // }
+                authenticate {
+                    getInstanceDetails()
+                }
             }
         }
 }
