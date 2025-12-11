@@ -1,4 +1,4 @@
-package gg.kuken.feature.instance
+package gg.kuken.feature.instance.model
 
 enum class ImageUpdatePolicy(
     val id: String,

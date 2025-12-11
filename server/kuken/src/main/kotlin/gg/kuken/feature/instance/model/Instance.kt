@@ -1,7 +1,8 @@
 @file:OptIn(ExperimentalUuidApi::class)
 
-package gg.kuken.feature.instance
+package gg.kuken.feature.instance.model
 
+import gg.kuken.feature.instance.InstanceUnreachableRuntimeException
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlin.uuid.ExperimentalUuidApi
@@ -17,6 +18,7 @@ class Instance(
     val runtime: InstanceRuntime?,
     val blueprintId: Uuid,
     val createdAt: Instant,
+    val nodeId: String,
 )
 
 val Instance.containerIdOrThrow: String
