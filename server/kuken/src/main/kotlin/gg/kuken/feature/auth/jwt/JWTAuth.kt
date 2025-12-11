@@ -25,7 +25,7 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-internal class JWTAuthServiceImpl(
+class JWTAuthServiceImpl(
     private val accountService: AccountService,
     private val hashAlgorithm: Hash,
 ) : AuthService {
@@ -86,7 +86,7 @@ internal class JWTAuthServiceImpl(
     }
 }
 
-internal class JWTVerifierImpl : JWTVerifier {
+class JWTVerifierImpl : JWTVerifier {
     companion object {
         private const val JWT_ISSUER = "Katan"
     }

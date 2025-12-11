@@ -13,8 +13,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import java.io.File
 import java.sql.SQLException
 
-@OptIn(ExperimentalSerializationApi::class)
-internal fun loadConfig(): KukenConfig {
+fun loadConfig(): KukenConfig {
     val parseOptions = ConfigParseOptions.defaults().setAllowMissing(true)
     val config =
         ConfigFactory
@@ -26,21 +25,21 @@ internal fun loadConfig(): KukenConfig {
     return Hocon {}.decodeFromConfig(config)
 }
 
-internal fun setupDevMode() {
+fun setupDevMode() {
     System.setProperty(
         kotlinx.coroutines.DEBUG_PROPERTY_NAME,
         kotlinx.coroutines.DEBUG_PROPERTY_VALUE_ON,
     )
 }
 
-internal fun setupRedis(config: KukenConfig.RedisConfig): RedisClient {
+fun setupRedis(config: KukenConfig.RedisConfig): RedisClient {
     val client = RedisClient.create(config.url)
     Runtime.getRuntime().addShutdownHook(Thread { client.shutdown() })
 
     return client
 }
 
-internal class DatabaseFactory(
+class DatabaseFactory(
     private val appConfig: KukenConfig,
 ) {
     fun create(): Database =
@@ -59,7 +58,7 @@ internal class DatabaseFactory(
         )
 }
 
-internal suspend fun checkDatabaseConnection(database: Database) {
+suspend fun checkDatabaseConnection(database: Database) {
     try {
         newSuspendedTransaction(db = database, readOnly = true) {
             database.connector()

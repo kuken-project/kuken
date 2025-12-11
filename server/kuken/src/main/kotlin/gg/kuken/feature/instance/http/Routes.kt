@@ -9,10 +9,10 @@ import kotlin.uuid.Uuid
 
 @Serializable
 @Resource("/instances")
-internal class InstanceRoutes {
+class InstanceRoutes {
     @Serializable
     @Resource("{instanceId}")
-    internal class ById(
+    class ById(
         val parent: InstanceRoutes = InstanceRoutes(),
         val instanceId: Uuid,
     )

@@ -23,7 +23,7 @@ data class ValidationConstraintViolation(
     val info: List<String>,
 )
 
-internal data class ValidationException(
+data class ValidationException(
     val data: ValidationErrorResponse,
 ) : RuntimeException()
 

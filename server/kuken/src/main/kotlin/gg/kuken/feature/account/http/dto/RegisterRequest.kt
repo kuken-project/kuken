@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class RegisterRequest(
+data class RegisterRequest(
     @field:NotBlank(message = "Email cannot be blank")
     @field:Email
     val email: String = "",

@@ -10,7 +10,7 @@ private const val HASH_COST = 12
 /**
  * Bcrypt salted hash implementation.
  */
-internal class BcryptHash : SaltedHash {
+class BcryptHash : SaltedHash {
     override val name: String = "Bcrypt"
     override val saltLength: Int = SALT_LENGTH
     private val random: Random = SecureRandom()

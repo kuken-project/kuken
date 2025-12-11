@@ -13,7 +13,7 @@ import kotlin.uuid.toKotlinUuid
 class AccountEntity(
     id: EntityID<UUID>,
 ) : UUIDEntity(id) {
-    internal companion object : UUIDEntityClass<AccountEntity>(AccountTable)
+    companion object : UUIDEntityClass<AccountEntity>(AccountTable)
 
     var email by AccountTable.email
     var displayName by AccountTable.displayName

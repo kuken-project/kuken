@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 val AuthDI =
     module {
-        single<AuthService> { JWTAuthServiceImpl(get(), get()) }
+        single<AuthService> { JWTAuthServiceImpl(accountService = get(), hashAlgorithm = get()) }
         single<JWTVerifier> { JWTVerifierImpl() }
     }

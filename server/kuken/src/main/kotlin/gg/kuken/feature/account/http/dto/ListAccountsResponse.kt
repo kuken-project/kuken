@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlin.uuid.ExperimentalUuidApi
 
 @Serializable
-internal data class AccountResponse(
+data class AccountResponse(
     @SerialName("accountId") val id: String,
     @SerialName("displayName") val displayName: String?,
     @SerialName("email") val email: String,

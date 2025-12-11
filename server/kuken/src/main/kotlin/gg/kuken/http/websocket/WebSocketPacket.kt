@@ -14,8 +14,8 @@ data class WebSocketPacket(
     @SerialName(DATA) val data: JsonObject? = null,
 ) {
     companion object {
-        internal const val OP = "o"
-        internal const val DATA = "d"
+        const val OP = "o"
+        const val DATA = "d"
 
         const val TARGET_ID = "tid"
         const val VALUE = "v"

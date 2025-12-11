@@ -18,7 +18,7 @@ import java.nio.channels.ClosedChannelException
 import java.util.Collections
 import kotlin.reflect.jvm.jvmName
 
-internal class WebSocketManager(
+class WebSocketManager(
     val json: Json,
 ) : CoroutineScope by CoroutineScope(
         SupervisorJob() + CoroutineName(WebSocketManager::class.jvmName),

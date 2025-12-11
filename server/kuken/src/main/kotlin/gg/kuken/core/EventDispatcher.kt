@@ -17,7 +17,7 @@ interface EventDispatcher : CoroutineScope {
 
 suspend inline fun <reified T : Any> EventDispatcher.listen(): Flow<T> = listen(T::class)
 
-internal class EventDispatcherImpl :
+class EventDispatcherImpl :
     EventDispatcher,
     CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
     private val publisher = MutableSharedFlow<Any>(extraBufferCapacity = 1)
@@ -29,7 +29,7 @@ internal class EventDispatcherImpl :
     }
 }
 
-internal class CompositeEventDispatcher(
+class CompositeEventDispatcher(
     private val dispatchers: List<EventDispatcher>,
 ) : EventDispatcher {
     override val coroutineContext = SupervisorJob() + Dispatchers.IO

@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalSerializationApi::class)
-internal fun Application.installDefaultFeatures(config: KukenConfig) {
+fun Application.installDefaultFeatures(config: KukenConfig) {
     install(Resources)
     install(DefaultHeaders)
     install(AutoHeadResponse)

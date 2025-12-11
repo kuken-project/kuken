@@ -20,7 +20,7 @@ import org.koin.core.component.KoinComponent
 private const val STOP_GRACE_PERIOD_MILLIS: Long = 1000
 private const val TIMEOUT_MILLIS: Long = 5000
 
-internal class Http(
+class Http(
     val appConfig: KukenConfig,
 ) : KoinComponent {
     private var shutdownPending = atomic(false)

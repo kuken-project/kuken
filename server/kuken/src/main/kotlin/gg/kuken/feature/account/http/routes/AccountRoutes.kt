@@ -5,16 +5,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Resource("/accounts")
-internal class AccountRoutes {
+class AccountRoutes {
     @Serializable
     @Resource("")
-    internal class List(
+    class List(
         val parent: AccountRoutes = AccountRoutes(),
     )
 
     @Serializable
     @Resource("")
-    internal class Register(
+    class Register(
         val parent: AccountRoutes = AccountRoutes(),
     )
 }

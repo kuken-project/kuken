@@ -7,6 +7,7 @@ import gg.kuken.core.security.Hash
 import gg.kuken.feature.account.AccountDI
 import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.auth.AuthDI
+import gg.kuken.feature.blueprint.BlueprintDI
 import gg.kuken.feature.instance.InstancesDI
 import gg.kuken.http.Http
 import gg.kuken.orchestrator.Orchestrator
@@ -20,7 +21,7 @@ import org.jetbrains.exposed.sql.Database
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-internal fun main() {
+fun main() {
     val config = loadConfig()
     if (config.devMode) {
         setupDevMode()
@@ -78,5 +79,5 @@ private fun configureDependencyInjection(config: KukenConfig) =
                 }
             }
 
-        modules(root, AccountDI, AuthDI, InstancesDI)
+        modules(root, AccountDI, AuthDI, InstancesDI, BlueprintDI)
     }

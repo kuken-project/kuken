@@ -14,7 +14,7 @@ import kotlin.jvm.Throws
 import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
 
-internal class DockerInstanceService(
+class DockerInstanceService(
     private val dockerClient: DockerClient,
     private val instanceRepository: InstanceRepository,
 ) : InstanceService {

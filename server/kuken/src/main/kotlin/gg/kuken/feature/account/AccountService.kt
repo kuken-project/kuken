@@ -29,7 +29,7 @@ interface AccountService {
     suspend fun deleteAccount(id: Uuid)
 }
 
-internal class AccountServiceImpl(
+class AccountServiceImpl(
     private val identityGeneratorService: IdentityGeneratorService,
     private val accountsRepository: AccountRepository,
     private val hashAlgorithm: Hash,
