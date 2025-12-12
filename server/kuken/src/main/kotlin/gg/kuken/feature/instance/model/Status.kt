@@ -40,7 +40,6 @@ enum class InstanceStatus(
             }
 
     companion object {
-
         fun getByLabel(label: String) = entries.firstOrNull { it.label == label } ?: Unknown
     }
 }

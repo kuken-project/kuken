@@ -69,7 +69,6 @@ value class LocalBlueprintSpecSource(
 class LocalBlueprintSpecProvider(
     private val parser: BlueprintParser,
 ) : BlueprintSpecProvider {
-
     override val providerId: String get() = "remote"
 
     override suspend fun provide(source: BlueprintSpecSource): BlueprintSpec {

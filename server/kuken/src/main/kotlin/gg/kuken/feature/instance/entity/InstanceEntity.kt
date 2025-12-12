@@ -66,7 +66,6 @@ class InstanceRepositoryImpl(
                 status = instance.status.label
                 nodeId = instance.nodeId
                 createdAt = instance.createdAt
-
             }
         }
     }

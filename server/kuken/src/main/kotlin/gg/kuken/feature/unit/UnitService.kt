@@ -31,12 +31,13 @@ internal class UnitService(
         val instance =
             instanceService.createInstance(
                 blueprintId = options.blueprintId,
-                options = CreateInstanceOptions(
-                    image = options.image,
-                    host = options.network?.host,
-                    port = options.network?.port,
-                    env = options.options,
-                ),
+                options =
+                    CreateInstanceOptions(
+                        image = options.image,
+                        host = options.network?.host,
+                        port = options.network?.port,
+                        env = options.options,
+                    ),
             )
         val status: UnitStatus =
             when (instance.status) {

@@ -111,11 +111,12 @@ class BlueprintParser(
                 val elements = mutableMapOf<String, JsonElement>()
                 for ((childKey, childNode) in root.entries) {
                     val qName = property.qualifiedName + PROPERTY_NAME_SEPARATOR + childKey
-                    val el = read(
-                        fqName = qName,
-                        node = childNode,
-                        allowUnknown = property.kind is PropertyKind.Struct && property.kind.allowUnknown
-                    ) ?: continue
+                    val el =
+                        read(
+                            fqName = qName,
+                            node = childNode,
+                            allowUnknown = property.kind is PropertyKind.Struct && property.kind.allowUnknown,
+                        ) ?: continue
 
                     elements[childKey] = el
                 }
@@ -132,32 +133,40 @@ class BlueprintParser(
         }
     }
 
-    fun read(fqName: String, node: ConfigValue, allowUnknown: Boolean): JsonElement? {
-        val property = supportedProperties.firstOrNull { property ->
-            property.qualifiedName == fqName
-        }
+    fun read(
+        fqName: String,
+        node: ConfigValue,
+        allowUnknown: Boolean,
+    ): JsonElement? {
+        val property =
+            supportedProperties.firstOrNull { property ->
+                property.qualifiedName == fqName
+            }
 
-        if (property != null)
+        if (property != null) {
             return read(property, node, equalityCheck = true)
+        }
 
         if (!allowUnknown) {
             return null
         }
 
-        val kind = when (node.valueType()) {
-            ConfigValueType.OBJECT -> PropertyKind.Struct(allowUnknown = false)
-            ConfigValueType.LIST -> PropertyKind.Multiple(PropertyKind.Mixed())
-            ConfigValueType.NUMBER -> PropertyKind.Numeric
-            ConfigValueType.BOOLEAN -> PropertyKind.TrueOrFalse
-            ConfigValueType.NULL -> PropertyKind.Null
-            ConfigValueType.STRING -> PropertyKind.Literal
-        }
+        val kind =
+            when (node.valueType()) {
+                ConfigValueType.OBJECT -> PropertyKind.Struct(allowUnknown = false)
+                ConfigValueType.LIST -> PropertyKind.Multiple(PropertyKind.Mixed())
+                ConfigValueType.NUMBER -> PropertyKind.Numeric
+                ConfigValueType.BOOLEAN -> PropertyKind.TrueOrFalse
+                ConfigValueType.NULL -> PropertyKind.Null
+                ConfigValueType.STRING -> PropertyKind.Literal
+            }
 
         return read(
-            property = Property(
-                qualifiedName = fqName,
-                kind = kind
-            ),
+            property =
+                Property(
+                    qualifiedName = fqName,
+                    kind = kind,
+                ),
             node = node,
             equalityCheck = true,
         )
@@ -277,9 +286,12 @@ class BlueprintParser(
                     struct("build")?.let { build ->
                         BlueprintSpecBuild(
                             entrypoint = build.string("entrypoint"),
-                            env = build.struct("env")?.mapValues { (_, value) ->
-                                value.jsonPrimitive.content
-                            }.orEmpty(),
+                            env =
+                                build
+                                    .struct("env")
+                                    ?.mapValues { (_, value) ->
+                                        value.jsonPrimitive.content
+                                    }.orEmpty(),
                             image = build.getValue("image").let(::elementToImage),
                             instance =
                                 build.struct("instance")?.let { instance ->

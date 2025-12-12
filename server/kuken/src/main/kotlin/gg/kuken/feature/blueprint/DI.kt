@@ -27,7 +27,7 @@ val BlueprintDI =
                     ),
                     LocalBlueprintSpecProvider(
                         parser = get(),
-                    )
+                    ),
                 ),
             )
         }

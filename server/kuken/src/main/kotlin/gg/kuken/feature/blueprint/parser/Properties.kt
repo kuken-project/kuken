@@ -39,7 +39,8 @@ internal object Properties {
             constraints = listOf(RequiredPropertyConstraint),
         )
 
-    val Env = Property(
+    val Env =
+        Property(
             qualifiedName = "build.env",
             kind = Struct(allowUnknown = true),
         )

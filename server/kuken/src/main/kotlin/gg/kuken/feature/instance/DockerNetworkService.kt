@@ -16,14 +16,16 @@ class DockerNetworkService(
     private val dockerClient: DockerClient,
 ) {
     companion object {
-
         private const val MACVLAN_DRIVER = "macvlan"
         internal const val HOST_DRIVER = "host"
     }
 
     private val logger = LogManager.getLogger(DockerNetworkService::class.java)
 
-    suspend fun connect(network: String, container: String) {
+    suspend fun connect(
+        network: String,
+        container: String,
+    ) {
         val network =
             runCatching {
                 withContext(IO) { dockerClient.networks.inspect(network) }
@@ -89,9 +91,10 @@ class DockerNetworkService(
      */
     private suspend fun randomPort(): UShort =
         withContext(IO) {
-            ServerSocket(0).use { socket ->
-                socket.localPort
-            }.toUShort()
+            ServerSocket(0)
+                .use { socket ->
+                    socket.localPort
+                }.toUShort()
         }
 
     /**

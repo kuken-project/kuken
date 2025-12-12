@@ -37,7 +37,9 @@ sealed class PropertyKind {
 
     object TrueOrFalse : PropertyKind()
 
-    data class Struct(val allowUnknown: Boolean) : PropertyKind()
+    data class Struct(
+        val allowUnknown: Boolean,
+    ) : PropertyKind()
 
     data class Multiple(
         val supports: PropertyKind,

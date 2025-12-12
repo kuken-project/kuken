@@ -111,13 +111,17 @@ class DockerInstanceService(
         generatedName: String,
         blueprint: Blueprint,
     ): Instance {
-        val env = blueprint.spec.build?.env.orEmpty() + options.env
+        val env =
+            blueprint.spec.build
+                ?.env
+                .orEmpty() + options.env
         val (containerId, address) =
             createAndConnectContainer(
                 instanceId = instanceId,
-                options = options.copy(
-                    env = env
-                ),
+                options =
+                    options.copy(
+                        env = env,
+                    ),
                 name = generatedName,
             )
 
@@ -155,10 +159,11 @@ class DockerInstanceService(
             createContainer(
                 instanceId = instanceId,
                 name = name,
-                options = options.copy(
-                    host = address.host,
-                    port = address.port,
-                ),
+                options =
+                    options.copy(
+                        host = address.host,
+                        port = address.port,
+                    ),
             )
 
         connectInstance(containerId = containerId)
@@ -234,7 +239,11 @@ class DockerInstanceService(
             nodeId = instance.nodeId,
         )
 
-    private suspend fun createContainer(instanceId: Uuid, name: String, options: CreateInstanceOptions): String {
+    private suspend fun createContainer(
+        instanceId: Uuid,
+        name: String,
+        options: CreateInstanceOptions,
+    ): String {
         logger.debug("Creating container with {} to {}...", options.image, instanceId)
         requireNotNull(options.port)
 
@@ -242,9 +251,11 @@ class DockerInstanceService(
             this@create.name = name
             this@create.image = options.image
             labels = mapOf("gg.kuken.instance.id" to instanceId.toString())
-            env = options.env.mapValues { (_, value) ->
-                value.replace("{addr.port}", options.port.toString())
-            }.map { (key, value) -> "$key=$value" }
+            env =
+                options.env
+                    .mapValues { (_, value) ->
+                        value.replace("{addr.port}", options.port.toString())
+                    }.map { (key, value) -> "$key=$value" }
 
             hostConfig {
                 portBindings(options.port) {
@@ -259,10 +270,10 @@ class DockerInstanceService(
         logger.debug("Connecting $containerId to $networkToConnect...")
 
         runCatching {
-             dockerNetworkService.connect(
-                 network = networkToConnect,
-                 container = containerId
-             )
+            dockerNetworkService.connect(
+                network = networkToConnect,
+                container = containerId,
+            )
             logger.debug("Connected {} to {}", containerId, networkToConnect)
         }.onFailure { error ->
             logger.error("Unable to connect {} to the network {}", containerId, networkToConnect, error)

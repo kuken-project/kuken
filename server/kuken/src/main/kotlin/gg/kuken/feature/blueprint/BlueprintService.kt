@@ -32,17 +32,21 @@ class BlueprintService(
     suspend fun importBlueprint(source: BlueprintSpecSource): Blueprint {
         val spec = blueprintSpecProvider.provide(source)
         val encoded = json.encodeToString(spec).encodeToByteArray()
-        val entity = blueprintRepository.create(
-            id = identityGeneratorService.generate(),
-            spec = encoded,
-            createdAt = Clock.System.now(),
-        )
+        val entity =
+            blueprintRepository.create(
+                id = identityGeneratorService.generate(),
+                spec = encoded,
+                createdAt = Clock.System.now(),
+            )
 
         return toModel(entity, spec)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    private fun toModel(entity: BlueprintEntity, spec: BlueprintSpec? = null): Blueprint {
+    private fun toModel(
+        entity: BlueprintEntity,
+        spec: BlueprintSpec? = null,
+    ): Blueprint {
         val spec = spec ?: json.decodeFromStream<BlueprintSpec>(entity.content.inputStream)
         return Blueprint(
             id = entity.id.value.toKotlinUuid(),
