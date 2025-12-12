@@ -29,23 +29,26 @@ class BlueprintService(
         blueprintRepository.find(id)?.let(::toModel)
             ?: throw BlueprintNotFoundException()
 
-    suspend fun importBlueprint(source: BlueprintSpecSource): BlueprintSpec {
+    suspend fun importBlueprint(source: BlueprintSpecSource): Blueprint {
         val spec = blueprintSpecProvider.provide(source)
-        blueprintRepository.create(
+        val encoded = json.encodeToString(spec).encodeToByteArray()
+        val entity = blueprintRepository.create(
             id = identityGeneratorService.generate(),
-            spec = json.encodeToString(spec).encodeToByteArray(),
+            spec = encoded,
             createdAt = Clock.System.now(),
         )
 
-        return spec
+        return toModel(entity, spec)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    private fun toModel(entity: BlueprintEntity): Blueprint =
-        Blueprint(
+    private fun toModel(entity: BlueprintEntity, spec: BlueprintSpec? = null): Blueprint {
+        val spec = spec ?: json.decodeFromStream<BlueprintSpec>(entity.content.inputStream)
+        return Blueprint(
             id = entity.id.value.toKotlinUuid(),
             createdAt = entity.createdAt,
             updatedAt = entity.updatedAt,
-            spec = json.decodeFromStream<BlueprintSpec>(entity.content.inputStream),
+            spec = spec,
         )
+    }
 }
