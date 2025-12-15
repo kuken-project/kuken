@@ -13,7 +13,7 @@ docker-kotlin = "0.7.0-SNAPSHOT"
 bcprov = "1.81"
 validator = "9.0.1.Final"
 hocon = "1.4.3"
-lettuce = "7.2.0.RELEASE"
+lettuce = "7.2.1.RELEASE"
 
 [libraries]
 ktx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "ktx-atomicfu" }
