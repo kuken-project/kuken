@@ -11,7 +11,7 @@ ktor = "3.2.1"
 postgresql = "42.7.7"
 docker-kotlin = "0.7.0-SNAPSHOT"
 bcprov = "1.81"
-validator = "9.0.1.Final"
+validator = "9.1.0.Final"
 hocon = "1.4.3"
 lettuce = "7.2.0.RELEASE"
 
