@@ -3,22 +3,37 @@ name: [Web] Build
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - web
   pull_request:
     branches: [ "main" ]
+    paths:
+      - web
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+      - run: cd web && yarn lint
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         # https://nodejs.org/en/about/releases/
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [20, 22, 24]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: cd web && yarn ci
-      - run: cd web && yarn build-only
+          cache-dependency-path: web/package-lock.json
+      - run: cd web && yarn ci && yarn build-only
