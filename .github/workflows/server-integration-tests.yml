@@ -1,10 +1,10 @@
-name: [Server] Integration Tests
+name: "[Server] Integration Tests"
 
 on:
   push:
     branches: [ main ]
     paths:
-      - server
+      - "server/**"
   workflow_dispatch:
 
 jobs:

@@ -1,13 +1,13 @@
-name: [Server] Build
+name: "[Server] Build"
 on:
   push:
     branches: [main]
     paths:
-      - server
+      - "server/**"
   pull_request:
     branches: [main]
     paths:
-      - server
+      - "server/**"
   workflow_dispatch:
 jobs:
   build:

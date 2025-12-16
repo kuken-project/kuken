@@ -1,4 +1,4 @@
-name: [Web] Publish Docker Image
+name: "[Web] Publish Docker Image"
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -11,12 +11,7 @@ on:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths:
-      - web
-  pull_request:
-    branches: [ "main" ]
-    types: [ "opened", "synchronize", "reopened" ]
-    paths:
-      - web
+      - "web/**"
   workflow_dispatch:
 
 env:
@@ -24,7 +19,6 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-
 
 jobs:
   build:
