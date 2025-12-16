@@ -1,4 +1,4 @@
-name: [Web] Build
+name: "[Web] Build"
 
 on:
   push:
@@ -14,14 +14,18 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js 24
+      - name: Checkout Application Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
         uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: 'npm'
           cache-dependency-path: web/package-lock.json
-      - run: cd web && yarn lint
+
+      - name: Lint
+        run: cd web && yarn lint
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -29,11 +33,15 @@ jobs:
         # https://nodejs.org/en/about/releases/
         node-version: [20, 22, 24]
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Checkout Application Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: web/package-lock.json
-      - run: cd web && yarn ci && yarn build-only
+
+      - name: Build
+        run: cd web && yarn ci && yarn build-only
