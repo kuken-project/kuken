@@ -60,7 +60,7 @@ const activeLink = computed(() => links[links.length - 1]!)
 
     &::after {
       content: '/';
-      font-weight: 700;
+      font-weight: lighter;
       display: inline-block;
       padding: 0 8px;
       color: var(--kt-content-neutral-low)
