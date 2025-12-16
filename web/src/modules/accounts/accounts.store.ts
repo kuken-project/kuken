@@ -1,9 +1,14 @@
 import { defineStore } from "pinia"
 import { isNull } from "@/utils"
 import type { Account } from "./api/models/account.model"
+import {computed} from "vue";
 
 type AccountsState = {
 	account: Account | null
+}
+
+export function useAccount() {
+    return computed(() => useAccountsStore().getAccount)
 }
 
 export const useAccountsStore = defineStore("accounts", {
