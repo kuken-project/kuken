@@ -38,5 +38,7 @@ jobs:
           validate-wrappers: true
 
       - name: Build with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: server
         run: ./gradlew build -x check
