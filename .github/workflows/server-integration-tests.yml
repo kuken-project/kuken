@@ -19,6 +19,11 @@ jobs:
           - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          path: server
+
       - name: Setup Docker
         uses: docker-practice/actions-setup-docker@master
 
@@ -27,16 +32,11 @@ jobs:
         with:
           java-version: '25'
           distribution: 'adopt'
-          server-id: github
-          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
         with:
           validate-wrappers: true
-
-      - name: Checkout
-        uses: actions/checkout@v5
 
       - name: Prune Docker System
         run: docker system prune -a -f
