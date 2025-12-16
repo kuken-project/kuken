@@ -38,4 +38,5 @@ jobs:
           validate-wrappers: true
 
       - name: Build with Gradle
+        working-directory: server
         run: ./gradlew build -x check
