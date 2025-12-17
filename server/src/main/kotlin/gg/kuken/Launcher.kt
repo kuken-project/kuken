@@ -71,9 +71,7 @@ private fun configureDependencyInjection(config: KukenConfig) =
                 single<EventDispatcher>(createdAtStart = true) {
                     CompositeEventDispatcher(
                         dispatchers =
-                            listOf(
-                                RedisEventDispatcher(redisClient = get()),
-                            ),
+                            listOf(),
                     )
                 }
 

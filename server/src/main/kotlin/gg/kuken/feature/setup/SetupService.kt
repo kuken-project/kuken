@@ -12,7 +12,7 @@ class SetupService(
     private val accountService: AccountService,
     private val remoteConfigService: RemoteConfigService,
 ) {
-    val requiredSetupSteps = setOf(Step.CreateAccount, Step.OrganizationName)
+    val requiredSetupSteps = linkedSetOf(Step.CreateAccount, Step.OrganizationName)
 
     suspend fun currentState(): SetupState {
         val stepsToComplete =
@@ -28,12 +28,12 @@ class SetupService(
 
     private suspend fun retrieveRemainingSteps(): Set<Step> =
         buildSet {
-            if (!remoteConfigService.isConfigValueSet(RemoteConfig.OrganizationName)) {
-                add(Step.OrganizationName)
-            }
-
             if (!accountService.existsAnyAccount()) {
                 add(Step.CreateAccount)
+            }
+
+            if (!remoteConfigService.isConfigValueSet(RemoteConfig.OrganizationName)) {
+                add(Step.OrganizationName)
             }
         }
 
