@@ -10,7 +10,7 @@ data class KukenConfig(
     val node: String,
     val docker: DockerConfig,
 ) {
-    val devMode: Boolean = System.getenv("PRODUCTION")?.toBoolean() ?: false
+    val devMode: Boolean = System.getenv("PRODUCTION")?.toBooleanStrictOrNull() == null
 
     @Serializable
     data class HttpConfig(
