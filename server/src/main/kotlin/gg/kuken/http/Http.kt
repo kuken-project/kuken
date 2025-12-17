@@ -63,7 +63,7 @@ class Http(
     }
 
     private fun Application.registerHttpModules() {
-        if (appConfig.devMode) {
+        if (!appConfig.devMode) {
             configureAPIDocs()
         }
 
