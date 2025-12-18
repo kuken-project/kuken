@@ -33,11 +33,6 @@ data class CombinedBlueprintSpecProvider(
     }
 }
 
-@JvmInline
-value class RemoteBlueprintSpecSource(
-    val url: String,
-) : BlueprintSpecSource
-
 class RemoteBlueprintSpecProvider(
     private val parser: BlueprintParser,
 ) : BlueprintSpecProvider {
@@ -45,7 +40,7 @@ class RemoteBlueprintSpecProvider(
     override val providerId: String get() = "remote"
 
     override suspend fun provide(source: BlueprintSpecSource): BlueprintSpec {
-        if (source !is RemoteBlueprintSpecSource) {
+        if (source !is BlueprintSpecSource.Remote) {
             throw UnsupportedBlueprintSpecSource()
         }
 
@@ -61,18 +56,13 @@ class RemoteBlueprintSpecProvider(
     }
 }
 
-@JvmInline
-value class LocalBlueprintSpecSource(
-    val filePath: String,
-) : BlueprintSpecSource
-
 class LocalBlueprintSpecProvider(
     private val parser: BlueprintParser,
 ) : BlueprintSpecProvider {
-    override val providerId: String get() = "remote"
+    override val providerId: String get() = "local"
 
     override suspend fun provide(source: BlueprintSpecSource): BlueprintSpec {
-        if (source !is LocalBlueprintSpecSource) {
+        if (source !is BlueprintSpecSource.Local) {
             throw UnsupportedBlueprintSpecSource()
         }
 

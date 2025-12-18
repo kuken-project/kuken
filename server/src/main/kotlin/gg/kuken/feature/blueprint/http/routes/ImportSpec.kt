@@ -1,10 +1,8 @@
 package gg.kuken.feature.blueprint.http.routes
 
 import gg.kuken.feature.blueprint.BlueprintService
-import gg.kuken.feature.blueprint.LocalBlueprintSpecSource
-import gg.kuken.feature.blueprint.RemoteBlueprintSpecSource
+import gg.kuken.feature.blueprint.BlueprintSpecSource
 import gg.kuken.feature.blueprint.http.BlueprintRoutes
-import gg.kuken.feature.blueprint.http.dto.ImportBlueprintRequest
 import gg.kuken.http.util.receiveValidating
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
@@ -17,8 +15,8 @@ fun Route.importBlueprint() {
     val validator by inject<Validator>()
 
     post<BlueprintRoutes.Import> {
-        val req = call.receiveValidating<ImportBlueprintRequest>(validator)
-        val blueprint = blueprintService.importBlueprint(RemoteBlueprintSpecSource(req.url))
+        val source = call.receiveValidating<BlueprintSpecSource>(validator)
+        val blueprint = blueprintService.importBlueprint(source)
 
         call.respond(blueprint)
     }

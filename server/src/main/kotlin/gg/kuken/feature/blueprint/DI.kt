@@ -22,10 +22,10 @@ val BlueprintDI =
         single<BlueprintSpecProvider> {
             CombinedBlueprintSpecProvider(
                 listOf(
-                    RemoteBlueprintSpecProvider(
+                    LocalBlueprintSpecProvider(
                         parser = get(),
                     ),
-                    LocalBlueprintSpecProvider(
+                    RemoteBlueprintSpecProvider(
                         parser = get(),
                     ),
                 ),
