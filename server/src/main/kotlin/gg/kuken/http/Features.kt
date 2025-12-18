@@ -73,6 +73,7 @@ fun Application.installDefaultFeatures(config: KukenConfig) {
         }
 
         exception<ValidationException> { call, exception ->
+            if (config.devMode) call.application.log.error(exception)
             call.respond(
                 status = HttpStatusCode.UnprocessableEntity,
                 message = exception.data,
@@ -85,6 +86,7 @@ fun Application.installDefaultFeatures(config: KukenConfig) {
         }
 
         exception<BadRequestException> { call, exception ->
+            if (config.devMode) call.application.log.error(exception)
             call.respond(HttpStatusCode.UnprocessableEntity)
         }
 
