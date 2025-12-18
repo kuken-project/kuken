@@ -29,7 +29,6 @@ const error = ref<Error | null>(null)
 
 // Functions
 function load(): void {
-    console.log("load")
     error.value = null
     state.isEmpty = false
     state.isLoading = true
@@ -44,7 +43,6 @@ function load(): void {
 // Functions
 function onDataLoaded(value: unknown) {
     // TODO Check empty state
-    logService.debug("data loaded", value)
     emits("loaded", value)
 }
 
