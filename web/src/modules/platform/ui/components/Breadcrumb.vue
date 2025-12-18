@@ -1,26 +1,27 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router"
-import { isNull, isUndefined } from "@/utils"
 import { computed } from "vue"
 
-const children = useRoute().matched
-const links = children
-    .filter(
-        (path) =>
-            !isUndefined(path.meta.title) &&
-            !isNull(path.meta.title) &&
-            path.meta.title.toString().length > 0
-    )
-    .map((path) => {
-        return {
-            title: path.meta.title as string,
-            href: path.name
-        }
-    })
-const isVisible = links.length > 1
+type Link = { title: PropertyKey; route: string }
 
-const inactiveLinks = computed(() => links.slice(0, links.length - 1))
-const activeLink = computed(() => links[links.length - 1]!)
+const route = useRoute()
+const links = computed(() =>
+    route.matched
+        .filter((route) => {
+            const title = route.meta.title
+            return title != null && String(title).length > 0
+        })
+        .map((route) => {
+            return {
+                title: String(route.meta.title),
+                route: route.path
+            } as Link
+        })
+)
+
+const isVisible = computed(() => links.value.length > 1)
+const inactiveLinks = computed(() => links.value.slice(0, -1))
+const activeLink = computed(() => links.value[links.value.length - 1])
 </script>
 
 <template>
@@ -29,11 +30,11 @@ const activeLink = computed(() => links[links.length - 1]!)
             v-for="link in inactiveLinks"
             :key="link.title"
             class="link"
-            :to="{ name: link.href }"
+            :to="{ path: link.route }"
         >
             {{ link.title }}
         </router-link>
-        <span key="active" class="link" v-text="activeLink.title" />
+        <span key="active" class="link" v-text="activeLink?.title" />
     </div>
 </template>
 

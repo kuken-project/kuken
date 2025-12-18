@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import { AuthRoutes } from "@/modules/auth/auth.routes"
-import { AccountsRoute } from "@/modules/accounts/accounts.routes"
 import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 import { HomeRoutes } from "@/modules/home/home.routes"
-import { BlueprintsRoutes } from "@/modules/blueprints/blueprints.routes"
 import { RequireSetupGuard } from "@/modules/setup/guards/require-setup.guard.ts"
 
 export function importPage(module: string, path: string): () => Promise<unknown> {
@@ -21,7 +19,7 @@ const router = createRouter({
             path: "/",
             component: importPage("platform", "Root"),
             beforeEnter: [AuthenticatedOnlyGuard],
-            children: [...HomeRoutes, ...AccountsRoute]
+            children: [...HomeRoutes]
         },
         {
             path: "/setup",
