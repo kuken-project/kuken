@@ -44,14 +44,15 @@ class DockerInstanceService(
 
     override suspend fun getInstance(instanceId: Uuid): Instance {
         val instance = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
+        val runtime = instance.containerId?.let { id -> buildRuntime(id) }
 
         return Instance(
             id = instance.id.value.toKotlinUuid(),
-            status = instance.status.let(InstanceStatus::valueOf),
+            status = instance.status.let(InstanceStatus::getByLabel),
             containerId = instance.containerId,
             updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
-            address = HostPort(instance.host!!, instance.port!!),
-            runtime = null,
+            address = HostPort(host = instance.host, port = instance.port!!),
+            runtime = runtime,
             blueprintId = instance.blueprintId.toKotlinUuid(),
             createdAt = instance.createdAt,
             nodeId = instance.nodeId,
