@@ -11,5 +11,7 @@ import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
 <style scoped lang="scss">
 .container {
     padding: 48px;
+    display: flex;
+    flex-direction: column;
 }
 </style>

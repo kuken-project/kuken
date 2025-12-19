@@ -1,6 +1,6 @@
 <template>
     <div
-        class="button"
+        class="card"
         :class="{
             'card--hoverable': hoverable,
             'card--flat': flat,

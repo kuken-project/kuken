@@ -40,7 +40,7 @@ async function performImport() {
                     <router-link
                         v-for="blueprint in state.readyToUseBlueprints"
                         :key="blueprint.id"
-                        :to="{ name: 'blueprints.info', params: { blueprintId: blueprint.id } }"
+                        :to="{ name: 'blueprints.details', params: { blueprintId: blueprint.id } }"
                         class="blueprint"
                     >
                         <div class="blueprintIcon">
