@@ -15,6 +15,7 @@ export const BlueprintsRoutes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: "",
+                name: "blueprints.home",
                 component: importPage(MODULE, "home/BlueprintsHome")
             },
             {
