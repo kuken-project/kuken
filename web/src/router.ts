@@ -3,6 +3,7 @@ import { AuthRoutes } from "@/modules/auth/auth.routes"
 import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 import { HomeRoutes } from "@/modules/home/home.routes"
 import { RequireSetupGuard } from "@/modules/setup/guards/require-setup.guard.ts"
+import {InstancesRoutes} from "@/modules/instances/instances.routes.ts";
 
 export function importPage(module: string, path: string): () => Promise<unknown> {
     const comps = import.meta.glob(`./modules/**/ui/pages/**/*.vue`)
@@ -19,7 +20,7 @@ const router = createRouter({
             path: "/",
             component: importPage("platform", "Root"),
             beforeEnter: [AuthenticatedOnlyGuard],
-            children: [...HomeRoutes]
+            children: [...HomeRoutes, ...InstancesRoutes]
         },
         {
             path: "/setup",
