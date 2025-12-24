@@ -24,4 +24,4 @@
 ## :crystal_ball: Added to documentation
 <!--- Put an `x` in the boxes that apply -->
 - [ ] README
-- [ ] [Official Website](https://github.com/KatanPanel/katan-website)
+- [ ] [Official Website](https://kuken.io)

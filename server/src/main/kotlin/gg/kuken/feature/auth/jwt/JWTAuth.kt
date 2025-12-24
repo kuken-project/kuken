@@ -30,7 +30,7 @@ class JWTAuthServiceImpl(
 ) : AuthService {
     companion object {
         private val jwtTokenLifetime: Duration = 6.hours
-        private const val JWT_ISSUER = "Katan"
+        private const val JWT_ISSUER = "Kuken"
     }
 
     private val algorithm = Algorithm.HMAC256("michjaelJackson")
@@ -87,7 +87,7 @@ class JWTAuthServiceImpl(
 
 class JWTVerifierImpl : JWTVerifier {
     companion object {
-        private const val JWT_ISSUER = "Katan"
+        private const val JWT_ISSUER = "Kuken"
     }
 
     // TODO generate secret

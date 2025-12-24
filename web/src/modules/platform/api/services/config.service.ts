@@ -3,9 +3,9 @@ import { isUndefined } from "@/utils"
 class ConfigService {
     public readonly appName = "Kuken"
     public readonly appVersion = import.meta.env.VITE_APP_VERSION
-    public readonly appWebsite = this.value("$VITE_KATAN_WEBSITE")
-    public readonly apiUrl = this.value("$VITE_KATAN_API")
-    public readonly gatewayUrl = this.value("$VITE_KATAN_GATEWAY")
+    public readonly appWebsite = this.value("$VITE_KUKEN_WEBSITE")
+    public readonly apiUrl = this.value("$VITE_KUKEN_API")
+    public readonly gatewayUrl = this.value("$VITE_KUKEN_GATEWAY")
     public readonly gitCommit = this.value("$VITE_GIT_COMMIT")
     public readonly gitBranch = this.value("$VITE_GIT_BRANCH")
     public readonly orgName = this.value("$VITE_ORG_NAME")

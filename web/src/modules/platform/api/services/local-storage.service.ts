@@ -1,6 +1,6 @@
 import { isNull } from "@/utils"
 
-const PREFIX = "katan_"
+const PREFIX = "kk_"
 
 class LocalStorageService {
     /**

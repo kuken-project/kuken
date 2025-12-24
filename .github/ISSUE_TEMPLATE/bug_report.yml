@@ -47,7 +47,7 @@ body:
   id: environment
   attributes:
     label: ⭐ Environment
-    description: Which is your Katan version.
+    description: Which is your Küken version.
     placeholder: "e.g. 1.0.0-alpha"
   validations:
     required: true

@@ -1,7 +1,7 @@
 # Build stage
 FROM node:lts as build-stage
 ENV NPM_CONFIG_LOGLEVEL info
-LABEL MAINTAINER="Natan Vieira Do Nascimento <natan@katan.org>"
+LABEL MAINTAINER="Natan Vieira Do Nascimento <natanvnascimento@gmail.com>"
 
 WORKDIR /app
 COPY package*.json ./

@@ -21,5 +21,5 @@ do
   rm "$file".tmpl
 done
 
-echo "Katan UI is ready.";
+echo "Küken UI is ready.";
 nginx -g 'daemon off;'

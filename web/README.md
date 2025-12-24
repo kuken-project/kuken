@@ -5,7 +5,7 @@
 **Clone the project repository**
 
 ```
-git clone https://github.com/KatanPanel/web-ui.git
+git clone https://github.com/devnatan/kuken.git
 ```
 
 **Run for local development**

@@ -1,4 +1,4 @@
-export interface KatanError {
+export interface KukenError {
     readonly code: string | number
     readonly message: string
 }
@@ -9,7 +9,7 @@ export class HttpError implements Error {
 
     readonly code!: string | number
 
-    constructor(private readonly error: KatanError) {
+    constructor(private readonly error: KukenError) {
         this.message = this.error.message
         this.name = `HttpError-${this.error.code}`
         this.code = this.error.code

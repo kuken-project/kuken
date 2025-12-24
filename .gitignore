@@ -29,7 +29,7 @@ hs_err_pid*
 # Gradle
 .gradle/
 
-# Katan
+# Kuken
 logs/
 build/
 

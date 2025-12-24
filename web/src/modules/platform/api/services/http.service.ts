@@ -4,7 +4,7 @@ import configService from "@/modules/platform/api/services/config.service"
 import { isUndefined } from "@/utils"
 import logService from "@/modules/platform/api/services/log.service"
 import { HttpError } from "@/modules/platform/api/models/error.model"
-import type { KatanError } from "@/modules/platform/api/models/error.model"
+import type { KukenError } from "@/modules/platform/api/models/error.model"
 
 class HttpService {
     readonly axios: AxiosInstance
@@ -27,7 +27,7 @@ class HttpService {
                     throw error
                 }
 
-                throw new HttpError(data as KatanError)
+                throw new HttpError(data as KukenError)
             }
         )
     }
