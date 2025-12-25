@@ -24,11 +24,11 @@ class WebSocketManager(
     ) {
     private val logger = LogManager.getLogger(WebSocketManager::class.java)
     private val sessions = Collections.synchronizedSet<WebSocketSession>(linkedSetOf())
-    private val generatedId = atomic(0)
+    private val nextSessionId = atomic(0)
     private val handlers = mutableMapOf<WebSocketOp, MutableList<WebSocketClientMessageHandler>>()
 
     suspend fun connect(connection: DefaultWebSocketServerSession) {
-        val session = WebSocketSession(generatedId.getAndIncrement(), connection, json)
+        val session = WebSocketSession(nextSessionId.getAndIncrement(), connection, json)
         sessions.add(session)
         logger.debug(
             "WebSocket session {} connected @ {}",
@@ -91,9 +91,9 @@ class WebSocketManager(
         try {
             session.connection.close()
         } catch (_: ClosedChannelException) {
+            // Channel already closed
         } finally {
             sessions.remove(session)
-            generatedId.decrementAndGet()
         }
     }
 
