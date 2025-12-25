@@ -11,7 +11,10 @@ plugins {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs.add("-opt-in=kotlin.uuid.ExperimentalUuidApi,kotlin.time.ExperimentalTime")
+        freeCompilerArgs.addAll(
+            "-opt-in=kotlin.uuid.ExperimentalUuidApi,kotlin.time.ExperimentalTime",
+            "-Xcontext-parameters"
+        )
     }
 }
 
