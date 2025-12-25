@@ -1,8 +1,8 @@
 package gg.kuken.http
 
 import gg.kuken.http.websocket.WebSocketOp
-import io.ktor.server.application.Application
 import gg.kuken.http.websocket.WebSocketPacketEventHandler
+import io.ktor.server.application.Application
 import org.koin.core.component.KoinComponent
 
 abstract class HttpModule : KoinComponent {

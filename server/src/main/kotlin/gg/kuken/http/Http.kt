@@ -21,6 +21,7 @@ import io.ktor.server.plugins.swagger.swaggerUI
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
+import io.ktor.server.websocket.webSocket
 import kotlinx.atomicfu.atomic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -80,9 +81,8 @@ class Http(
         with(app) {
             installDefaultFeatures(appConfig)
             routing {
-                get("/") {
-                    call.respond(respondServerInfo())
-                }
+                webSocket { webSocketManager.connect(this) }
+                get("/") { call.respond(respondServerInfo()) }
             }
 
             registerHttpModules()
