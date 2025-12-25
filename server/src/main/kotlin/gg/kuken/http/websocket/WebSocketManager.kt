@@ -38,17 +38,10 @@ class WebSocketManager(
 
         try {
             for (frame in connection.incoming) {
-                if (frame !is Frame.Text) continue
-
-                val packet: WebSocketClientMessage
-                try {
-                    packet = json.decodeFromString(frame.readText())
-                } catch (e: SerializationException) {
-                    logger.error("Failed to deserialize WebSocket packet text", e)
-                    continue
+                if (frame is Frame.Text) {
+                    val packet = decodePacket(frame) ?: continue
+                    packetReceived(packet, session)
                 }
-
-                packetReceived(packet, session)
             }
         } catch (_: ClosedReceiveChannelException) {
             val closeReason = session.connection.closeReason.await()
@@ -62,6 +55,14 @@ class WebSocketManager(
         }
     }
 
+    private fun decodePacket(frame: Frame.Text): WebSocketClientMessage? =
+        try {
+            json.decodeFromString<WebSocketClientMessage>(frame.readText())
+        } catch (e: SerializationException) {
+            logger.error("Failed to deserialize WebSocket packet text", e)
+            null
+        }
+
     private suspend fun packetReceived(
         packet: WebSocketClientMessage,
         session: WebSocketSession,
@@ -73,7 +74,7 @@ class WebSocketManager(
         }
 
         val context = WebSocketClientMessageContext(packet, session)
-        for (handler in handlerList) {
+        handlerList.forEach { handler ->
             try {
                 with(handler) { context.handle() }
             } catch (e: Throwable) {
