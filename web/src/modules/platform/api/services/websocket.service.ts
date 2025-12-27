@@ -7,7 +7,7 @@ import type { Logger } from "@/modules/platform/api/services/log.service"
 import logService from "@/modules/platform/api/services/log.service"
 import configService from "@/modules/platform/api/services/config.service"
 
-type WebSocketListener = (arg0: unknown) => void
+type WebSocketListener = (arg0: any) => void
 
 class WebSocketService {
     private readonly logger: Logger = logService.create("Gateway")
@@ -71,10 +71,16 @@ class WebSocketService {
         return !isUndefined(this.ws) && this.ws.readyState === WebSocket.OPEN
     }
 
-    listen(op: number, listener: WebSocketListener): void {
+    listen(op: number, listener: WebSocketListener): () => void {
         if (!this.listeners.has(op)) this.listeners.set(op, [])
 
         this.listeners.get(op)?.push(listener)
+        this.logger.debug(`Added listener for op ${op}`)
+
+        return () => {
+            this.listeners.get(op)?.splice(this.listeners.get(op)?.indexOf(listener)!, 1);
+            this.logger.debug(`Removed listener for op ${op}`)
+        }
     }
 
     close(): void {
