@@ -20,17 +20,17 @@ data class WebSocketClientMessageContext(
     val session: WebSocketSession,
 )
 
-suspend fun WebSocketClientMessageContext.respond(code: Int) {
-    respond<Unit>(code = code, data = null)
+suspend fun WebSocketClientMessageContext.respond(op: Int) {
+    respond<Unit>(op = op, data = null)
 }
 
 suspend inline fun <reified T> WebSocketClientMessageContext.respond(
-    code: Int = packet.op,
+    op: Int = packet.op,
     data: T? = null,
 ) {
     session.send(
         serializer = WebSocketServerMessageSerializer(serializer<T>()),
-        message = WebSocketServerMessage(code, data),
+        message = WebSocketServerMessage(op = op, data = data),
     )
 }
 

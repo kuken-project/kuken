@@ -33,14 +33,15 @@ class WebSocketServerMessageSerializer<T>(
         value: WebSocketServerMessage<T>,
     ) {
         encoder.encodeStructure(descriptor) {
+            encodeIntElement(descriptor = descriptor, index = 0, value = value.op)
+
             @OptIn(ExperimentalSerializationApi::class)
             encodeNullableSerializableElement(
                 descriptor = descriptor,
-                index = 0,
+                index = 1,
                 serializer = dataSerializer,
                 value = value.data,
             )
-            encodeIntElement(descriptor = descriptor, index = 1, value = value.op)
         }
     }
 
