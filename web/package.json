@@ -21,7 +21,7 @@
     "@intlify/unplugin-vue-i18n": "^6.0.3",
     "@uiw/codemirror-extensions-color": "^4.23.10",
     "@uiw/codemirror-extensions-hyper-link": "^4.23.10",
-    "@vueuse/core": "^13.0.0",
+    "@vueuse/core": "^14.1.0",
     "axios": "1.12.0",
     "codemirror": "^6.0.1",
     "consola": "^3.2.3",
