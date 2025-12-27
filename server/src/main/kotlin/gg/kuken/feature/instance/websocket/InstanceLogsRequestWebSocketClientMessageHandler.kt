@@ -26,11 +26,21 @@ class InstanceLogsRequestWebSocketClientMessageHandler(
             return
         }
 
+        val inspection = dockerClient.containers.inspect(containerId)
+        val isContainerRunning = inspection.state.isRunning
+
         try {
             dockerClient.containers
-                .logs(containerId)
-                .onStart {
-                    respond(WebSocketOpCodes.InstanceLogsRequestStarted)
+                .logs(containerId) {
+                    follow = true
+                    showTimestamps = false
+                    stdout = true
+                    stderr = false
+                }.onStart {
+                    respond(
+                        op = WebSocketOpCodes.InstanceLogsRequestStarted,
+                        data = mapOf("running" to isContainerRunning),
+                    )
                 }.onCompletion {
                     respond(WebSocketOpCodes.InstanceLogsRequestFinished)
                 }.collect { frame ->
