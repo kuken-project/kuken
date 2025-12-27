@@ -1,5 +1,8 @@
 import { isUndefined } from "@/utils"
-import type { WebSocketMessage } from "@/modules/platform/api/models/websocket.response"
+import {
+    type WebSocketMessage,
+    type WebSocketOp
+} from "@/modules/platform/api/models/websocket.response"
 import type { Logger } from "@/modules/platform/api/services/log.service"
 import logService from "@/modules/platform/api/services/log.service"
 import configService from "@/modules/platform/api/services/config.service"
@@ -42,11 +45,13 @@ class WebSocketService {
         }
     }
 
-    async send(message: WebSocketMessage): Promise<void> {
+    async send(code: WebSocketOp, payload: any): Promise<void> {
         if (isUndefined(this.ws) || this.ws.readyState !== WebSocket.OPEN) {
             this.logger.debug("Waiting connection be established to send message...")
             await this.awaitConnect()
         }
+
+        const message: WebSocketMessage = { o: code, d: payload }
 
         this.ws?.send(JSON.stringify(message))
     }
