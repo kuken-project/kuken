@@ -31,6 +31,8 @@ class WebSocketService {
             onFailure?.()
         }
         this.ws.onmessage = (e: MessageEvent) => {
+            this.logger.debug("Message received:", e.data)
+
             const data = JSON.parse(e.data)
 
             if (!data.o) {
@@ -54,6 +56,7 @@ class WebSocketService {
         const message: WebSocketMessage = { o: code, d: payload }
 
         this.ws?.send(JSON.stringify(message))
+        this.logger.debug("Message sent:", message)
     }
 
     awaitConnect(): Promise<void> {

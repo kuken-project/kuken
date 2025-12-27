@@ -1,6 +1,6 @@
-import httpService from "@/modules/platform/api/services/http.service.ts";
-import type {AxiosResponse} from "axios";
-import type {Instance} from "@/modules/instances/api/models/instance.model.ts";
+import httpService from "@/modules/platform/api/services/http.service.ts"
+import type { AxiosResponse } from "axios"
+import type { Instance } from "@/modules/instances/api/models/instance.model.ts"
 
 class InstancesService {
     async getInstance(instanceId: String): Promise<Instance> {

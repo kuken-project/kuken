@@ -4,7 +4,7 @@
             <img src="/img/icon-white-transparent.png" alt="Logo" />
         </div>
         <template v-if="$slots.default">
-          <slot />
+            <slot />
         </template>
     </header>
 </template>
