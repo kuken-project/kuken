@@ -3,6 +3,8 @@ package gg.kuken.feature.blueprint.http.routes
 import gg.kuken.feature.blueprint.BlueprintService
 import gg.kuken.feature.blueprint.BlueprintSpecSource
 import gg.kuken.feature.blueprint.http.BlueprintRoutes
+import gg.kuken.feature.rbac.Permissions
+import gg.kuken.feature.rbac.http.requirePermission
 import gg.kuken.http.util.receiveValid
 import io.ktor.server.resources.post
 import io.ktor.server.response.respond
@@ -10,6 +12,8 @@ import io.ktor.server.routing.Route
 import org.koin.ktor.ext.inject
 
 fun Route.importBlueprint() {
+    requirePermission(Permissions.ImportBlueprint)
+
     val blueprintService by inject<BlueprintService>()
 
     post<BlueprintRoutes.Import> {
