@@ -1,6 +1,7 @@
 package gg.kuken.http
 
 import gg.kuken.KukenConfig
+import gg.kuken.feature.rbac.http.RBACAuthorizationPlugin
 import gg.kuken.http.exception.ResourceException
 import gg.kuken.http.util.ValidationException
 import io.ktor.http.HttpHeaders
@@ -10,8 +11,6 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.application.log
-import io.ktor.server.auth.Authentication
-import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.autohead.AutoHeadResponse
 import io.ktor.server.plugins.calllogging.CallLogging
@@ -37,6 +36,7 @@ fun Application.installDefaultFeatures(config: KukenConfig) {
     install(Resources)
     install(DefaultHeaders)
     install(AutoHeadResponse)
+    install(RBACAuthorizationPlugin)
 
     install(CallLogging) {
         level = if (config.devMode) Level.DEBUG else Level.INFO
