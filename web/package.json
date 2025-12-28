@@ -15,7 +15,7 @@
     "ci": "yarn install --immutable --immutable-cache --check-cache"
   },
   "dependencies": {
-    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/lang-json": "^6.0.2",
     "@codemirror/lang-markdown": "^6.3.2",
     "@codemirror/lint": "^6.8.4",
     "@intlify/unplugin-vue-i18n": "^6.0.3",
