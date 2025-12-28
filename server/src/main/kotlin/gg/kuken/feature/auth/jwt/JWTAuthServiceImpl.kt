@@ -18,14 +18,14 @@ import kotlin.uuid.Uuid
 class JWTAuthServiceImpl(
     private val accountService: AccountService,
     private val passwordHashAlgorithm: Hash,
-    private val tokenAlgorithmFactory: AlgorithmFactory,
+    private val tokenAlgorithmProvider: AlgorithmProvider,
 ) : AuthService {
     companion object {
         private val jwtTokenLifetime: Duration = 6.hours
         private const val JWT_ISSUER = "Kuken"
     }
 
-    private val tokenAlgorithm: Algorithm by lazy { tokenAlgorithmFactory.create() }
+    private val tokenAlgorithm: Algorithm = tokenAlgorithmProvider.get()
 
     private fun validate(
         input: CharArray,

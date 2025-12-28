@@ -10,7 +10,7 @@ import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.JWTVerifier
 
 class JWTVerifierImpl(
-    tokenAlgorithmFactory: AlgorithmFactory,
+    tokenAlgorithmProvider: AlgorithmProvider,
 ) : JWTVerifier {
     companion object {
         private const val JWT_ISSUER = "Kuken"
@@ -18,7 +18,7 @@ class JWTVerifierImpl(
 
     private val jwtVerifier: com.auth0.jwt.JWTVerifier =
         JWT
-            .require(tokenAlgorithmFactory.create())
+            .require(tokenAlgorithmProvider.get())
             .withIssuer(JWT_ISSUER)
             .build()
 
