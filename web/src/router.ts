@@ -8,7 +8,7 @@ import { UnitsRoutes } from "@/modules/units/units.routes.ts"
 
 export function importPage(module: string, path: string): () => Promise<unknown> {
     const comps = import.meta.glob(`./modules/**/ui/pages/**/*.vue`)
-    return comps[`./modules/${module}/ui/pages/${path}Page.vue`]
+    return comps[`./modules/${module}/ui/pages/${path}Page.vue`]!
 }
 
 export const SETUP_ROUTE = "setup"
