@@ -7,7 +7,7 @@ Bash (Ubuntu, Debian, Fedora, etc.)
 curl -fsSL https://raw.githubusercontent.com/devnatan/kuken/main/installer/installer.sh | bash
 ```
 ```shell
-wget -qO- curl -fsSL https://raw.githubusercontent.com/devnatan/kuken/main/installer/installer.sh | bash
+wget -qO- https://raw.githubusercontent.com/devnatan/kuken/main/installer/installer.sh | bash
 ```
 
 Manual installation
