@@ -6,6 +6,9 @@
             empty-state.refresh
         </VButton>
     </EmptyState>
+    <template v-else-if="error && error.code === 2002">
+        <!-- Do nothing -->
+    </template>
     <slot v-else key="content" :refresh="load" />
 </template>
 
@@ -15,19 +18,20 @@ import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import { reactive, ref } from "vue"
 import logService from "@/modules/platform/api/services/log.service"
+import { useRouter } from "vue-router"
 
 const emits = defineEmits(["loaded", "error"])
-const props = defineProps<{
-    resource: () => Promise<unknown>
-    includeRefreshButton?: true
-}>()
+const props = defineProps({
+    resource: { required: true, type: Function<Promise<unknown>> },
+    includeRefreshButton: { required: false, default: true },
+    redirectNotAllowed: { required: false, default: true }
+})
 const state = reactive({
     isLoading: true,
     isEmpty: false
 })
 const error = ref<Error | null>(null)
 
-// Functions
 function load(): void {
     error.value = null
     state.isEmpty = false
@@ -40,13 +44,25 @@ function load(): void {
         .finally(() => (state.isLoading = false))
 }
 
-// Functions
 function onDataLoaded(value: unknown) {
     // TODO Check empty state
     emits("loaded", value)
 }
 
+const router = useRouter()
 function onError(errorArg: Error) {
+    console.log("props", props.redirectNotAllowed)
+    console.log("code", errorArg.code)
+    if (
+        errorArg.code &&
+        errorArg.code === 2002 /* Insufficient permissions */ &&
+        props.redirectNotAllowed
+    ) {
+        console.log("redirect")
+        router.replace({ name: "access-denied" })
+        return
+    }
+
     logService.error("Failed to load resource", errorArg)
     error.value = errorArg
     emits("error", errorArg)

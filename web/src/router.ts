@@ -30,6 +30,11 @@ const router = createRouter({
             meta: {
                 title: "Set Up"
             }
+        },
+        {
+            path: "/access-denied",
+            name: "access-denied",
+            component: importPage("platform", "AccessDenied")
         }
     ]
 })
