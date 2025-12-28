@@ -10,7 +10,7 @@ val UnitDI =
             UnitRepositoryImpl(database = get())
         }
 
-        single {
+        factory {
             UnitService(
                 kukenConfig = get(),
                 unitRepository = get(),
