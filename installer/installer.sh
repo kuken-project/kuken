@@ -26,8 +26,6 @@ err() {
 
 # --- OS/Architecture detection ---
 detect_os() {
-	print "Detecting operating system..."
-
 	case "$(uname -s)" in
 		Linux*)
 			OS="linux"
@@ -46,8 +44,6 @@ detect_os() {
 }
 
 detect_arch() {
-	print "Detecting architecture..."
-
 	case "$(uname -m)" in
 		x86_64|amd64)
 			ARCH="amd64"
@@ -177,11 +173,17 @@ EOF
 }
 
 main() {
+  detect_os
+  detect_arch
+
+  print "Operating System: $OS ($ARCH)"
+
 	check_curl
 	check_java
 	check_docker
 
-	download_and_install "$(get_latest_release)"
+  local version="$(get_latest_release)"
+	download_and_install "$version"
 }
 
 main
