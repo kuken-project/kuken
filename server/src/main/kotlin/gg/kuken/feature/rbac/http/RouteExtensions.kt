@@ -55,7 +55,7 @@ private object PermissionRouteHook : Hook<suspend (ApplicationCall) -> Any> {
 
 private val PermissionRoutePlugin =
     createRouteScopedPlugin(
-        name = "permission",
+        name = "gg.kuken.feature.rbac.http.PermissionRoutePlugin",
         createConfiguration = ::SinglePermissionRoutePluginConfig,
     ) {
         on(PermissionRouteHook) { call ->
