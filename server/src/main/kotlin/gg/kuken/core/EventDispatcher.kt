@@ -25,7 +25,7 @@ class EventDispatcherImpl :
     override suspend fun <T : Any> listen(eventType: KClass<T>): Flow<T> = publisher.filterIsInstance(eventType)
 
     override suspend fun dispatch(event: Any) {
-        publisher.tryEmit(event)
+        publisher.emit(event)
     }
 }
 
