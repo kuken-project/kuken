@@ -12,8 +12,6 @@ import io.ktor.server.routing.Route
 import org.koin.ktor.ext.inject
 
 fun Route.importBlueprint() {
-    requirePermission(Permissions.ImportBlueprint)
-
     val blueprintService by inject<BlueprintService>()
 
     post<BlueprintRoutes.Import> {

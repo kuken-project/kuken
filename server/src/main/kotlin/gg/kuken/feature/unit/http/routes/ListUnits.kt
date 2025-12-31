@@ -11,8 +11,6 @@ import io.ktor.server.routing.Route
 import org.koin.ktor.ext.inject
 
 internal fun Route.listUnits() {
-    requirePermission(Permissions.ListUnits)
-
     val unitService by inject<UnitService>()
 
     get<UnitRoutes.All> {

@@ -27,12 +27,6 @@ fun ApplicationCall.getAccountId(): Uuid =
         ?.id
         ?: throw InvalidAccessTokenException()
 
-suspend fun ApplicationCall.isAdmin(): Boolean {
-    val userId = getAccountId()
-    val permissionService by inject<PermissionService>()
-    return permissionService.hasPermission(userId, Permissions.Admin)
-}
-
 typealias GetResourceId = (ApplicationCall) -> Uuid?
 
 class SinglePermissionRoutePluginConfig {
