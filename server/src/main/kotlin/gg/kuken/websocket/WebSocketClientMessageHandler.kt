@@ -1,4 +1,4 @@
-package gg.kuken.http.websocket
+package gg.kuken.websocket
 
 import kotlinx.coroutines.CoroutineScope
 import org.koin.core.component.KoinComponent

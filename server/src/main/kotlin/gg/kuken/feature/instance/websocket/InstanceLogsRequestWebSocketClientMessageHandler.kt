@@ -1,11 +1,11 @@
 package gg.kuken.feature.instance.websocket
 
 import gg.kuken.feature.instance.InstanceService
-import gg.kuken.http.websocket.WebSocketClientMessageContext
-import gg.kuken.http.websocket.WebSocketClientMessageHandler
-import gg.kuken.http.websocket.WebSocketOpCodes
-import gg.kuken.http.websocket.respond
-import gg.kuken.http.websocket.uuid
+import gg.kuken.websocket.WebSocketClientMessageContext
+import gg.kuken.websocket.WebSocketClientMessageHandler
+import gg.kuken.websocket.WebSocketOpCodes
+import gg.kuken.websocket.respond
+import gg.kuken.websocket.uuid
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import me.devnatan.dockerkt.DockerClient
@@ -30,27 +30,34 @@ class InstanceLogsRequestWebSocketClientMessageHandler(
         val isContainerRunning = inspection.state.isRunning
 
         try {
-            dockerClient.containers
-                .logs(containerId) {
-                    follow = true
-                    showTimestamps = false
-                    stdout = true
-                    stderr = true
-                }.onStart {
-                    respond(
-                        op = WebSocketOpCodes.InstanceLogsRequestStarted,
-                        data = mapOf("running" to isContainerRunning),
-                    )
-                }.onCompletion {
-                    respond(WebSocketOpCodes.InstanceLogsRequestFinished)
-                }.collect { frame ->
-                    respond(
-                        op = WebSocketOpCodes.InstanceLogsRequestFrame,
-                        data = frame,
-                    )
-                }
+            captureLogs(containerId, isContainerRunning)
         } catch (_: ContainerNotFoundException) {
             respond(WebSocketOpCodes.InstanceUnavailable)
         }
+    }
+
+    private suspend fun WebSocketClientMessageContext.captureLogs(
+        containerId: String,
+        isContainerRunning: Boolean
+    ) {
+        dockerClient.containers
+            .logs(containerId) {
+                follow = true
+                showTimestamps = false
+                stdout = true
+                stderr = true
+            }.onStart {
+                respond(
+                    op = WebSocketOpCodes.InstanceLogsRequestStarted,
+                    data = mapOf("running" to isContainerRunning),
+                )
+            }.onCompletion {
+                respond(WebSocketOpCodes.InstanceLogsRequestFinished)
+            }.collect { frame ->
+                respond(
+                    op = WebSocketOpCodes.InstanceLogsRequestFrame,
+                    data = frame,
+                )
+            }
     }
 }

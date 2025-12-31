@@ -1,4 +1,4 @@
-package gg.kuken.http.websocket
+package gg.kuken.websocket
 
 import io.ktor.server.websocket.DefaultWebSocketServerSession
 import io.ktor.websocket.Frame

@@ -1,4 +1,4 @@
-package gg.kuken.http.websocket
+package gg.kuken.websocket
 
 import kotlinx.serialization.Required
 import kotlinx.serialization.SerialName

@@ -1,4 +1,4 @@
-package gg.kuken.http.websocket
+package gg.kuken.websocket
 
 typealias WebSocketOp = Int
 
@@ -13,4 +13,6 @@ object WebSocketOpCodes {
     const val InstanceLogsRequestFrame: WebSocketOp = 4
 
     const val InstanceLogsRequestFinished: WebSocketOp = 5
+
+    const val InstanceStarted: WebSocketOp = 6
 }

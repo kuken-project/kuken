@@ -7,10 +7,9 @@ import gg.kuken.feature.blueprint.http.BlueprintHttpModule
 import gg.kuken.feature.instance.http.InstanceHttpModule
 import gg.kuken.feature.remoteConfig.RemoteConfig
 import gg.kuken.feature.remoteConfig.RemoteConfigService
-import gg.kuken.feature.setup.SetupService
 import gg.kuken.feature.setup.http.SetupHttpModule
 import gg.kuken.feature.unit.http.UnitHttpModule
-import gg.kuken.http.websocket.WebSocketManager
+import gg.kuken.websocket.WebSocketManager
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.EmbeddedServer

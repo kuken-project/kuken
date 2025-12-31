@@ -1,7 +1,7 @@
 package gg.kuken.http
 
-import gg.kuken.http.websocket.WebSocketClientMessageHandler
-import gg.kuken.http.websocket.WebSocketOp
+import gg.kuken.websocket.WebSocketClientMessageHandler
+import gg.kuken.websocket.WebSocketOp
 import io.ktor.server.application.Application
 import org.koin.core.component.KoinComponent
 
