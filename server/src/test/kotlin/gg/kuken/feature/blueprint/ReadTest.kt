@@ -26,7 +26,7 @@ class ReadTest {
                 input,
                 Property(
                     qualifiedName = "root",
-                    kind = PropertyKind.Struct,
+                    kind = PropertyKind.Struct(allowUnknown = false),
                 ),
                 Property(
                     qualifiedName = "root.nested",
@@ -63,7 +63,7 @@ class ReadTest {
                 input,
                 Property(
                     qualifiedName = "root",
-                    kind = PropertyKind.Struct,
+                    kind = PropertyKind.Struct(allowUnknown = false),
                 ),
                 Property(
                     qualifiedName = "root.nested-1",
@@ -71,7 +71,7 @@ class ReadTest {
                 ),
                 Property(
                     qualifiedName = "root.nested-2",
-                    kind = PropertyKind.Struct,
+                    kind = PropertyKind.Struct(allowUnknown = false),
                 ),
                 Property(
                     qualifiedName = "root.nested-2.nested-2-1",
@@ -251,7 +251,7 @@ class ReadTest {
                 input,
                 Property(
                     qualifiedName = "data",
-                    kind = PropertyKind.Multiple(PropertyKind.Struct),
+                    kind = PropertyKind.Multiple(PropertyKind.Struct(allowUnknown = false)),
                 ),
                 Property(
                     qualifiedName = "data.a",
@@ -263,7 +263,7 @@ class ReadTest {
                         PropertyKind.Mixed(
                             PropertyKind.Numeric,
                             PropertyKind.Literal,
-                            PropertyKind.Struct,
+                            PropertyKind.Struct(allowUnknown = false),
                         ),
                 ),
                 Property(
@@ -319,8 +319,8 @@ class ReadTest {
         val result =
             withParserTest(
                 input,
-                Property("data", PropertyKind.Struct),
-                Property("data.*", PropertyKind.Struct),
+                Property("data", PropertyKind.Struct(allowUnknown = false)),
+                Property("data.*", PropertyKind.Struct(allowUnknown = false)),
                 Property("data.*.key", PropertyKind.Literal),
             )
         assertEquals(
