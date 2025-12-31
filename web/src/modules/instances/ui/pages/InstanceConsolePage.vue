@@ -192,17 +192,6 @@ watch([searchQuery, filterStream], () => {
     <div class="console-container">
         <div class="console-toolbar">
             <div class="toolbar-left">
-                <!-- <button @click="isPaused = !isPaused" :class="{ active: isPaused }">
-          {{ isPaused ? 'Resume' : 'Pause' }}
-        </button> -->
-
-                <!-- <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search logs..."
-            class="search-input"
-        /> -->
-
                 <span class="frame-count">
                     {{ searchResults.length }} / {{ frames.length }} lines
                 </span>
@@ -223,19 +212,6 @@ watch([searchQuery, filterStream], () => {
                         {{ isConnected ? "Connected" : "Disconnected" }}
                     </template>
                 </div>
-
-                <!-- <button @click="clearConsole">Clear</button>
-        <button @click="downloadLogs" :disabled="frames.length === 0">
-          ⬇ Download
-        </button>
-        <button
-            @click="autoScroll = true; scrollToBottom()"
-            :class="{ active: autoScroll }"
-        >
-          Auto-scroll
-        </button> -->
-            </div>
-        </div>
 
         <div class="console-wrapper">
             <div class="fade-overlay fade-top"></div>
