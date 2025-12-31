@@ -1,5 +1,10 @@
 package gg.kuken.feature.instance.http
 
+import gg.kuken.feature.instance.http.routes.deleteFile
+import gg.kuken.feature.instance.http.routes.getInstanceDetails
+import gg.kuken.feature.instance.http.routes.listFiles
+import gg.kuken.feature.instance.http.routes.readFile
+import gg.kuken.feature.instance.http.routes.writeFile
 import gg.kuken.feature.instance.websocket.InstanceLogsRequestWebSocketClientMessageHandler
 import gg.kuken.http.HttpModule
 import gg.kuken.http.websocket.WebSocketClientMessageHandler
@@ -16,6 +21,10 @@ internal object InstanceHttpModule : HttpModule() {
             routing {
                 authenticate {
                     getInstanceDetails()
+                    listFiles()
+                    readFile()
+                    writeFile()
+                    deleteFile()
                 }
             }
         }
