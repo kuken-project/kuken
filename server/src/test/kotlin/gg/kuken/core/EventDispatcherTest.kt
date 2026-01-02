@@ -14,6 +14,13 @@ private data class TestEvent<T>(
     val value: T,
 )
 
+private sealed class SealedEvent {
+
+    data class TestEvent(val value: String) : SealedEvent()
+
+    data class AnotherEvent(val value: String) : SealedEvent()
+}
+
 @ExperimentalCoroutinesApi
 class EventDispatcherTest {
     @Test
@@ -48,6 +55,27 @@ class EventDispatcherTest {
             eventsDispatcher.dispatch(event = TestEvent("abc"))
 
             assertEquals(listOf(element = TestEvent("abc")), received)
+        }
+
+    @Test
+    fun `listen to a publication of a sealed type`() =
+        runTest {
+            val eventsDispatcher: EventDispatcher = EventDispatcherImpl()
+            val received = mutableListOf<SealedEvent>()
+
+            eventsDispatcher
+                .listen<SealedEvent>()
+                .onEach(received::add)
+                .launchIn(TestScope(UnconfinedTestDispatcher()))
+
+            assertTrue(received.isEmpty())
+            eventsDispatcher.dispatch(event = SealedEvent.TestEvent("abc"))
+            eventsDispatcher.dispatch(event = SealedEvent.AnotherEvent("def"))
+
+            assertEquals(
+                actual = received,
+                expected = listOf(SealedEvent.TestEvent("abc"), SealedEvent.AnotherEvent("def")),
+            )
         }
 
     @Test
