@@ -2,7 +2,7 @@
 kotlin = "2.2.21"
 ktx-serialization = "1.9.0"
 ktx-coroutines = "1.10.2"
-ktx-atomicfu = "0.28.0"
+ktx-atomicfu = "0.29.0"
 exposed = "1.0.0-rc-4"
 koin = "4.1.1"
 koinKtor = "4.1.1"
@@ -12,7 +12,7 @@ postgresql = "42.7.8"
 docker-kotlin = "0.10.1"
 bcprov = "1.83"
 validator = "9.1.0.Final"
-hocon = "1.4.3"
+hocon = "1.4.5"
 lettuce = "7.2.1.RELEASE"
 
 [libraries]
