@@ -6,6 +6,9 @@ join_by() {
 	echo "$*";
 }
 
+export VITE_GIT_COMMIT=$(git rev-parse --short HEAD)
+export VITE_GIT_BRANCH=$(git branch --show-current)
+
 # Find Vue environment vars
 vars=$(env | grep VITE_ | awk -F = '{print "$"$1}')
 vars=$(join_by ',' "$vars")
