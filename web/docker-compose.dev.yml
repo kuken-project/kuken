@@ -2,6 +2,7 @@ services:
   kuken-web:
     build:
       context: .
+      dockerfile: Dockerfile.dev
       args:
         - VITE_GIT_COMMIT=${GIT_COMMIT:-unknown}
         - VITE_GIT_BRANCH=${GIT_BRANCH:-unknown}
