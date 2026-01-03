@@ -44,19 +44,17 @@ pub async fn execute(args: WebInstallArgs) -> Result<()> {
     let pb = create_spinner(&multi, "Checking Docker installation...");
     check_docker()?;
     pb.finish_and_clear();
-    println!("{}  Docker is ready", style("✔").green());
 
     let mode = if args.dev {
         "development"
     } else {
         "production"
     };
-    println!();
+
     print_box(&format!(
         "Installing Web UI in {} mode",
         style(mode).bold().fg(custom_color(KUKEN_ORANGE))
     ));
-    println!();
 
     let api_url = get_api_url(args.api_url).await?;
     test_api_connection(&api_url, &multi).await;
