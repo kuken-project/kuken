@@ -152,40 +152,40 @@ fn print_success_message() {
     println!();
     println!(
         "{}",
-        style("╔═══════════════════════════════════════════════════════════╗")
+        style("╔═════════════════════════════════════════════════════════════╗")
             .fg(orange)
             .bold()
     );
     println!(
         "{}",
-        style("║                                                           ║").fg(orange)
+        style("║                                                             ║").fg(orange)
     );
     println!(
         "{}{}{}",
         style("║     ").fg(orange),
-        style("✔  Küken Web UI installed successfully!")
+        style("    ⭐ Küken Web UI installed successfully! ⭐")
             .bold()
-            .green(),
-        style("               ║").fg(orange)
+            .fg(orange),
+        style("          ║").fg(orange)
     );
     println!(
         "{}",
-        style("║                                                           ║").fg(orange)
+        style("║                                                             ║").fg(orange)
     );
     println!(
         "{}",
-        style("╚═══════════════════════════════════════════════════════════╝")
+        style("╚═════════════════════════════════════════════════════════════╝")
             .fg(orange)
             .bold()
     );
     println!();
 
-    println!("  {} Access the Web UI at:", style("→").fg(orange).bold());
     println!(
-        "    {}",
+        "  {} Access the Web UI at: {}",
+        style("→").fg(orange).bold(),
         style("http://localhost:3000")
             .cyan()
-            .bold()
+            .white()
             .underlined()
             .for_stdout()
     );
@@ -384,7 +384,7 @@ async fn test_api_connection(api_url: &str, multi: &MultiProgress) {
                         println!(
                             "{}{}{}",
                             style("│ ").fg(orange),
-                            style("✔  API Connection Successful").green().bold(),
+                            style(" API Connection successful!").white().bold(),
                             style("                                 │").fg(orange)
                         );
                         println!(
