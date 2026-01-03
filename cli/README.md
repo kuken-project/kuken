@@ -8,7 +8,7 @@ Download the latest release for your platform from [GitHub Releases](https://git
 
 ## Manual Installation
 
-#### Linux
+### Linux
 
 ```bash
 curl -LO https://github.com/devnatan/kuken/releases/download/v0.1.0/kuken-linux-amd64
@@ -17,7 +17,7 @@ sudo mv kuken-linux-amd64 /usr/local/bin/kuken
 kuken --version
 ```
 
-#### macOS
+### macOS
 
 ```bash
 curl -LO https://github.com/devnatan/kuken/releases/download/v0.1.0/kuken-darwin-arm64
@@ -27,7 +27,7 @@ sudo mv kuken-darwin-arm64 /usr/local/bin/kuken
 kuken --version
 ```
 
-#### Windows
+### Windows
 
 ```powershell
 # Download (replace VERSION with the latest version)
