@@ -4,7 +4,7 @@ export const WebSocketOpCodes = {
     InstanceLogsRequestStarted: 3 as const,
     InstanceLogsRequestFrame: 4 as const,
     InstanceLogsRequestFinished: 5 as const,
-    InstanceStarted: 6 as const,
+    InstanceStarted: 6 as const
 } as const
 
 export type WebSocketOp = (typeof WebSocketOpCodes)[keyof typeof WebSocketOpCodes]

@@ -6,7 +6,7 @@ class ConfigService {
     public readonly apiUrl = this.value("$VITE_KUKEN_API")
     public readonly gitCommit = this.value("$VITE_GIT_COMMIT")
     public readonly gitBranch = this.value("$VITE_GIT_BRANCH")
-    
+
     public get gatewayUrl(): string {
         return this.apiUrl.startsWith("https://")
             ? this.apiUrl.replace("https://", "wss://")

@@ -139,6 +139,7 @@ const fetechedWhileStopped = ref(false)
 let unsubscribeStart: (() => void) | null = null
 let unsubscribeFrames: (() => void) | null = null
 let unsubscribeEnd: (() => void) | null = null
+let unsubscribeInstanceStart: (() => void) | null = null
 
 const handleLogsEnd = () => {
     logsEnded.value = true
@@ -163,6 +164,12 @@ const setupListeners = () => {
             handleLogsEnd()
         }
     })
+
+    unsubscribeFrames = websocketService.listen(WebSocketOpCodes.InstanceStarted, () => {
+        isConnected.value = true
+
+        console.log("server ignitou novamente gloria deus")
+    })
 }
 
 onMounted(() => {
@@ -177,6 +184,7 @@ onUnmounted(() => {
     unsubscribeStart?.()
     unsubscribeFrames?.()
     unsubscribeEnd?.()
+    unsubscribeInstanceStart?.()
 })
 
 // --- Finally ---
@@ -212,6 +220,8 @@ watch([searchQuery, filterStream], () => {
                         {{ isConnected ? "Connected" : "Disconnected" }}
                     </template>
                 </div>
+            </div>
+        </div>
 
         <div class="console-wrapper">
             <div class="fade-overlay fade-top"></div>
