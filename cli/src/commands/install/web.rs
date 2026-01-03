@@ -418,7 +418,7 @@ async fn test_api_connection(api_url: &str, multi: &MultiProgress) {
                         println!(
                             "{}  {} {}{}",
                             style("│").fg(orange),
-                            style("Mode:        ").dim(),
+                            style("Environment: ").dim(),
                             style(mode_text).bold(),
                             " ".repeat(62 - 17 - mode_text.len())
                                 + &style("│").fg(orange).to_string()
