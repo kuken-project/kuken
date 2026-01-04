@@ -1997,10 +1997,10 @@ vue-progressive-image@^5.0.6:
   resolved "https://registry.yarnpkg.com/vue-progressive-image/-/vue-progressive-image-5.0.6.tgz#4a4017dec1ddd3387b74152742617974c42e700e"
   integrity sha512-AEh6NnDNb6fSXgAc0nu0siNHLrJsqmrvvakWRuY/+88WY4sgoxsxsa0I6DvZdJwxjTeRCUaipjTdcv/ao0gTVA==
 
-vue-router@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.5.0.tgz#58fc5fe374e10b6018f910328f756c3dae081f14"
-  integrity sha512-HDuk+PuH5monfNuY+ct49mNmkCRK4xJAV9Ts4z9UFc4rzdDnxQLyCMGGc8pKhZhHTVzfanpNwB/lwqevcBwI4w==
+vue-router@4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.6.4.tgz#a0a9cb9ef811a106d249e4bb9313d286718020d8"
+  integrity sha512-Hz9q5sa33Yhduglwz6g9skT8OBPii+4bFn88w6J+J4MfEo4KRRpmiNG/hHHkdbRFlLBOqxN8y8gf2Fb0MTUgVg==
   dependencies:
     "@vue/devtools-api" "^6.6.4"
 
@@ -2009,7 +2009,7 @@ vue3-icon@^3.0.3:
   resolved "https://registry.yarnpkg.com/vue3-icon/-/vue3-icon-3.0.3.tgz#08ae47faf08097be1d033049412d0b9de66fab52"
   integrity sha512-B9/f/nwbVBUsBQVSNp7nFIsD/uM/M9MbK38FQFXs8IMSClrEG0gXWtyViQN28na25zpsoKH8Blrzcn/LbUV76Q==
 
-vue@^3.5.26:
+vue@3.5.26:
   version "3.5.26"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.26.tgz#03a0b17311e0e593d34b9358fa249b85e3a6d9fb"
   integrity sha512-SJ/NTccVyAoNUJmkM9KUqPcYlY+u8OVL1X5EW9RIs3ch5H2uERxyyIUI4MRxVCSOiEcupX9xNGde1tL9ZKpimA==
