@@ -19,7 +19,7 @@ interface InstanceService {
     suspend fun runInstanceCommand(
         instanceId: Uuid,
         commandToRun: String,
-    )
+    ): Int
 
     suspend fun startInstance(instanceId: Uuid)
 

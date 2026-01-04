@@ -464,7 +464,7 @@ class DockerInstanceService(
     override suspend fun runInstanceCommand(
         instanceId: Uuid,
         commandToRun: String,
-    ) {
+    ): Int {
         val container = getInstanceContainerId(instanceId)
         val execId =
             dockerClient.exec.create(container) {
@@ -475,9 +475,10 @@ class DockerInstanceService(
                 command = listOf("sh", "-c") + commandToRun
             }
 
-        // TODO Command output as Result
         dockerClient.exec.start(execId) {
             detach = true
         }
+
+        return dockerClient.exec.inspect(execId).exitCode
     }
 }

@@ -5,6 +5,7 @@ import gg.kuken.feature.instance.http.InstanceRoutes
 import gg.kuken.http.util.receiveValid
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.resources.post
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import jakarta.validation.constraints.NotBlank
 import kotlinx.serialization.Serializable
@@ -21,11 +22,16 @@ fun Route.command() {
 
     post<InstanceRoutes.Command> { parameters ->
         val request = call.receiveValid<CommandRequest>()
-        instanceService.runInstanceCommand(
-            instanceId = parameters.instanceId,
-            commandToRun = request.command,
-        )
+        val exitCode =
+            instanceService.runInstanceCommand(
+                instanceId = parameters.instanceId,
+                commandToRun = request.command,
+            )
 
-        call.response.status(HttpStatusCode.OK)
+        call.respond(
+            mapOf(
+                "exitCode" to exitCode,
+            ),
+        )
     }
 }
