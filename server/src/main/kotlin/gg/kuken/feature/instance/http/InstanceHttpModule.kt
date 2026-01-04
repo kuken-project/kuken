@@ -11,9 +11,9 @@ import gg.kuken.http.HttpModule
 import gg.kuken.websocket.WebSocketClientMessageHandler
 import gg.kuken.websocket.WebSocketOp
 import gg.kuken.websocket.WebSocketOpCodes
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.auth.authenticate
+import io.ktor.server.routing.routing
 import org.koin.core.component.get
 
 internal object InstanceHttpModule : HttpModule() {

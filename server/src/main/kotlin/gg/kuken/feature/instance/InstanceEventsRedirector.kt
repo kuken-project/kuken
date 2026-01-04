@@ -6,20 +6,16 @@ import gg.kuken.feature.instance.event.InstanceEvent
 import gg.kuken.websocket.WebSocketManager
 import gg.kuken.websocket.WebSocketOpCodes
 import gg.kuken.websocket.WebSocketServerMessage
-import gg.kuken.websocket.WebSocketServerMessageSerializer
-import io.ktor.websocket.Frame
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 
-class InstanceEventRedirector(
+class InstanceEventsRedirector(
     val webSocketManager: WebSocketManager,
     val eventDispatcher: EventDispatcher,
-): CoroutineScope {
-
+) : CoroutineScope {
     private val json: Json = Json { ignoreUnknownKeys = true }
 
     override val coroutineContext = webSocketManager.coroutineContext
@@ -27,27 +23,31 @@ class InstanceEventRedirector(
     init {
         launch(Dispatchers.Default + CoroutineName("InstanceEventRedirector")) {
             eventDispatcher.listen<InstanceEvent>().collect { event ->
-                if (!webSocketManager.isReceivingEvents())
+                if (!webSocketManager.isReceivingEvents()) {
                     return@collect
-
-                val message = translate(event) ?: return@collect
-
-                webSocketManager.broadcasting { session ->
-
-                    session.connection.outgoing.send(Frame.Text(json.encodeToString(
-                        serializer = WebSocketServerMessageSerializer(serializer<T>()),
-                        message
-                    )))
                 }
+
+//                val message = translate(event) ?: return@collect
+//
+//                webSocketManager.broadcasting { session ->
+//
+//                    session.connection.outgoing.send(Frame.Text(json.encodeToString(
+//                        serializer = WebSocketServerMessageSerializer(serializer<T>()),
+//                        message
+//                    )))
+//                }
             }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private inline fun <reified T : Any> translate(event: InstanceEvent): WebSocketServerMessage<T>? = when (event) {
-        is InstanceEvent.InstanceStartedEvent -> WebSocketServerMessage(
-            op = WebSocketOpCodes.InstanceStarted,
-            data = event.instanceId
-        )
-    } as WebSocketServerMessage<T>?
+    private inline fun <reified T : Any> translate(event: InstanceEvent): WebSocketServerMessage<T>? =
+        when (event) {
+            is InstanceEvent.InstanceStartedEvent -> {
+                WebSocketServerMessage(
+                    op = WebSocketOpCodes.InstanceStarted,
+                    data = event.instanceId,
+                )
+            }
+        } as WebSocketServerMessage<T>?
 }

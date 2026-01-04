@@ -107,10 +107,10 @@ class WebSocketManager(
         handlers.computeIfAbsent(op) { mutableListOf() }.add(handler)
     }
 
-    internal suspend inline fun broadcasting(crossinline block: suspend (WebSocketSession) -> Unit) = supervisorScope {
-        sessions.forEach { session -> block(session) }
-    }
+    internal suspend inline fun broadcasting(crossinline block: suspend (WebSocketSession) -> Unit) =
+        supervisorScope {
+            sessions.forEach { session -> block(session) }
+        }
 
     fun isReceivingEvents(): Boolean = sessions.isNotEmpty()
-
 }

@@ -16,10 +16,9 @@ class DockerEventDispatcher(
     dispatcher: EventDispatcherImpl = EventDispatcherImpl(),
     val dockerClient: DockerClient,
 ) : EventDispatcher by dispatcher {
-
     init {
         launch(
-            context = CoroutineName("DockerEventDispatcher#consumer")
+            context = CoroutineName("DockerEventDispatcher#consumer"),
         ) {
             dockerClient.system
                 .events { filterByType(EventType.CONTAINER) }

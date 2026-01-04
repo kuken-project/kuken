@@ -1,7 +1,7 @@
 package gg.kuken.feature.instance.data.entity
 
-import gg.kuken.feature.instance.model.Instance
 import gg.kuken.feature.instance.data.repository.InstanceRepository
+import gg.kuken.feature.instance.model.Instance
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq

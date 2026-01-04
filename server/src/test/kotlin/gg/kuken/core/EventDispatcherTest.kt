@@ -15,10 +15,13 @@ private data class TestEvent<T>(
 )
 
 private sealed class SealedEvent {
+    data class TestEvent(
+        val value: String,
+    ) : SealedEvent()
 
-    data class TestEvent(val value: String) : SealedEvent()
-
-    data class AnotherEvent(val value: String) : SealedEvent()
+    data class AnotherEvent(
+        val value: String,
+    ) : SealedEvent()
 }
 
 @ExperimentalCoroutinesApi

@@ -1,8 +1,7 @@
-package gg.kuken.feature.unit.entity
+package gg.kuken.feature.unit.data.entity
 
+import gg.kuken.feature.unit.data.repository.UnitRepository
 import gg.kuken.feature.unit.model.KukenUnit
-import gg.kuken.feature.unit.repository.UnitRepository
-import kotlinx.coroutines.Dispatchers.IO
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.dao.UUIDEntity

@@ -1,7 +1,7 @@
 package gg.kuken.feature.instance.http.routes
 
-import gg.kuken.feature.instance.http.InstanceRoutes
 import gg.kuken.feature.instance.InstanceFileService
+import gg.kuken.feature.instance.http.InstanceRoutes
 import io.ktor.server.resources.delete
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route

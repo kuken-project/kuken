@@ -1,7 +1,9 @@
 package gg.kuken.feature.unit
 
-import gg.kuken.feature.unit.entity.UnitRepositoryImpl
-import gg.kuken.feature.unit.repository.UnitRepository
+import gg.kuken.feature.unit.data.entity.UnitRepositoryImpl
+import gg.kuken.feature.unit.data.repository.UnitRepository
+import gg.kuken.feature.unit.http.mapper.UnitInstanceMapper
+import gg.kuken.feature.unit.http.mapper.UnitMapper
 import org.koin.dsl.module
 
 val UnitDI =
@@ -15,6 +17,19 @@ val UnitDI =
                 kukenConfig = get(),
                 unitRepository = get(),
                 identityGeneratorService = get(),
+                instanceService = get(),
+            )
+        }
+
+        factory {
+            UnitInstanceMapper(
+                blueprintService = get(),
+            )
+        }
+
+        factory {
+            UnitMapper(
+                unitInstanceMapper = get(),
                 instanceService = get(),
             )
         }

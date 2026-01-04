@@ -5,11 +5,11 @@ import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.instance.InstanceService
 import gg.kuken.feature.instance.model.CreateInstanceOptions
 import gg.kuken.feature.instance.model.InstanceStatus
-import gg.kuken.feature.unit.entity.UnitEntity
+import gg.kuken.feature.unit.data.entity.UnitEntity
+import gg.kuken.feature.unit.data.repository.UnitRepository
 import gg.kuken.feature.unit.model.KukenUnit
 import gg.kuken.feature.unit.model.UnitCreateOptions
 import gg.kuken.feature.unit.model.UnitStatus
-import gg.kuken.feature.unit.repository.UnitRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlin.time.Clock

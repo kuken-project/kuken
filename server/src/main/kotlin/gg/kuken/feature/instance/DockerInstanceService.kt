@@ -7,6 +7,7 @@ import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.blueprint.BlueprintService
 import gg.kuken.feature.blueprint.model.Blueprint
 import gg.kuken.feature.instance.data.entity.InstanceEntity
+import gg.kuken.feature.instance.data.repository.InstanceRepository
 import gg.kuken.feature.instance.model.CreateInstanceOptions
 import gg.kuken.feature.instance.model.HostPort
 import gg.kuken.feature.instance.model.ImageUpdatePolicy
@@ -16,7 +17,6 @@ import gg.kuken.feature.instance.model.InstanceRuntimeMount
 import gg.kuken.feature.instance.model.InstanceRuntimeNetwork
 import gg.kuken.feature.instance.model.InstanceRuntimeSingleNetwork
 import gg.kuken.feature.instance.model.InstanceStatus
-import gg.kuken.feature.instance.data.repository.InstanceRepository
 import gg.kuken.http.exception.ResourceException
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +59,22 @@ class DockerInstanceService(
             updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
             address = HostPort(host = instance.host, port = instance.port!!),
             runtime = runtime,
+            blueprintId = instance.blueprintId.toKotlinUuid(),
+            createdAt = instance.createdAt,
+            nodeId = instance.nodeId,
+        )
+    }
+
+    override suspend fun getInstanceNoRuntime(instanceId: Uuid): Instance {
+        val instance = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
+
+        return Instance(
+            id = instance.id.value.toKotlinUuid(),
+            status = instance.status.let(InstanceStatus::getByLabel),
+            containerId = instance.containerId,
+            updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
+            address = HostPort(host = instance.host, port = instance.port!!),
+            runtime = null,
             blueprintId = instance.blueprintId.toKotlinUuid(),
             createdAt = instance.createdAt,
             nodeId = instance.nodeId,

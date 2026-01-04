@@ -38,7 +38,7 @@ class InstanceLogsRequestWebSocketClientMessageHandler(
 
     private suspend fun WebSocketClientMessageContext.captureLogs(
         containerId: String,
-        isContainerRunning: Boolean
+        isContainerRunning: Boolean,
     ) {
         dockerClient.containers
             .logs(containerId) {

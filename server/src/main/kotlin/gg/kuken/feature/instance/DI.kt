@@ -30,8 +30,8 @@ val InstancesDI =
             )
         }
 
-        single<InstanceEventRedirector>(createdAtStart = true) {
-            InstanceEventRedirector(
+        single<InstanceEventsRedirector>(createdAtStart = true) {
+            InstanceEventsRedirector(
                 webSocketManager = get(),
                 eventDispatcher = get(),
             )

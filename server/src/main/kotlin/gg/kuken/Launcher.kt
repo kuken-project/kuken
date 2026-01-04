@@ -1,6 +1,7 @@
 package gg.kuken
 
 import gg.kuken.core.EventDispatcher
+import gg.kuken.core.docker.DockerEventDispatcher
 import gg.kuken.core.security.BcryptHash
 import gg.kuken.core.security.Hash
 import gg.kuken.feature.account.AccountDI
@@ -8,7 +9,6 @@ import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.auth.AuthDI
 import gg.kuken.feature.blueprint.BlueprintDI
 import gg.kuken.feature.instance.InstancesDI
-import gg.kuken.core.docker.DockerEventDispatcher
 import gg.kuken.feature.rbac.RBACDI
 import gg.kuken.feature.remoteConfig.RemoteConfigDI
 import gg.kuken.feature.setup.SetupDI
