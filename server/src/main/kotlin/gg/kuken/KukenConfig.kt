@@ -20,7 +20,7 @@ data class KukenConfig(
 
     @Serializable
     data class DBConfig(
-        val host: String,
+        val url: String,
         val user: String,
         val password: String,
     )

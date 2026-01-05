@@ -9,6 +9,7 @@ koinKtor = "4.1.1"
 log4j = "2.25.3"
 ktor = "3.3.3"
 postgresql = "42.7.8"
+h2 = "2.2.224"
 docker-kotlin = "0.12.2"
 bcprov = "1.83"
 validator = "9.1.0.Final"
@@ -42,6 +43,7 @@ ktor-server-feature-statuspages = { module = "io.ktor:ktor-server-status-pages",
 ktor-server-feature-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }

@@ -43,10 +43,9 @@ class DatabaseFactory(
 ) {
     fun create(): Database =
         Database.connect(
-            url = "jdbc:postgresql://${appConfig.db.host}",
+            url = appConfig.db.url,
             user = appConfig.db.user,
             password = appConfig.db.password,
-            driver = "org.postgresql.Driver",
             databaseConfig =
                 DatabaseConfig {
                     useNestedTransactions = true

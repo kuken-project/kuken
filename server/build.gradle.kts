@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.bundles.exposed)
     implementation(libs.postgresql)
+    implementation(libs.h2)
     implementation(libs.lettuce)
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
