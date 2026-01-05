@@ -416,7 +416,7 @@ class DockerInstanceService(
                     InstanceRuntimeMount(
                         type = mount.type.name,
                         source = mount.source!!,
-                        destination = mount.target!!,
+                        destination = mount.target,
                         readonly = mount.readonly,
                     )
                 },

@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import me.devnatan.dockerkt.DockerClient
 import me.devnatan.dockerkt.DockerException
 import me.devnatan.dockerkt.models.network.Network
-import me.devnatan.dockerkt.resource.NetworkNotFoundException
+import me.devnatan.dockerkt.resource.network.NetworkNotFoundException
 import me.devnatan.dockerkt.resource.network.create
 import org.apache.logging.log4j.LogManager
 import java.net.ServerSocket
@@ -57,7 +57,7 @@ class DockerNetworkService(
         try {
             withContext(Dispatchers.IO) {
                 dockerClient.networks.connectContainer(
-                    id = network.id,
+                    network = network.id,
                     container = container,
                 )
             }
@@ -121,7 +121,7 @@ class DockerNetworkService(
      */
     private suspend fun createNetwork(name: String): String {
         logger.debug("Creating network {}...", name)
-        return dockerClient.networks.create { this.name = name }.id
+        return dockerClient.networks.create { this.name = name }
     }
 
     /**
