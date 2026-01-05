@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.atomicfu)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlinter)
+    alias(libs.plugins.dokka)
 }
 
 kotlin {
