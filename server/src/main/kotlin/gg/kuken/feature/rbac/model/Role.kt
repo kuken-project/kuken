@@ -9,7 +9,7 @@ data class Role(
     val id: Uuid,
     val name: String,
     val description: String,
-    val isSystem: Boolean,
+    val isSystem: Boolean, // Cannot be deleted or modified by regular users
     val createdAt: Instant,
     val updatedAt: Instant,
 )
