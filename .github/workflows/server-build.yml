@@ -42,18 +42,20 @@ jobs:
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
-        with:
-          validate-wrappers: true
-          gradle-home-cache-cleanup: true
-
       # Workaround for Windows: https://github.com/graalvm/native-build-tools/issues/754
       # Error "'other' has different root" happens when project and temp folder are on different drives
       - name: Set Temp Directory (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
-        run: echo "GRADLE_OPTS=-Djava.io.tmpdir=${{ github.workspace }}\temp" >> $env:GITHUB_ENV
+        run: |
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\temp"
+          echo "GRADLE_OPTS=-Djava.io.tmpdir=${{ github.workspace }}\temp" >> $env:GITHUB_ENV
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          validate-wrappers: true
+          gradle-home-cache-cleanup: true
 
       - name: Build with Gradle
         env:
