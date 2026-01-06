@@ -83,17 +83,6 @@ jobs:
         shell: pwsh
         run: Copy-Item src/main/resources/kuken.conf build/native/nativeCompile/
 
-      - name: Package Linux Binary
-        if: matrix.os == 'ubuntu-latest'
-        working-directory: server/build/native/nativeCompile
-        run: tar -czf ${{ matrix.artifact-name }}.${{ matrix.archive-ext }} *
-
-      - name: Package Windows Binary
-        if: matrix.os == 'windows-latest'
-        working-directory: server/build/native/nativeCompile
-        shell: pwsh
-        run: Compress-Archive -Path * -DestinationPath ${{ matrix.artifact-name }}.${{ matrix.archive-ext }}
-
       - name: Upload JAR artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -104,5 +93,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
-          path: server/build/native/nativeCompile/${{ matrix.artifact-name }}.${{ matrix.archive-ext }}
+          path: server/build/native/nativeCompile/
 

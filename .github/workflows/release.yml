@@ -43,6 +43,7 @@ jobs:
     name: Build Native - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -101,22 +102,11 @@ jobs:
         shell: pwsh
         run: Copy-Item src/main/resources/kuken.conf build/native/nativeCompile/
 
-      - name: Package Linux Binary
-        if: matrix.os == 'ubuntu-latest'
-        working-directory: server/build/native/nativeCompile
-        run: tar -czf ${{ matrix.artifact-name }}.${{ matrix.archive-ext }} *
-
-      - name: Package Windows Binary
-        if: matrix.os == 'windows-latest'
-        working-directory: server/build/native/nativeCompile
-        shell: pwsh
-        run: Compress-Archive -Path * -DestinationPath ${{ matrix.artifact-name }}.${{ matrix.archive-ext }}
-
       - name: Upload native artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact-name }}
-          path: server/build/native/nativeCompile/${{ matrix.artifact-name }}.${{ matrix.archive-ext }}
+          path: server/build/native/nativeCompile/
 
   release:
     name: Create Release
@@ -130,6 +120,13 @@ jobs:
         with:
           path: artifacts
 
+      - name: Package Binaries
+        run: |
+          cd artifacts/kuken-server-linux-amd64
+          tar -czf ../kuken-server-linux-amd64.tar.gz *
+          cd ../kuken-server-windows-amd64
+          zip -r ../kuken-server-windows-amd64.zip *
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -139,8 +136,8 @@ jobs:
           prerelease: false
           files: |
             artifacts/jar-artifacts/*.jar
-            artifacts/kuken-server-linux-amd64/*.tar.gz
-            artifacts/kuken-server-windows-amd64/*.zip
+            artifacts/kuken-server-linux-amd64.tar.gz
+            artifacts/kuken-server-windows-amd64.zip
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
