@@ -1,0 +1,50 @@
+# Build artifacts
+build/
+.gradle/
+*.jar
+*.class
+*.log
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.fleet/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Docker files (avoid recursive copy)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Test files
+*.test.*
+test-results/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Local environment
+.env
+.env.local
+*.local
+
+# Gradle wrapper jar is needed, don't ignore gradle/
+

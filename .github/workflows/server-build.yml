@@ -11,26 +11,35 @@ on:
       - "server/**"
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: server
-
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
+    name: Build - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact-name: kuken-server-linux-amd64
+            archive-ext: tar.gz
+          - os: windows-latest
+            artifact-name: kuken-server-windows-amd64
+            archive-ext: zip
     permissions:
       contents: read
       packages: write
+    defaults:
+      run:
+        working-directory: server
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup JDK 24
-        uses: actions/setup-java@v5
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
         with:
           java-version: '24'
-          distribution: 'adopt'
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
@@ -40,5 +49,37 @@ jobs:
       - name: Build with Gradle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: server
         run: ./gradlew build -x check
+
+      - name: Build Native Image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew nativeCompile
+
+      - name: Copy config file
+        shell: bash
+        run: cp src/main/resources/kuken.conf build/native/nativeCompile/
+
+      - name: Package Linux Binary
+        if: matrix.os == 'ubuntu-latest'
+        working-directory: server/build/native/nativeCompile
+        run: tar -czf ${{ matrix.artifact-name }}.${{ matrix.archive-ext }} *
+
+      - name: Package Windows Binary
+        if: matrix.os == 'windows-latest'
+        working-directory: server/build/native/nativeCompile
+        shell: pwsh
+        run: Compress-Archive -Path * -DestinationPath ${{ matrix.artifact-name }}.${{ matrix.archive-ext }}
+
+      - name: Upload JAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-${{ matrix.os }}
+          path: server/build/libs/*.jar
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: server/build/native/nativeCompile/${{ matrix.artifact-name }}.${{ matrix.archive-ext }}
+

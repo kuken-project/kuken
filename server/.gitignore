@@ -30,6 +30,9 @@ logs/
 build/
 docs/
 
+# Environment variables (contains secrets)
+.env
+
 # Gradle
 buildSrc/build
 

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.atomicfu)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.graalvm.native)
     alias(libs.plugins.kotlinter)
     alias(libs.plugins.dokka)
 }
@@ -65,6 +66,37 @@ ktor {
     }
 
     development = providers.environmentVariable("PRODUCTION").isPresent
+}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            fallback.set(false)
+            verbose.set(true)
+
+            buildArgs.add("--initialize-at-build-time=kotlin")
+            buildArgs.add("--initialize-at-run-time=kotlin.uuid.SecureRandomHolder")
+            buildArgs.add("--initialize-at-run-time=org.bouncycastle")
+
+            buildArgs.add("--initialize-at-run-time=io.netty.channel.epoll.Epoll")
+            buildArgs.add("--initialize-at-run-time=io.netty.channel.epoll.Native")
+            buildArgs.add("--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop")
+            buildArgs.add("--initialize-at-run-time=io.netty.channel.unix.Errors")
+            buildArgs.add("--initialize-at-run-time=io.netty.channel.unix.IovArray")
+            buildArgs.add("--initialize-at-run-time=io.netty.channel.unix.Limits")
+
+            buildArgs.add("--add-modules=jdk.unsupported")
+            buildArgs.add("-J--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED")
+            buildArgs.add("-H:+AllowIncompleteClasspath")
+            
+            buildArgs.add("--install-exit-handlers")
+            buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
+            buildArgs.add("-H:+ReportExceptionStackTraces")
+
+            imageName.set("kuken-server")
+            mainClass.set(application.mainClass)
+        }
+    }
 }
 
 dokka {
