@@ -34,30 +34,20 @@ class SetupService(
     private val permissionRepository: PermissionRepository,
     private val roleRepository: RoleRepository,
 ) {
-    val requiredSetupSteps = linkedSetOf(Step.CreateAccount, Step.OrganizationName)
+    val requiredSetupSteps = linkedSetOf(Step.OrganizationName, Step.CreateAccount)
 
     suspend fun currentState(): SetupState {
-        val stepsToComplete =
-            coroutineScope {
-                retrieveRemainingSteps()
-            }
+        val stepsToComplete = retrieveRemainingSteps()
 
         return SetupState(
             completed = stepsToComplete.isEmpty(),
-            remainingSteps = stepsToComplete.filter { step -> step in requiredSetupSteps }.toSet(),
+            remainingSteps =
+                requiredSetupSteps
+                    .mapNotNull { step -> stepsToComplete.firstOrNull { it == step } }
+                    .filter { step -> step in requiredSetupSteps }
+                    .toSet(),
         )
     }
-
-    private suspend fun retrieveRemainingSteps(): Set<Step> =
-        buildSet {
-            if (!accountService.existsAnyAccount()) {
-                add(Step.CreateAccount)
-            }
-
-            if (!remoteConfigService.isConfigValueSet(RemoteConfig.OrganizationName)) {
-                add(Step.OrganizationName)
-            }
-        }
 
     suspend fun tryComplete(request: SetupRequest): SetupState {
         coroutineScope {
@@ -80,6 +70,17 @@ class SetupService(
         )
     }
 
+    private suspend fun retrieveRemainingSteps(): Set<Step> =
+        buildSet {
+            if (!accountService.existsAnyAccount()) {
+                add(Step.CreateAccount)
+            }
+
+            if (!remoteConfigService.isConfigValueSet(RemoteConfig.OrganizationName)) {
+                add(Step.OrganizationName)
+            }
+        }
+
     suspend fun setupDefaultRoles(): Role =
         coroutineScope {
             // Core permissions that the Administrator role needs
@@ -97,7 +98,7 @@ class SetupService(
                     roleRepository.createRole(
                         name = "Administrator",
                         description = "Access to all resources",
-                        isSystem = true, // cannot be deleted or modified by regular users
+                        isSystem = true,
                     )
                 }
 
@@ -148,5 +149,8 @@ class SetupService(
             grantedBy = account.id,
             expiresAt = null,
         )
+    }
+
+    suspend fun importBlueprints() {
     }
 }
