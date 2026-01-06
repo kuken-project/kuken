@@ -1,7 +1,12 @@
 <template>
     <AuthLayout>
         <h4>Log In</h4>
-        <p :class="$style.subtitle">Enter your credentials to access your account.</p>
+        <p :class="$style.subtitle">
+            <template v-if="backendInfo">
+                Enter your credentials to access {{ backendInfo.organization.name }}.
+            </template>
+            <template v-else> Enter your credentials to access your account. </template>
+        </p>
         <VForm @submit.prevent="performLogin">
             <VFieldSet>
                 <VLabel>
@@ -54,6 +59,7 @@ import type { HttpError } from "@/modules/platform/api/models/error.model"
 import { useRouter } from "vue-router"
 import { useAccountsStore } from "@/modules/accounts/accounts.store"
 import VLayout from "@/modules/platform/ui/components/grid/VLayout.vue"
+import { usePlatformStore } from "@/modules/platform/platform.store.ts"
 
 const router = useRouter()
 
@@ -62,6 +68,7 @@ const credentials = reactive({ email: "", password: "" })
 const errorTranslationText = ref<string | null>(null)
 const loginBeingPerformed = ref<boolean>(false)
 const currentAccount = useAccountsStore().account?.email
+const backendInfo = usePlatformStore().getBackendInfo
 
 // Functions
 function performLogin() {

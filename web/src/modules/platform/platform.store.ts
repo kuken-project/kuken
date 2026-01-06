@@ -1,24 +1,24 @@
 import { defineStore } from "pinia"
-import type { ServerInfo } from "@/modules/platform/api/models/server-info"
+import type { BackendInfo } from "@/modules/platform/api/models/backend-info.ts"
 import { isNull } from "@/utils"
 
-type PlatformStore = { serverInfo: ServerInfo | null }
+type PlatformStore = { backendInfo: BackendInfo | null }
 
 export const usePlatformStore = defineStore("platform", {
-    state: (): PlatformStore => ({ serverInfo: null }),
+    state: (): PlatformStore => ({ backendInfo: null }),
     getters: {
-        getServerInfo(): ServerInfo {
-            if (!this.hasServerInfo) throw new Error("Missing system information")
+        getBackendInfo(): BackendInfo {
+            if (!this.hasBackendInfo) throw new Error("Missing backend information")
 
-            return this.serverInfo!
+            return this.backendInfo!
         },
-        hasServerInfo(): boolean {
-            return !isNull(this.serverInfo)
+        hasBackendInfo(): boolean {
+            return !isNull(this.backendInfo)
         }
     },
     actions: {
-        updateServerInfo(serverInfo: ServerInfo) {
-            this.serverInfo = serverInfo
+        updateBackendInfo(backendInfo: BackendInfo) {
+            this.backendInfo = backendInfo
         }
     }
 })

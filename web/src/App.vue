@@ -8,11 +8,11 @@
 import { ModalsContainer } from "vue-final-modal"
 import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
 import { ref } from "vue"
-import serverService from "@/modules/platform/api/services/server.service"
+import backendService from "@/modules/platform/api/services/backend.service.ts"
 
 const isLoading = ref(true)
 
-serverService.getInfo().finally(() => (isLoading.value = false))
+backendService.getInfo().finally(() => (isLoading.value = false))
 </script>
 <style lang="scss">
 #app {
