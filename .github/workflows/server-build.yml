@@ -46,20 +46,40 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
         with:
           validate-wrappers: true
+          gradle-home-cache-cleanup: true
+
+      # Workaround for Windows: https://github.com/graalvm/native-build-tools/issues/754
+      # Error "'other' has different root" happens when project and temp folder are on different drives
+      - name: Set Temp Directory (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: echo "GRADLE_OPTS=-Djava.io.tmpdir=${{ github.workspace }}\temp" >> $env:GITHUB_ENV
 
       - name: Build with Gradle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew buildFatJar
 
-      - name: Build Native Image
+      - name: Build Native Image (Linux)
+        if: matrix.os == 'ubuntu-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew nativeCompile
 
-      - name: Copy config file
-        shell: bash
+      - name: Build Native Image (Windows)
+        if: matrix.os == 'windows-latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew nativeCompile
+
+      - name: Copy config file (Linux)
+        if: matrix.os == 'ubuntu-latest'
         run: cp src/main/resources/kuken.conf build/native/nativeCompile/
+
+      - name: Copy config file (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: Copy-Item src/main/resources/kuken.conf build/native/nativeCompile/
 
       - name: Package Linux Binary
         if: matrix.os == 'ubuntu-latest'
