@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.launch
 import me.devnatan.dockerkt.DockerClient
 import me.devnatan.dockerkt.models.system.Event
+import me.devnatan.dockerkt.models.system.EventAction
 import me.devnatan.dockerkt.models.system.EventActor
 import me.devnatan.dockerkt.models.system.EventType
 import me.devnatan.dockerkt.resource.system.events
@@ -21,14 +22,16 @@ class DockerEventDispatcher(
             context = CoroutineName("DockerEventDispatcher#consumer"),
         ) {
             dockerClient.system
-                .events { filterByType(EventType.CONTAINER) }
-                .collect(::interceptDockerEvent)
+                .events {
+                    filterByType(EventType.Container)
+                    filterByAction(EventAction.Start)
+                }.collect(::interceptDockerEvent)
         }
     }
 
     private suspend fun interceptDockerEvent(event: Event) {
         when (event.action) {
-            "start" -> dispatch(InstanceEvent.InstanceStartedEvent(event.actor.getInstanceId()))
+            EventAction.Start -> dispatch(InstanceEvent.InstanceStartedEvent(event.actor.getInstanceId()))
             else -> Unit
         }
     }
