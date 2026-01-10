@@ -55,7 +55,7 @@ class JWTAuthServiceImpl(
                 input = password.toCharArray(),
                 hash = hash,
             )
-        if (!validated) throw InvalidAccessTokenException()
+        if (!validated) throw AccountNotFoundException()
 
         val now = Clock.System.now()
         return try {
