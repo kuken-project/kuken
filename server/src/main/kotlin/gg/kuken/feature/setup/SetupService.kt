@@ -164,7 +164,7 @@ class SetupService(
 
     suspend fun importBlueprints() = coroutineScope {
         val baseRemoteUrl = "https://raw.githubusercontent.com/devnatan/kuken/refs/heads/main/blueprints/games"
-        listOf("minecraft-java-edition").map { baseName ->
+        listOf("minecraft/minecraft-java-edition").map { baseName ->
             async {
                 blueprintService.importBlueprint(BlueprintSpecSource.Remote("$baseRemoteUrl/$baseName.conf"))
             }
