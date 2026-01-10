@@ -1,7 +1,8 @@
 package gg.kuken.feature.setup
 
 import gg.kuken.feature.account.AccountService
-import gg.kuken.feature.rbac.Permissions
+import gg.kuken.feature.blueprint.BlueprintService
+import gg.kuken.feature.blueprint.BlueprintSpecSource
 import gg.kuken.feature.rbac.Permissions.ManageAccounts
 import gg.kuken.feature.rbac.Permissions.ManageBlueprints
 import gg.kuken.feature.rbac.Permissions.ManageInstances
@@ -14,13 +15,11 @@ import gg.kuken.feature.rbac.model.Role
 import gg.kuken.feature.rbac.repository.AccountPermissionRepository
 import gg.kuken.feature.rbac.repository.PermissionRepository
 import gg.kuken.feature.rbac.repository.RoleRepository
-import gg.kuken.feature.rbac.service.PermissionService
 import gg.kuken.feature.remoteConfig.RemoteConfig
 import gg.kuken.feature.remoteConfig.RemoteConfigService
 import gg.kuken.feature.setup.http.dto.SetupRequest
 import gg.kuken.feature.setup.model.SetupState
 import gg.kuken.feature.setup.model.SetupState.Step
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -33,6 +32,7 @@ class SetupService(
     private val accountPermissionRepository: AccountPermissionRepository,
     private val permissionRepository: PermissionRepository,
     private val roleRepository: RoleRepository,
+    private val blueprintService: BlueprintService,
 ) {
     val requiredSetupSteps = linkedSetOf(Step.OrganizationName, Step.CreateAccount)
 
@@ -69,10 +69,7 @@ class SetupService(
                     )
                 }
 
-            val blueprints =
-                async {
-                    importBlueprints()
-                }
+            val blueprints = async { importBlueprints() }
 
             listOf(
                 setConfigValue,
@@ -165,6 +162,12 @@ class SetupService(
         )
     }
 
-    fun importBlueprints() {
+    suspend fun importBlueprints() = coroutineScope {
+        val baseRemoteUrl = "https://raw.githubusercontent.com/devnatan/kuken/refs/heads/main/blueprints/games"
+        listOf("minecraft-java-edition").map { baseName ->
+            async {
+                blueprintService.importBlueprint(BlueprintSpecSource.Remote("$baseRemoteUrl/$baseName.conf"))
+            }
+        }.awaitAll()
     }
 }

@@ -1,10 +1,12 @@
 package gg.kuken.feature.blueprint.parser
 
+import com.typesafe.config.Config
 import com.typesafe.config.ConfigException
 import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigList
 import com.typesafe.config.ConfigObject
 import com.typesafe.config.ConfigParseOptions
+import com.typesafe.config.ConfigResolver
 import com.typesafe.config.ConfigSyntax
 import com.typesafe.config.ConfigValue
 import com.typesafe.config.ConfigValueType
@@ -17,6 +19,8 @@ import gg.kuken.feature.blueprint.model.BlueprintSpecImage
 import gg.kuken.feature.blueprint.model.BlueprintSpecInstance
 import gg.kuken.feature.blueprint.model.BlueprintSpecRemote
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.hocon.Hocon
+import kotlinx.serialization.hocon.decodeFromConfig
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonNull
@@ -27,7 +31,7 @@ import kotlin.reflect.KClass
 
 // TODO detailed error diagnostics
 class BlueprintParser(
-    private val supportedProperties: List<Property> = AllSupportedProperties,
+    private val supportedProperties: List<Property> = AllSupportedProperties
 ) {
     private val parseOptions = ConfigParseOptions.defaults().setSyntax(ConfigSyntax.CONF)
     private val requiredProperties: List<Property> =
@@ -35,12 +39,10 @@ class BlueprintParser(
             property.constraints.any { constraint -> constraint is RequiredPropertyConstraint }
         }
 
-    fun read(input: String): JsonObject {
-        val output = mutableMapOf<String, JsonElement>()
+    fun read(input: String): Config = ConfigFactory.parseString(input, parseOptions).resolve()
 
+    fun validate(config: Config) {
         try {
-            val config = ConfigFactory.parseString(input, parseOptions)
-
             // TODO remove this and iterate over supported properties building a qualified name
             //      allowing RequiredPropertyConstraint work properly :)
             for (requiredProperty in requiredProperties) {
@@ -59,8 +61,7 @@ class BlueprintParser(
             // Iterate over supported properties because some root level properties have required
             // constraints. Unknown nodes are purposefully ignored.
             for ((path, node) in config.root().entries) {
-                val element = read(fqName = path, node = node, allowUnknown = false) ?: continue
-                output[path] = element
+                validate(fqName = path, node = node, allowUnknown = false)
             }
         } catch (exception: Throwable) {
             val message =
@@ -73,11 +74,9 @@ class BlueprintParser(
 
             throw BlueprintSpecParseException(message, exception)
         }
-
-        return JsonObject(output)
     }
 
-    fun read(
+    fun validate(
         property: Property,
         node: ConfigValue,
         equalityCheck: Boolean,
@@ -100,7 +99,7 @@ class BlueprintParser(
                     // we need to check each value in this list based on supported list types
                     checkPropertyAndNodeKindEquality(childKind, childType)
 
-                    val element = read(property, childNode, false)
+                    val element = validate(property, childNode, false)
                     elements.add(element)
                 }
 
@@ -113,7 +112,7 @@ class BlueprintParser(
                 for ((childKey, childNode) in root.entries) {
                     val qName = property.qualifiedName + PROPERTY_NAME_SEPARATOR + childKey
                     val el =
-                        read(
+                        validate(
                             fqName = qName,
                             node = childNode,
                             allowUnknown = property.kind is PropertyKind.Struct && property.kind.allowUnknown,
@@ -134,7 +133,7 @@ class BlueprintParser(
         }
     }
 
-    fun read(
+    fun validate(
         fqName: String,
         node: ConfigValue,
         allowUnknown: Boolean,
@@ -145,24 +144,23 @@ class BlueprintParser(
             }
 
         if (property != null) {
-            return read(property, node, equalityCheck = true)
+            return validate(property, node, equalityCheck = true)
         }
 
         if (!allowUnknown) {
             return null
         }
 
-        val kind =
-            when (node.valueType()) {
-                ConfigValueType.OBJECT -> PropertyKind.Struct(allowUnknown = false)
-                ConfigValueType.LIST -> PropertyKind.Multiple(PropertyKind.Mixed())
-                ConfigValueType.NUMBER -> PropertyKind.Numeric
-                ConfigValueType.BOOLEAN -> PropertyKind.TrueOrFalse
-                ConfigValueType.NULL -> PropertyKind.Null
-                ConfigValueType.STRING -> PropertyKind.Literal
-            }
+        val kind = when (node.valueType()) {
+            ConfigValueType.OBJECT -> PropertyKind.Struct(allowUnknown = false)
+            ConfigValueType.LIST -> PropertyKind.Multiple(PropertyKind.Mixed())
+            ConfigValueType.NUMBER -> PropertyKind.Numeric
+            ConfigValueType.BOOLEAN -> PropertyKind.TrueOrFalse
+            ConfigValueType.NULL -> PropertyKind.Null
+            ConfigValueType.STRING -> PropertyKind.Literal
+        }
 
-        return read(
+        return validate(
             property =
                 Property(
                     qualifiedName = fqName,
@@ -174,8 +172,9 @@ class BlueprintParser(
     }
 
     fun parse(input: String): BlueprintSpec {
-        val value = read(input)
-        return transform(value)
+        val config = read(input)
+        validate(config)
+        return transform(config)
     }
 
     private fun validate(
@@ -277,75 +276,7 @@ class BlueprintParser(
         return anyMatch
     }
 
-    private fun transform(value: JsonObject): BlueprintSpec =
-        with(value) {
-            BlueprintSpec(
-                name = string("name"),
-                version = string("version"),
-                remote =
-                    struct("remote")?.let { remote ->
-                        BlueprintSpecRemote(
-                            origin = remote.string("origin"),
-                            assets =
-                                remote.struct("assets")?.let { assets ->
-                                    BlueprintSpecRemote.Assets(
-                                        iconUrl = assets.string("iconUrl"),
-                                    )
-                                },
-                        )
-                    },
-                build =
-                    struct("build")?.let { build ->
-                        BlueprintSpecBuild(
-                            entrypoint = build.string("entrypoint"),
-                            env =
-                                build
-                                    .struct("env")
-                                    ?.mapValues { (_, value) ->
-                                        value.jsonPrimitive.content
-                                    }.orEmpty(),
-                            image = build.getValue("image").let(::elementToImage),
-                            instance =
-                                build.struct("instance")?.let { instance ->
-                                    BlueprintSpecInstance(
-                                        name = instance.string("name"),
-                                    )
-                                },
-                        )
-                    },
-                options = emptyList(),
-            )
-        }
-
-    private fun elementToImage(element: JsonElement): BlueprintSpecImage =
-        when (element) {
-            is JsonObject -> {
-                BlueprintSpecImage.Ref(
-                    ref = element.string("ref"),
-                    tag = element.string("tag"),
-                )
-            }
-
-            is JsonArray -> {
-                BlueprintSpecImage.Multiple(
-                    images =
-                        element.map { child ->
-                            if (child !is JsonObject) {
-                                error("Expected a JsonObject for image multiple child, given $child")
-                            }
-
-                            BlueprintSpecImage.Ref(
-                                ref = child.string("ref"),
-                                tag = child.string("tag"),
-                            )
-                        },
-                )
-            }
-
-            is JsonPrimitive -> {
-                BlueprintSpecImage.Identifier(
-                    id = element.content,
-                )
-            }
-        }
+    private fun transform(config: Config): BlueprintSpec = Hocon {
+        useConfigNamingConvention = true
+    }.decodeFromConfig(config)
 }

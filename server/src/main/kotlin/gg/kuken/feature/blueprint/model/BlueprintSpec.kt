@@ -1,7 +1,20 @@
 package gg.kuken.feature.blueprint.model
 
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.Transient
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.PolymorphicKind
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.encoding.decodeStructure
+import kotlinx.serialization.encoding.encodeStructure
 
 @Serializable
 data class BlueprintSpec(
@@ -36,11 +49,11 @@ data class BlueprintSpecRemote(
 data class BlueprintSpecBuild(
     val image: BlueprintSpecImage,
     val entrypoint: String,
-    val env: Map<String, String>,
-    val instance: BlueprintSpecInstance?,
+    @Transient val env: Map<String, String> = emptyMap(),
+    @Transient val instance: BlueprintSpecInstance? = null,
 )
 
-@Serializable
+@Serializable(with = BlueprintSpecImage.Serializer::class)
 sealed class BlueprintSpecImage {
     @Serializable
     @SerialName("identifier")
@@ -51,15 +64,72 @@ sealed class BlueprintSpecImage {
     @Serializable
     @SerialName("ref")
     data class Ref(
-        val ref: String,
+        val label: String,
         val tag: String,
     ) : BlueprintSpecImage()
 
     @Serializable
     @SerialName("multiple")
-    data class Multiple(
+    data class MultipleIdentifier(
+        val images: List<String>,
+    ) : BlueprintSpecImage()
+
+    @Serializable
+    @SerialName("multiple")
+    data class MultipleRef(
         val images: List<Ref>,
     ) : BlueprintSpecImage()
+
+    class Serializer : KSerializer<BlueprintSpecImage> {
+
+        @OptIn(InternalSerializationApi::class)
+        override val descriptor: SerialDescriptor = buildSerialDescriptor(
+            serialName = "gg.kuken.feature.blueprint.model.BlueprintSpecImage",
+            kind = PolymorphicKind.SEALED
+        )
+
+        override fun deserialize(decoder: Decoder): BlueprintSpecImage = try {
+            Identifier(decoder.decodeString())
+        } catch (_: SerializationException) {
+            decoder.decodeStructure(descriptor) {
+                try {
+                    val imageList = decodeSerializableElement(
+                        descriptor = descriptor,
+                        index = 0,
+                        deserializer = ListSerializer(String.serializer()),
+                    )
+
+                    MultipleIdentifier(imageList)
+                } catch (_: SerializationException) {
+                    val imageList = decodeSerializableElement(
+                        descriptor = descriptor,
+                        index = 0,
+                        deserializer = ListSerializer(Ref.serializer()),
+                    )
+
+                    MultipleRef(imageList)
+                }
+            }
+        }
+
+        override fun serialize(
+            encoder: Encoder,
+            value: BlueprintSpecImage
+        ) = when(value) {
+            is Identifier -> encoder.encodeString(value.id)
+            is MultipleIdentifier -> encoder.encodeStructure(descriptor) {
+                value.images.forEachIndexed { index, string ->
+                    encodeStringElement(descriptor, index, string)
+                }
+            }
+            is MultipleRef -> encoder.encodeStructure(descriptor) {
+                value.images.forEachIndexed { index, ref ->
+                    encodeSerializableElement(descriptor, index, Ref.serializer(), ref)
+                }
+            }
+            is Ref -> encoder.encodeSerializableValue(Ref.serializer(), value)
+        }
+    }
 }
 
 @Serializable

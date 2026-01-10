@@ -29,13 +29,13 @@ data class Property(
 }
 
 sealed class PropertyKind {
-    object Null : PropertyKind()
+    data object Null : PropertyKind()
 
-    object Literal : PropertyKind()
+    data object Literal : PropertyKind()
 
-    object Numeric : PropertyKind()
+    data object Numeric : PropertyKind()
 
-    object TrueOrFalse : PropertyKind()
+    data object TrueOrFalse : PropertyKind()
 
     data class Struct(
         val allowUnknown: Boolean,
@@ -52,6 +52,8 @@ sealed class PropertyKind {
 
         constructor(vararg kinds: PropertyKind) : this(kinds.toList())
     }
+
+    data class Reference(val node: String) : PropertyKind()
 }
 
 internal val AllSupportedProperties: List<Property> =
