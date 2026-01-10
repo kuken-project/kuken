@@ -11,6 +11,7 @@ val SetupDI =
                 accountPermissionRepository = get(),
                 permissionRepository = get(),
                 roleRepository = get(),
+                blueprintService = get(),
             )
         }
     }
