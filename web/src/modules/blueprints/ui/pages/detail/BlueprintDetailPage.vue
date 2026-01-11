@@ -38,16 +38,26 @@
                 <VCol :size="5">
                     <section class="build-configuration">
                         <h4>Build Configuration</h4>
-                        <VCard>
-                            <pre>{{ JSON.stringify(blueprint.spec.build, null, 2) }}</pre>
+                        <VCard style="padding: 0">
+                            <higlight
+                                :autodetect="false"
+                                :code="JSON.stringify(blueprint.spec.build, null, 2)"
+                                class="highlight"
+                                language="json"
+                            />
                         </VCard>
                     </section>
                 </VCol>
                 <VCol :size="7">
                     <section class="file-descriptor">
                         <h4>File Descriptor</h4>
-                        <VCard>
-                            <pre>{{ JSON.stringify(blueprint.spec, null, 2) }}</pre>
+                        <VCard style="padding: 0">
+                            <higlight
+                                :autodetect="false"
+                                :code="JSON.stringify(blueprint.spec, null, 2)"
+                                class="highlight"
+                                language="json"
+                            />
                         </VCard>
                     </section>
                 </VCol>
@@ -65,7 +75,9 @@ import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import VCard from "@/modules/platform/ui/components/card/VCard.vue"
 import { useHead } from "@unhead/vue"
+import hljsVuePlugin from "@highlightjs/vue-plugin"
 
+const higlight = hljsVuePlugin.component
 const props = defineProps<{ blueprintId: string }>()
 
 const resource = () => blueprintsService.getBlueprint(props.blueprintId)
@@ -75,6 +87,12 @@ useHead({
     title: () => (blueprint.value ? `${blueprint.value.spec.name} - Game Directory` : "")
 })
 </script>
+<style lang="scss">
+pre code.hljs {
+    text-wrap: auto;
+    border-radius: 20px !important;
+}
+</style>
 <style lang="scss" scoped>
 .header {
     display: flex;
@@ -113,6 +131,11 @@ useHead({
     padding: 4.8rem 2.4rem;
     width: 100%;
     font-size: 16px;
+
+    span {
+        user-select: none;
+        margin-bottom: 0.8rem;
+    }
 }
 
 .build-configuration,
