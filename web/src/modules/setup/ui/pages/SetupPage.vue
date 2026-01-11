@@ -54,7 +54,7 @@ async function completeSetup() {
         }
     })
 
-    await router.replace({ name: AUTH_LOGIN_ROUTE })
+    window.location.href = router.resolve({ name: AUTH_LOGIN_ROUTE }).href
 }
 
 async function proceedSetup() {
