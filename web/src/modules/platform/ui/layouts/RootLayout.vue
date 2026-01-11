@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import TheHeader from "@/modules/platform/ui/components/TheHeader.vue"
 </script>
 <template>
@@ -30,7 +30,7 @@ import TheHeader from "@/modules/platform/ui/components/TheHeader.vue"
 .content {
     background-color: #fff;
     border-radius: 20px;
-    margin: 0 24px 24px 24px;
+    margin: 0 16px 16px 16px;
     height: 100%;
 }
 </style>
