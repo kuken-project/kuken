@@ -1,5 +1,5 @@
 import httpService from "@/modules/platform/api/services/http.service"
-import type { AxiosResponse } from "axios"
+import type { AxiosError, AxiosResponse } from "axios"
 import type { Setup, SetupRequest } from "@/modules/setup/api/models/setup.model.ts"
 
 class SetupService {
@@ -7,7 +7,10 @@ class SetupService {
         return httpService
             .get("setup")
             .then((res: AxiosResponse) => res.data as Setup)
-            .catch(() => ({ completed: true }) as Setup)
+            .catch((error: AxiosError) => {
+                if (error.response?.status === 423 /* Locked */) return { completed: true } as Setup
+                else throw error
+            })
     }
 
     async completeSetup(request: SetupRequest): Promise<Setup> {

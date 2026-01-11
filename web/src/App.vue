@@ -11,6 +11,9 @@ import { ref } from "vue"
 import backendService from "@/modules/platform/api/services/backend.service.ts"
 import { useHead } from "@unhead/vue"
 import configService from "@/modules/platform/api/services/config.service.ts"
+import { SETUP_ROUTE } from "@/router.ts"
+import { useRouter } from "vue-router"
+import { usePlatformStore } from "@/modules/platform/platform.store.ts"
 
 const isLoading = ref(true)
 
@@ -18,7 +21,19 @@ useHead({
     title: configService.appName
 })
 
-backendService.getInfo().finally(() => (isLoading.value = false))
+const platformStore = usePlatformStore()
+const router = useRouter()
+
+backendService
+    .getInfo()
+    .catch(console.error)
+    .finally(() => {
+        if (!platformStore.hasBackendInfo) {
+            router.push({ name: SETUP_ROUTE }).finally(() => (isLoading.value = false))
+        } else {
+            isLoading.value = false
+        }
+    })
 </script>
 <style lang="scss">
 #app {

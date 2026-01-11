@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router"
 import { AuthRoutes } from "@/modules/auth/auth.routes"
 import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 import { HomeRoutes } from "@/modules/home/home.routes"
-import { RequireSetupGuard } from "@/modules/setup/guards/require-setup.guard.ts"
 import { InstancesRoutes } from "@/modules/instances/instances.routes.ts"
 import { UnitsRoutes } from "@/modules/units/units.routes.ts"
 
@@ -38,7 +37,5 @@ const router = createRouter({
         }
     ]
 })
-
-router.beforeEach(RequireSetupGuard)
 
 export default router
