@@ -77,7 +77,7 @@ class SetupService(
                 blueprints,
             ).awaitAll()
 
-            return@coroutineScope SetupState(
+            SetupState(
                 completed = true,
                 remainingSteps = emptySet(),
             )

@@ -49,7 +49,7 @@ data class BlueprintSpecRemote(
 data class BlueprintSpecBuild(
     val image: BlueprintSpecImage,
     val entrypoint: String,
-    @Transient val env: Map<String, String> = emptyMap(),
+    val env: Map<String, String> = emptyMap(),
     @Transient val instance: BlueprintSpecInstance? = null,
 )
 
