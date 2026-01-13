@@ -10,7 +10,7 @@ export const UnitsRoutes: Array<RouteRecordRaw> = [
                 required: false
             }
         },
-        component: importPage("units", "CreateUnit"),
+        component: importPage("units", "create-unit/CreateUnit"),
         meta: {
             title: "Create new"
         }

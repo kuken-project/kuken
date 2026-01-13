@@ -8,7 +8,7 @@ export default {
         return httpService.get(`units`).then((res: AxiosResponse) => res.data as Unit[])
     },
 
-    async createUnit(options: CreateUnitRequest): Promise<unknown> {
-        return httpService.post(`units`, options).then((res: AxiosResponse) => res.data as unknown)
+    async createUnit(options: CreateUnitRequest): Promise<Unit> {
+        return httpService.post(`units`, options).then((res: AxiosResponse) => res.data as Unit)
     }
 } as const

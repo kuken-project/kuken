@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import websocketService from "@/modules/platform/api/services/websocket.service.ts"
 import { WebSocketOpCodes } from "@/modules/platform/api/models/websocket.response.ts"
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue"
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, unref, watch } from "vue"
 import { useElementSize, useScroll } from "@vueuse/core"
+import VInput from "@/modules/platform/ui/components/form/VInput.vue"
+import VForm from "@/modules/platform/ui/components/form/VForm.vue"
+import instancesService from "@/modules/instances/api/services/instances.service.ts"
 
 interface Frame {
     value: string
@@ -18,6 +21,7 @@ const props = defineProps<{ instanceId: string }>()
 const frames = ref<Frame[]>([])
 const maxFrames = 10000
 const isPaused = ref(false)
+const command = ref("")
 
 // --- Scrolling ---
 const scrollerRef = ref<HTMLElement>()
@@ -131,6 +135,14 @@ const highlightSearch = (text: string) => {
     return text.replace(regex, "<mark>$1</mark>")
 }
 
+async function sendCommand() {
+    const input = unref(command)
+
+    const { exitCode } = await instancesService.runInstanceCommand(props.instanceId, input)
+
+    console.log(`Exit code for ${input}: ${exitCode}`)
+}
+
 // --- WebSocket Listener ---
 const isConnected = ref(false)
 const logsEnded = ref(false)
@@ -157,6 +169,10 @@ const setupListeners = () => {
         }
     )
 
+    unsubscribeInstanceStart = websocketService.listen(WebSocketOpCodes.InstanceStarted, () => {
+        isConnected.value = true
+    })
+
     unsubscribeFrames = websocketService.listen(WebSocketOpCodes.InstanceLogsRequestFrame, addFrame)
 
     unsubscribeEnd = websocketService.listen(WebSocketOpCodes.InstanceLogsRequestFinished, () => {
@@ -167,8 +183,6 @@ const setupListeners = () => {
 
     unsubscribeFrames = websocketService.listen(WebSocketOpCodes.InstanceStarted, () => {
         isConnected.value = true
-
-        console.log("server ignitou novamente gloria deus")
     })
 }
 
@@ -253,6 +267,10 @@ watch([searchQuery, filterStream], () => {
                 <template v-else> Waiting for logs... </template>
             </div>
         </div>
+
+        <VForm @submit.prevent="sendCommand">
+            <VInput placeholder="Type something..." v-model="command" />
+        </VForm>
     </div>
 </template>
 
@@ -471,10 +489,9 @@ watch([searchQuery, filterStream], () => {
 .console-line {
     display: flex;
     padding: 2px 8px;
-    line-height: 1.5;
     white-space: pre-wrap;
     word-break: break-all;
-    height: 24px;
+    min-height: 24px;
     align-items: center;
     scroll-snap-align: start;
 }

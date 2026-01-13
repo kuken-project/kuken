@@ -1,16 +1,17 @@
 <template>
     <input
-        class="input"
-        :disabled="disabled"
-        :readonly="disabled"
         :class="{
             'input--onSurface': onSurface
         }"
+        :disabled="disabled"
+        :placeholder="placeholder"
+        :readonly="disabled"
+        class="input"
         @input="onInputChange"
     />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref } from "vue"
 
 const emits = defineEmits(["update:modelValue"])

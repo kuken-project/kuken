@@ -1,9 +1,14 @@
 <template>
-    <h2 class="root">
+    <h2 :class="{ centered: centered }" class="root">
         <slot />
     </h2>
 </template>
-<style scoped lang="scss">
+<script lang="ts" setup>
+const { centered } = defineProps({
+    centered: { required: false }
+})
+</script>
+<style lang="scss" scoped>
 .root {
     position: relative;
     font-weight: bold;
@@ -19,6 +24,15 @@
         bottom: 3px;
         position: absolute;
         right: 15%;
+    }
+}
+
+.centered {
+    text-align: center;
+    width: 100%;
+
+    &:after {
+        display: none;
     }
 }
 </style>

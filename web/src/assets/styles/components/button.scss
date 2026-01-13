@@ -19,8 +19,9 @@
     font-family: var(--kt-body-font), sans-serif;
     background-color: var(--kt-background-surface-high);
     color: var(--kt-content-neutral);
+    transition: opacity ease-in-out 0.2s;
 
-    &[disabled="true"] {
+    &[disabled] {
         opacity: 0.38;
     }
 
@@ -51,8 +52,8 @@
     border-color: var(--kt-content-primary);
     color: var(--kt-content-primary-oncolor);
 
-    &:not([disabled="true"]):hover,
-    &:not([disabled="true"]):focus {
+    &:not([disabled]):hover,
+    &:not([disabled]):focus {
         background-color: var(--kt-content-primary-hover);
         border-color: var(--kt-content-primary-hover);
         color: var(--kt-content-primary-oncolor);
