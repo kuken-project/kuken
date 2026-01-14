@@ -1,12 +1,15 @@
 <script lang="ts" setup>
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
-import { reactive, ref, unref } from "vue"
-import type { Blueprint } from "@/modules/blueprints/api/models/blueprint.model.ts"
+import { reactive, unref } from "vue"
+import {
+    type Blueprint,
+    resolveBlueprintSource
+} from "@/modules/blueprints/api/models/blueprint.model.ts"
 import { isNull } from "@/utils"
+import { ProgressiveImage } from "vue-progressive-image"
 
-const selected = ref<string | null>("")
-const emit = defineEmits<{ selected: [blueprintId: string] }>()
+const selected = defineModel()
 
 const resource = () => blueprintsService.listReadyToUseBlueprints()
 const { blueprintList } = reactive<{ blueprintList: Blueprint[] }>({ blueprintList: [] })
@@ -18,10 +21,8 @@ function isSelected(blueprint: Blueprint) {
 function select(blueprint: Blueprint) {
     if (isSelected(blueprint)) {
         selected.value = null
-        emit("selected", "")
     } else {
         selected.value = blueprint.id
-        emit("selected", blueprint.id)
     }
 }
 </script>
@@ -36,14 +37,15 @@ function select(blueprint: Blueprint) {
                     class="blueprint"
                     @click="select(blueprint)"
                 >
-                    <div
-                        :style="{ backgroundImage: `url(${blueprint.spec.remote.assets.iconUrl})` }"
+                    <ProgressiveImage
+                        :src="resolveBlueprintSource(blueprint.spec.assets.icon!.source)"
                         class="image"
                     />
                     <div class="body">
-                        <h5 class="title" v-text="blueprint.spec.name" />
+                        <h5 class="title" v-text="blueprint.spec.descriptor.name" />
                         <p class="description">
-                            Version {{ blueprint.spec.version }} · Küken Official Blueprint
+                            Version {{ blueprint.spec.descriptor.version }} · Küken Official
+                            Blueprint
                         </p>
                     </div>
                 </li>
@@ -53,16 +55,12 @@ function select(blueprint: Blueprint) {
 </template>
 
 <style lang="scss" scoped>
-.blueprintList {
-    margin-top: 8px;
-}
-
 .blueprint {
     display: flex;
     flex-direction: row;
     gap: 16px;
     padding: 12px;
-    border: 2px solid transparent;
+    border: 2px solid var(--kt-border-low);
     transition:
         border ease-in-out 0.15s,
         background-color ease-in-out 0.15s;
@@ -70,11 +68,11 @@ function select(blueprint: Blueprint) {
 
     &:hover {
         cursor: pointer;
-        border: 2px solid var(--kt-border-low);
+        border-color: var(--kt-border-medium);
     }
 
     &.selected {
-        border: 2px solid var(--kt-content-primary);
+        border-color: var(--kt-content-primary);
     }
 }
 
