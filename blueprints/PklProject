@@ -1,0 +1,8 @@
+amends "pkl:Project"
+
+package {
+  name = "blueprints"
+  baseUri = "package://kuken.io/blueprints/package"
+  version = "1.0.0"
+  packageZipUrl = "https://kuken.io/blueprints/\(name)/\(name)@\(version).zip"
+}
