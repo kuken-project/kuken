@@ -1,0 +1,1 @@
+amends "package://github.com/devnatan/kuken/tree/main/blueprints/package@1.0.0#/Blueprint.pkl"

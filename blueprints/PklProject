@@ -6,7 +6,7 @@ package {
   version = "1.0.0"
   packageZipUrl =
     "https://raw.githubusercontent.com/devnatan/kuken/refs/heads/main/blueprints/package/package@\(version).zip"
-  sourceCode = "https://github.com/devnatan/kuken/blueprints"
+  sourceCode = "https://github.com/devnatan/kuken/blueprints/blueprints"
   license = "Apache-2.0"
   website = "https://kuken.io"
   documentation = "https://docs.kuken.io"
