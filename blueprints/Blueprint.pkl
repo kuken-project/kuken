@@ -1,0 +1,33 @@
+@ModuleInfo { minPklVersion = "0.30.2" }
+module io.kuken.Blueprint
+
+inputs: Mapping<String, Input>
+
+build: Build
+
+hidden refs: Refs
+
+typealias Property = String | Input
+
+abstract class Input {
+  type: String
+}
+
+class NumberInput extends Input {
+  type = "text"
+  default: Number
+}
+
+class TextInput extends Input {
+  type = "text"
+  label: String
+}
+
+class Build {
+  docker: Docker
+  env: Mapping<String, Property>
+}
+
+class Docker {
+  image: Property
+}
