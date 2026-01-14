@@ -4,8 +4,11 @@
   "version": "1.0.0",
   "packageZipUrl": "https://raw.githubusercontent.com/devnatan/kuken/refs/heads/main/blueprints/package/package@1.0.0.zip",
   "packageZipChecksums": {
-    "sha256": "5ea5cdbd8bef3f47c6869cd4e7d1ba311f63b4877a1da43c5596dd094c56e96b"
+    "sha256": "17c544e177d72cfb57131a6ab4c46450bd9c1d516328c6e913a76899b03a1243"
   },
   "dependencies": {},
+  "sourceCode": "https://github.com/devnatan/kuken/blueprints",
+  "documentation": "https://docs.kuken.io",
+  "license": "Apache-2.0",
   "authors": []
 }
