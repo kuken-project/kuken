@@ -7,14 +7,15 @@
                         <div class="header">
                             <div
                                 :style="{
-                                    backgroundImage: `url(${blueprint.spec.remote.assets.iconUrl})`
+                                    backgroundImage: `url(${resolveBlueprintSource(blueprint.spec.assets.icon?.source!)})`
                                 }"
                                 class="icon"
                             />
                             <div class="text">
-                                <h4 class="title">{{ blueprint.spec.name }}</h4>
+                                <h4 class="title">{{ blueprint.spec.descriptor.name }}</h4>
                                 <p class="description">
-                                    Version {{ blueprint.spec.version }} · Küken Official Blueprint
+                                    Version {{ blueprint.spec.descriptor.version }} · Küken Official
+                                    Blueprint
                                 </p>
                             </div>
                         </div>
@@ -67,7 +68,10 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue"
-import type { Blueprint } from "@/modules/blueprints/api/models/blueprint.model"
+import {
+    type Blueprint,
+    resolveBlueprintSource
+} from "@/modules/blueprints/api/models/blueprint.model"
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
 import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
@@ -84,7 +88,7 @@ const resource = () => blueprintsService.getBlueprint(props.blueprintId)
 const blueprint = ref<Blueprint | null>(null)
 
 useHead({
-    title: () => (blueprint.value ? `${blueprint.value.spec.name} - Game Directory` : "")
+    title: () => (blueprint.value ? `${blueprint.value.spec.descriptor.name} - Game Directory` : "")
 })
 </script>
 <style lang="scss">

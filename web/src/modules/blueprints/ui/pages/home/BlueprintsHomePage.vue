@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
@@ -10,7 +10,10 @@ import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
 import VInput from "@/modules/platform/ui/components/form/VInput.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
-import type { Blueprint } from "@/modules/blueprints/api/models/blueprint.model.ts"
+import {
+    type Blueprint,
+    resolveBlueprintSource
+} from "@/modules/blueprints/api/models/blueprint.model.ts"
 
 let state = reactive({ readyToUseBlueprints: [] as Blueprint[] })
 const importUrl = ref("")
@@ -27,7 +30,7 @@ async function performImport() {
         <VCol :size="5">
             <Resource
                 :resource="blueprintsService.listReadyToUseBlueprints"
-                @loaded="(blueprints) => (state.readyToUseBlueprints = blueprints)"
+                @loaded="(blueprints: Blueprint[]) => (state.readyToUseBlueprints = blueprints)"
             >
                 <div class="header">
                     <h4>Your Library</h4>
@@ -45,8 +48,8 @@ async function performImport() {
                     >
                         <div class="blueprintIcon">
                             <img
-                                :src="blueprint.spec.remote.assets.iconUrl"
                                 :alt="`${blueprint.id} icon`"
+                                :src="resolveBlueprintSource(blueprint.spec.assets.icon?.source!)"
                             />
                         </div>
                     </router-link>
@@ -61,10 +64,10 @@ async function performImport() {
                     <VLabel>
                         URL
                         <VInput
-                            type="url"
                             v-model="importUrl"
-                            required="true"
                             placeholder="https://kuken.io"
+                            required="true"
+                            type="url"
                         />
                     </VLabel>
                 </VFieldSet>
@@ -74,7 +77,7 @@ async function performImport() {
     </VContainer>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .blueprintList {
     display: grid;
     gap: 12px;
