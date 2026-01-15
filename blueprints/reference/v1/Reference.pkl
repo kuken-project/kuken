@@ -64,6 +64,10 @@ url: WebUrl
 // TYPE DEFINITIONS - PRIMITIVES
 // ============================================================================
 
+const FILE_PROTOCOL = "file://"
+const SECURE_WEB_PROTOCOL = "https://"
+const INSECURE_WEB_PROTOCOL = "http://"
+
 /// A valid URL or file path reference used throughout the blueprint.
 ///
 /// Supported schemes:
@@ -79,14 +83,14 @@ typealias Source =
         && (startsWith("url://")),
     )
 
-typealias FileURI = String(startsWith("file://"))
+typealias FileURI = String(!isEmpty && startsWith(FILE_PROTOCOL))
 
 /// Web-only URL reference that excludes local file paths.
 /// Used for public-facing URLs like documentation and official websites.
 typealias WebUrl =
   String(
     !isEmpty
-      && (startsWith("https://") || startsWith("http://")),
+      && (startsWith(SECURE_WEB_PROTOCOL) || startsWith(INSECURE_WEB_PROTOCOL)),
   )
 
 /// A valid Docker image reference with optional tag or digest.
@@ -237,9 +241,11 @@ abstract class AppResource extends Property {
   source: Source
 }
 
-class FileResource extends AppResource {}
+class FileResource extends AppResource {
+  source: FileURI
+}
 
-function file(path: String): FileResource = new { source = path }
+function file(path: String): FileResource = new { source = "\(FILE_PROTOCOL)\(path)" }
 
 // ============================================================================
 // RUNTIME REFERENCES
