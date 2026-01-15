@@ -237,7 +237,7 @@ resources: AppResources?
 
 typealias AppResources = Listing<AppResource>
 
-abstract class AppResource extends Property {
+abstract class AppResource {
   source: Source
 }
 
