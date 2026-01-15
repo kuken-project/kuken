@@ -74,5 +74,5 @@ build {
 }
 
 instance {
-  startup = ""
+  startup = "java Xms128M -jar server.jar"
 }
