@@ -73,13 +73,13 @@ url: WebUrl
 ///
 typealias Source =
   WebUrl
+    | FileURI
     | String(
       !isEmpty
-        && (
-          startsWith("file://")
-            || startsWith("url://")
-        ),
+        && (startsWith("url://")),
     )
+
+typealias FileURI = String(startsWith("file://"))
 
 /// Web-only URL reference that excludes local file paths.
 /// Used for public-facing URLs like documentation and official websites.
@@ -228,6 +228,18 @@ class AppAssets {
   /// Should be a square PNG, SVG, or WebP image, 256x256 pixels maximum.
   icon: Source
 }
+
+resources: AppResources?
+
+typealias AppResources = Listing<AppResource>
+
+abstract class AppResource extends Property {
+  source: Source
+}
+
+class FileResource extends AppResource {}
+
+function file(path: String): FileResource = new { source = path }
 
 // ============================================================================
 // RUNTIME REFERENCES
@@ -431,6 +443,7 @@ class DataSizeInput extends UserInput {
 instance: InstanceSettings
 
 class InstanceSettings extends Base {
+  @SourceCode
   startup: ResolvableProperty
 }
 
@@ -479,4 +492,14 @@ class EnvironmentVariable extends Property {
 const function env(_name: EnvVarName, _value: EnvVarValue): EnvironmentVariable = new {
   name = _name
   value = _value
+}
+
+// ============================================================================
+// HOOKS
+// ============================================================================
+
+hooks: Hooks
+
+class Hooks {
+  onInstall: AppResource
 }
