@@ -1,0 +1,39 @@
+#!/bin/bash
+set -e
+
+cd /home/container
+
+if [[ -z "$HYTALE_SERVER_SESSION_TOKEN" ]]; then
+	./hytale-downloader/hytale-downloader-linux -patchline "$HYTALE_PATCHLINE" -download-path HytaleServer.zip
+
+	unzip -o HytaleServer.zip -d .
+
+	rm -f HytaleServer.zip
+elif [[ -f "HytaleMount/HytaleServer.zip" ]]; then
+	unzip -o HytaleMount/HytaleServer.zip -d .
+elif [[ -f "HytaleMount/Assets.zip" ]]; then
+	ln -s -f HytaleMount/Assets.zip Assets.zip
+elif [[ -f "Server/Assets.zip" ]]; then
+	ln -s -f Server/Assets.zip Assets.zip
+elif [[ -f "HytaleServer.zip" ]]; then
+	unzip -o HytaleServer.zip -d .
+fi
+
+if [ "${INSTALL_SOURCEQUERY_PLUGIN}" == "1" ]; then
+	mkdir -p mods
+	echo -e "Downloading latest hytale-sourcequery plugin..."
+	LATEST_URL=$(curl -sSL https://api.github.com/repos/physgun-com/hytale-sourcequery/releases/latest \
+		| grep -oP '"browser_download_url":\s*"\K[^"]+\.jar' || true)
+	if [[ -n "$LATEST_URL" ]]; then
+		curl -sSL -o mods/hytale-sourcequery.jar "$LATEST_URL"
+		echo -e "Successfully downloaded hytale-sourcequery plugin to mods folder."
+	else
+		echo -e "Warning: Could not find hytale-sourcequery plugin download URL."
+	fi
+fi
+
+if [[ -f config.json && -n "$HYTALE_MAX_VIEW_RADIUS" ]]; then
+	jq ".MaxViewRadius = $HYTALE_MAX_VIEW_RADIUS" config.json > config.tmp.json && mv config.tmp.json config.json
+fi
+
+/java.sh $@
