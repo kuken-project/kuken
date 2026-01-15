@@ -17,5 +17,5 @@ mv hytale-downloader/hytale-downloader-linux-amd64 hytale-downloader/hytale-down
 chmod 555 hytale-downloader/hytale-downloader-linux
 
 echo -e "Verifying Hytale Downloader installation..."
-echo -e "Hytale Downloader version: $(/hytale-downloader/hytale-downloader-linux -version)"
+echo -e "Hytale Downloader version: $(./hytale-downloader/hytale-downloader-linux -version)"
 echo -e "Hytale Downloader installed successfully."
