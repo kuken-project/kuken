@@ -25,9 +25,6 @@
       "type": "[Lorg.apache.logging.log4j.core.config.Property;"
     },
     {
-      "type": "android.os.Build"
-    },
-    {
       "type": "com.fasterxml.jackson.core.JsonParser"
     },
     {
@@ -202,7 +199,7 @@
       "type": "io.ktor.client.engine.HttpClientEngineConfig"
     },
     {
-      "type": "io.ktor.client.engine.okhttp.OkHttpEngineContainer"
+      "type": "io.ktor.client.engine.cio.CIOEngineContainer"
     },
     {
       "type": "io.ktor.client.plugins.DefaultRequest"
@@ -224,17 +221,6 @@
     },
     {
       "type": "io.ktor.client.plugins.api.ClientPluginInstance"
-    },
-    {
-      "type": "io.ktor.client.plugins.logging.HttpClientCallLogger",
-      "fields": [
-        {
-          "name": "requestLogged"
-        },
-        {
-          "name": "responseLogged"
-        }
-      ]
     },
     {
       "type": "io.ktor.client.request.HttpRequest"
@@ -299,21 +285,10 @@
       ]
     },
     {
-      "type": "io.ktor.network.sockets.ServerSocketImpl$acceptSuspend$1",
-      "fields": [
-        {
-          "name": "label"
-        }
-      ]
-    },
-    {
       "type": "io.ktor.resources.Resources"
     },
     {
       "type": "io.ktor.serialization.kotlinx.json.KotlinxSerializationJsonExtensionProvider"
-    },
-    {
-      "type": "io.ktor.server.application.ApplicationCall"
     },
     {
       "type": "io.ktor.server.application.PluginInstance"
@@ -323,14 +298,6 @@
     },
     {
       "type": "io.ktor.server.auth.Authentication"
-    },
-    {
-      "type": "io.ktor.server.cio.backend.HttpServerKt$httpServer$acceptJob$1",
-      "fields": [
-        {
-          "name": "label"
-        }
-      ]
     },
     {
       "type": "io.ktor.server.engine.BaseApplicationResponse"
@@ -390,22 +357,10 @@
       "type": "io.ktor.utils.io.ByteReadChannel"
     },
     {
-      "type": "io.ktor.utils.io.pool.DefaultPool",
-      "fields": [
-        {
-          "name": "top"
-        }
-      ]
-    },
-    {
       "type": "io.ktor.websocket.WebSocketExtension"
     },
     {
       "type": "jakarta.servlet.Servlet"
-    },
-    {
-      "type": "java.io.IOException",
-      "allDeclaredFields": true
     },
     {
       "type": "java.lang.Boolean"
@@ -414,12 +369,16 @@
       "type": "java.lang.Class",
       "methods": [
         {
-          "name": "getModule",
-          "parameterTypes": []
-        },
-        {
           "name": "isSealed",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "java.lang.ClassLoader",
+      "fields": [
+        {
+          "name": "classLoaderValueMap"
         }
       ]
     },
@@ -427,23 +386,10 @@
       "type": "java.lang.ClassValue"
     },
     {
-      "type": "java.lang.Exception",
-      "allDeclaredFields": true
-    },
-    {
       "type": "java.lang.Integer"
     },
     {
       "type": "java.lang.Long"
-    },
-    {
-      "type": "java.lang.Module",
-      "methods": [
-        {
-          "name": "getDescriptor",
-          "parameterTypes": []
-        }
-      ]
     },
     {
       "type": "java.lang.Object",
@@ -470,8 +416,7 @@
       ]
     },
     {
-      "type": "java.lang.Throwable",
-      "allDeclaredFields": true
+      "type": "java.lang.Throwable"
     },
     {
       "type": "java.lang.management.ManagementFactory",
@@ -492,20 +437,7 @@
       ]
     },
     {
-      "type": "java.lang.module.ModuleDescriptor"
-    },
-    {
       "type": "java.net.StandardSocketOptions"
-    },
-    {
-      "type": "java.nio.channels.ClosedChannelException",
-      "allDeclaredFields": true,
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": []
-        }
-      ]
     },
     {
       "type": "java.security.AccessController",
@@ -543,6 +475,12 @@
       "type": "javax.servlet.Servlet"
     },
     {
+      "type": "jdk.internal.jrtfs.JrtFileSystemProvider"
+    },
+    {
+      "type": "jdk.internal.misc.Unsafe"
+    },
+    {
       "type": "kotlin.Any"
     },
     {
@@ -550,9 +488,6 @@
     },
     {
       "type": "kotlin.ByteArray"
-    },
-    {
-      "type": "kotlin.Function1"
     },
     {
       "type": "kotlin.Function2"
@@ -630,12 +565,6 @@
       "type": "kotlin.collections.MutableMap"
     },
     {
-      "type": "kotlin.coroutines.jvm.internal.BaseContinuationImpl"
-    },
-    {
-      "type": "kotlin.jvm.functions.Function1"
-    },
-    {
       "type": "kotlin.jvm.internal.DefaultConstructorMarker"
     },
     {
@@ -661,9 +590,6 @@
       "allPublicFields": true
     },
     {
-      "type": "kotlin.uuid.Uuid"
-    },
-    {
       "type": "kotlinx.atomicfu.AtomicBoolean",
       "fields": [
         {
@@ -676,22 +602,6 @@
       "fields": [
         {
           "name": "value"
-        }
-      ]
-    },
-    {
-      "type": "kotlinx.coroutines.AwaitAll",
-      "fields": [
-        {
-          "name": "notCompletedCount$volatile"
-        }
-      ]
-    },
-    {
-      "type": "kotlinx.coroutines.AwaitAll$AwaitAllNode",
-      "fields": [
-        {
-          "name": "_disposer$volatile"
         }
       ]
     },
@@ -781,6 +691,17 @@
       ]
     },
     {
+      "type": "kotlinx.coroutines.internal.ConcurrentLinkedListNode",
+      "fields": [
+        {
+          "name": "_next$volatile"
+        },
+        {
+          "name": "_prev$volatile"
+        }
+      ]
+    },
+    {
       "type": "kotlinx.coroutines.internal.DispatchedContinuation",
       "fields": [
         {
@@ -830,7 +751,12 @@
       ]
     },
     {
-      "type": "kotlinx.coroutines.internal.StackTraceRecoveryKt"
+      "type": "kotlinx.coroutines.internal.Segment",
+      "fields": [
+        {
+          "name": "cleanedAndPointers$volatile"
+        }
+      ]
     },
     {
       "type": "kotlinx.coroutines.internal.ThreadSafeHeap",
@@ -876,6 +802,26 @@
         },
         {
           "name": "producerIndex$volatile"
+        }
+      ]
+    },
+    {
+      "type": "kotlinx.coroutines.sync.SemaphoreAndMutexImpl",
+      "fields": [
+        {
+          "name": "_availablePermits$volatile"
+        },
+        {
+          "name": "deqIdx$volatile"
+        },
+        {
+          "name": "enqIdx$volatile"
+        },
+        {
+          "name": "head$volatile"
+        },
+        {
+          "name": "tail$volatile"
         }
       ]
     },
@@ -1197,17 +1143,7 @@
       "type": "org.apache.logging.log4j.core.config.HttpWatcher"
     },
     {
-      "type": "org.apache.logging.log4j.core.config.LoggerConfig",
-      "methods": [
-        {
-          "name": "newBuilder",
-          "parameterTypes": []
-        }
-      ]
-    },
-    {
-      "type": "org.apache.logging.log4j.core.config.LoggerConfig$Builder",
-      "allDeclaredFields": true
+      "type": "org.apache.logging.log4j.core.config.LoggerConfig"
     },
     {
       "type": "org.apache.logging.log4j.core.config.LoggerConfig$RootLogger",
@@ -2120,6 +2056,25 @@
       "type": "org.apache.logging.slf4j.SLF4JServiceProvider"
     },
     {
+      "type": "org.graalvm.home.impl.DefaultHomeFinder"
+    },
+    {
+      "type": "org.graalvm.polyglot.io.IOHelper",
+      "fields": [
+        {
+          "name": "ACCESS"
+        }
+      ]
+    },
+    {
+      "type": "org.graalvm.polyglot.management.Management",
+      "fields": [
+        {
+          "name": "ACCESS"
+        }
+      ]
+    },
+    {
       "type": "org.jetbrains.exposed.v1.core.ColumnType",
       "methods": [
         {
@@ -2169,6 +2124,9 @@
     },
     {
       "type": "org.osgi.framework.FrameworkUtil"
+    },
+    {
+      "type": "org.pkl.core.runtime.VmLanguageProvider"
     },
     {
       "type": "org.postgresql.Driver",
@@ -2434,10 +2392,37 @@
   ],
   "resources": [
     {
+      "glob": "META-INF/graalvm/org.graalvm.polyglot/version"
+    },
+    {
+      "glob": "META-INF/graalvm/org.graalvm.truffle/version"
+    },
+    {
       "glob": "META-INF/log4j-provider.properties"
     },
     {
       "glob": "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat"
+    },
+    {
+      "glob": "META-INF/resources/engine/libtruffleattach/windows/amd64/sha256"
+    },
+    {
+      "glob": "META-INF/services/com.oracle.truffle.api.TruffleRuntimeAccess"
+    },
+    {
+      "glob": "META-INF/services/com.oracle.truffle.api.impl.TruffleLocator"
+    },
+    {
+      "glob": "META-INF/services/com.oracle.truffle.api.instrumentation.provider.TruffleInstrumentProvider"
+    },
+    {
+      "glob": "META-INF/services/com.oracle.truffle.api.library.provider.DefaultExportProvider"
+    },
+    {
+      "glob": "META-INF/services/com.oracle.truffle.api.provider.InternalResourceProvider"
+    },
+    {
+      "glob": "META-INF/services/com.oracle.truffle.api.provider.TruffleLanguageProvider"
     },
     {
       "glob": "META-INF/services/io.ktor.client.HttpClientEngineContainer"
@@ -2456,6 +2441,9 @@
     },
     {
       "glob": "META-INF/services/java.nio.channels.spi.SelectorProvider"
+    },
+    {
+      "glob": "META-INF/services/java.nio.file.spi.FileSystemProvider"
     },
     {
       "glob": "META-INF/services/java.sql.Driver"
@@ -2485,10 +2473,25 @@
       "glob": "META-INF/services/org.apache.logging.log4j.util.PropertySource"
     },
     {
+      "glob": "META-INF/services/org.graalvm.home.HomeFinder"
+    },
+    {
+      "glob": "META-INF/services/org.graalvm.polyglot.impl.AbstractPolyglotImpl"
+    },
+    {
       "glob": "META-INF/services/org.jetbrains.exposed.v1.core.statements.GlobalStatementInterceptor"
     },
     {
       "glob": "META-INF/services/org.jetbrains.exposed.v1.jdbc.DatabaseConnectionAutoRegistration"
+    },
+    {
+      "glob": "META-INF/services/org.pkl.core.StackFrameTransformer"
+    },
+    {
+      "glob": "META-INF/services/org.pkl.core.module.ModuleKeyFactory"
+    },
+    {
+      "glob": "META-INF/services/org.pkl.core.resource.ResourceReader"
     },
     {
       "glob": "META-INF/services/org.slf4j.spi.SLF4JServiceProvider"
@@ -2582,6 +2585,9 @@
     },
     {
       "glob": "log4j2c387f44.yml"
+    },
+    {
+      "glob": "org/pkl/core/Release.properties"
     },
     {
       "glob": "org/postgresql/driverconfig.properties"
