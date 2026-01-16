@@ -16,7 +16,6 @@ package {
     "blueprints/icons/**"
     "package/**"
     "processor/**"
-    "blueprints/**"
     "build/**"
     ".idea/**"
     "*.exe"

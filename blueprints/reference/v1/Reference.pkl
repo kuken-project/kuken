@@ -341,7 +341,6 @@ abstract class UserInput extends Property {
   /// Human-readable display text shown to users.
   /// Should clearly describe the input's purpose without requiring technical knowledge.
   abstract label: DisplayLabel
-  abstract hint: String?
 
   /// Input type identifier set automatically by subclasses.
   /// Used internally for UI rendering and validation.
@@ -359,8 +358,6 @@ abstract class UserInput extends Property {
 /// }
 /// ```
 class TextInput extends UserInput {
-  abstract name: InputId
-  abstract label: DisplayLabel
   fixed type: String = "text"
 
   /// Default text value if user doesn't specify one.
@@ -532,5 +529,5 @@ const function env(_name: EnvVarName, _value: EnvVarValue): EnvironmentVariable 
 hooks: Hooks
 
 class Hooks {
-  onInstall: AppResource?
+  onInstall: AppResource
 }
