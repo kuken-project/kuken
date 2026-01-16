@@ -17,7 +17,7 @@ RUN --mount=type=secret,id=github_actor \
     --mount=type=secret,id=github_token \
     GITHUB_ACTOR=$(cat /run/secrets/github_actor) \
     GITHUB_TOKEN=$(cat /run/secrets/github_token) \
-    ./gradlew buildOpenApi nativeCompile --no-daemon
+    ./gradlew nativeCompile --no-daemon
 
 FROM debian:bookworm-slim
 
