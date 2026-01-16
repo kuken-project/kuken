@@ -28,15 +28,15 @@ application {
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.graalvm.polyglot") {
-            useVersion("24.1.2")
+            useVersion("24.2.2")
             because("PKL 0.30.2 requires GraalVM 24.x components for native-image compatibility")
         }
         if (requested.group == "org.graalvm.truffle") {
-            useVersion("24.1.2")
+            useVersion("24.2.2")
             because("PKL 0.30.2 requires GraalVM 24.x components for native-image compatibility")
         }
         if (requested.group == "org.graalvm.sdk") {
-            useVersion("24.1.2")
+            useVersion("24.2.2")
             because("PKL 0.30.2 requires GraalVM 24.x components for native-image compatibility")
         }
     }
@@ -71,8 +71,8 @@ dependencies {
     implementation("org.pkl-lang:pkl-core:0.30.2") {
         exclude(group = "org.pkl-lang", module = "pkl-config-java-all")
     }
-    implementation("org.graalvm.polyglot:polyglot:24.1.2")
-    implementation("org.graalvm.truffle:truffle-api:24.1.2")
+    implementation("org.graalvm.polyglot:polyglot:24.2.2")
+    implementation("org.graalvm.truffle:truffle-api:24.2.2")
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
 }
