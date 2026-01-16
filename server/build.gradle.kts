@@ -73,7 +73,6 @@ dependencies {
     }
     implementation("org.graalvm.polyglot:polyglot:24.1.2")
     implementation("org.graalvm.truffle:truffle-api:24.1.2")
-    implementation("org.graalvm.polyglot:js-community:24.1.2")
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
 }
@@ -112,8 +111,6 @@ graalvmNative {
             buildArgs.add("--initialize-at-run-time=org.graalvm.polyglot")
             buildArgs.add("--initialize-at-run-time=com.oracle.truffle")
 
-            buildArgs.add("--initialize-at-run-time=kotlin.uuid.SecureRandomHolder")
-            buildArgs.add("--initialize-at-run-time=kotlinx.coroutines")
             buildArgs.add("--initialize-at-run-time=io.netty")
             buildArgs.add("--initialize-at-run-time=org.bouncycastle")
 
