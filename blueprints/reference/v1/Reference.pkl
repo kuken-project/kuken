@@ -136,14 +136,32 @@ typealias EnvVarName =
       && matches(Regex(#"^[A-Z_][A-Z0-9_]*$"#)),
   )
 
-/// Valid TCP/UDP port number in the range 1-65535.
-///
-/// Remember: Ports 1-1023 are system ports requiring elevated privileges.
+function tcp(port: PortNumber): Port = new {
+  value = port
+  protocol = "tcp"
+}
+
+function udp(port: PortNumber): Port = new {
+  value = port
+  protocol = "udp"
+}
+
 typealias PortNumber =
   UInt16(
     this >= 1
       && this <= 65535,
   )
+
+class Port {
+  /// Valid TCP/UDP port number in the range 1-65535.
+  ///
+  /// Remember: Ports 1-1023 are system ports requiring elevated privileges.
+  value: PortNumber
+
+  protocol: NetworkProtocol
+}
+
+typealias NetworkProtocol = "tcp" | "udp"
 
 /// Valid input identifier in kebab-case format.
 /// Used for programmatic references to user inputs throughout the blueprint.
@@ -172,7 +190,7 @@ typealias DisplayLabel =
 // TYPE DEFINITIONS - COMPOSITE
 // ============================================================================
 
-/// Property value that can reference user inputs for dynamic substitution.
+/// Property value that can reference [UserInput], [EnvironmentVariable] or [Ref] for dynamic substitution.
 /// Enables both static values and runtime-resolved references.
 typealias ResolvableProperty = String(!isEmpty) | Property
 
@@ -287,20 +305,22 @@ class RuntimeRefs {
 class InstanceRefs {
   /// Unique identifier assigned to this instance.
   /// Can be used for tagging, logging, or internal references.
-  const id: Ref = internalPropertyRef("instance.id")
+  const id: String = internalPropertyRef("instance.id").value()
 
   /// Generated unique name for this instance.
   /// Useful for container names, volume prefixes, or network identifiers.
-  const name: Ref = internalPropertyRef("instance.name")
+  const name: String = internalPropertyRef("instance.name").value()
 }
 
 /// Network-related runtime values assigned during deployment.
 /// These references provide access to ports and network configuration determined at runtime.
 class NetworkRefs {
+  const host: String = internalPropertyRef("network.host").value()
+
   /// Primary port assigned to this instance.
   /// Resolves to the actual port number allocated by Küken, useful when auto-assigning ports
   /// or when the port depends on other runtime conditions.
-  const port: Ref = internalPropertyRef("network.port")
+  const port: Int = internalPropertyRef("network.port").value().toInt()
 }
 
 // ============================================================================
@@ -311,47 +331,17 @@ class NetworkRefs {
 /// Each input defines validation rules, display properties, and default values where applicable.
 inputs: UserInputs
 
-const function selectorInput(_name: InputId, _label: DisplayLabel) = new SelectInput {
-  name = _name
-  label = _label
-}
-
-const function textInput(_name: InputId, _label: DisplayLabel) = new TextInput {
-  name = _name
-  label = _label
-}
-
-const function dataSizeInput(_name: InputId, _label: DisplayLabel) = new DataSizeInput {
-  name = _name
-  label = _label
-}
-
-const function passwordInput(_name: InputId, _label: DisplayLabel) = new PasswordInput {
-  name = _name
-  label = _label
-}
-
-const function portInput(_name: InputId, _label: DisplayLabel, _default: PortNumber) = new PortInput {
-  name = _name
-  label = _label
-  default = _default
-}
-
-const function checkboxInput(_name: InputId, _label: DisplayLabel) = new CheckboxInput {
-  name = _name
-  label = _label
-}
-
 /// Base class for all user input types.
 /// Subclasses provide type-specific validation and UI rendering hints.
 abstract class UserInput extends Property {
   /// Unique programmatic identifier in kebab-case.
   /// Used in environment variable references and property interpolation.
-  name: InputId
+  abstract name: InputId
 
   /// Human-readable display text shown to users.
   /// Should clearly describe the input's purpose without requiring technical knowledge.
   abstract label: DisplayLabel
+  abstract hint: String?
 
   /// Input type identifier set automatically by subclasses.
   /// Used internally for UI rendering and validation.
@@ -377,6 +367,11 @@ class TextInput extends UserInput {
   default: String?
 }
 
+const function textInput(_name: InputId, _label: DisplayLabel) = new TextInput {
+  name = _name
+  label = _label
+}
+
 /// Password input field with masked character display.
 /// Use for passwords, API keys, secret tokens, or any sensitive credentials.
 /// Values are masked in the UI and should be stored securely by Küken.
@@ -394,6 +389,11 @@ class PasswordInput extends UserInput {
   fixed type: String = "password"
 }
 
+const function passwordInput(_name: InputId, _label: DisplayLabel) = new PasswordInput {
+  name = _name
+  label = _label
+}
+
 /// Network port number input with automatic range validation.
 /// Use for HTTP/HTTPS ports, database connections, API endpoints, or custom service ports.
 /// Validates port range and provides appropriate numeric input UI.
@@ -407,8 +407,6 @@ class PasswordInput extends UserInput {
 /// }
 /// ```
 class PortInput extends UserInput {
-  abstract name: InputId
-  abstract label: DisplayLabel
   fixed type: String = "port"
 
   /// Default port number if user doesn't specify one.
@@ -416,9 +414,13 @@ class PortInput extends UserInput {
   default: PortNumber
 }
 
+const function portInput(_name: InputId, _label: DisplayLabel, _default: PortNumber) = new PortInput {
+  name = _name
+  label = _label
+  default = _default
+}
+
 class SelectInput extends UserInput {
-  abstract name: InputId
-  abstract label: DisplayLabel
   fixed type: String = "select"
 
   /// Default text value if user doesn't specify one.
@@ -426,21 +428,33 @@ class SelectInput extends UserInput {
   items: Listing<String>
 }
 
+const function selectInput(_name: InputId, _label: DisplayLabel, _items: List<String>) = new SelectInput {
+  name = _name
+  label = _label
+  items = _items.toListing()
+}
+
 class CheckboxInput extends UserInput {
-  abstract name: InputId
-  abstract label: DisplayLabel
   fixed type: String = "checkbox"
 
   default: Boolean?
 }
 
+const function checkboxInput(_name: InputId, _label: DisplayLabel) = new CheckboxInput {
+  name = _name
+  label = _label
+}
+
 class DataSizeInput extends UserInput {
-  abstract name: InputId
-  abstract label: DisplayLabel
   fixed type: String = "datasize"
 
   /// Default text value if user doesn't specify one.
   default: DataSize?
+}
+
+const function dataSizeInput(_name: InputId, _label: DisplayLabel) = new DataSizeInput {
+  name = _name
+  label = _label
 }
 
 // ============================================================================
@@ -476,7 +490,18 @@ class BuildConfig extends Base {
 /// The image can be static, reference a user input, or use string interpolation.
 class DockerConfig extends Base {
   /// Docker image reference to use for this application.
-  /// Can be a static string like `"nginx:alpine"`, a direct input reference, or interpolated like `"postgres:${VersionInput}"`.
+  /// Can be a static string like `"nginx:alpine"`, a direct [ResolvableProperty] reference, or interpolated like `"postgres:\(something)"`.
+  ///
+  /// Example:
+  /// ```pkl
+  /// const DockerImageVersion = textInput("docker-image-version", "Docker Image Version")
+  ///
+  /// build {
+  ///   docker {
+  ///     image = "postgres:\(DockerImageVersion)"
+  ///   }
+  /// }
+  /// ```
   ///
   /// **Best practices:** Pin to specific versions for stability and consider using official images when available.
   image: ResolvableProperty
@@ -507,5 +532,5 @@ const function env(_name: EnvVarName, _value: EnvVarValue): EnvironmentVariable 
 hooks: Hooks
 
 class Hooks {
-  onInstall: AppResource
+  onInstall: AppResource?
 }
