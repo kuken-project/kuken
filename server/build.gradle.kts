@@ -82,7 +82,7 @@ graalvmNative {
             verbose.set(true)
 
             buildArgs.add("--initialize-at-build-time=kotlin")
-            buildArgs.add("--initialize-at-build-time=org.pkl.core.runtime")
+            buildArgs.add("--initialize-at-build-time=org.pkl.core")
             buildArgs.add("--initialize-at-build-time=com.oracle.truffle")
             buildArgs.add("--initialize-at-build-time=org.graalvm.polyglot")
 
