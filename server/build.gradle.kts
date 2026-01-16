@@ -105,6 +105,7 @@ graalvmNative {
 
             buildArgs.add("--initialize-at-build-time=kotlin")
 
+            buildArgs.add("--initialize-at-run-time=kotlin.uuid.SecureRandomHolder")
             buildArgs.add("--initialize-at-run-time=org.pkl")
             buildArgs.add("--initialize-at-run-time=org.pkl.core")
             buildArgs.add("--initialize-at-run-time=org.pkl.config")
