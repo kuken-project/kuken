@@ -1,3 +1,5 @@
+import type { Blueprint } from "@/modules/blueprints/api/models/blueprint.model.ts"
+
 export type Unit = {
     id: string
     name: string
@@ -10,15 +12,10 @@ export type Unit = {
 export type UnitInstance = {
     id: string
     address: UnitInstanceAddress
-    blueprint: UnitInstanceBlueprint
+    blueprint: Blueprint
 }
 
 export type UnitInstanceAddress = {
     host: string
     port: string
-}
-
-export type UnitInstanceBlueprint = {
-    id: string
-    iconUrl?: string
 }

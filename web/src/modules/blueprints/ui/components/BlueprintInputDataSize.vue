@@ -12,9 +12,7 @@ const model = defineModel()
     <VFieldSet>
         <VLabel>
             {{ props.label }}
-            <VInput ref="input" v-model="model" required="true" type="text" />
+            <VInput v-model="model" required="true" type="text" />
         </VLabel>
     </VFieldSet>
 </template>
-
-<style lang="scss" scoped></style>

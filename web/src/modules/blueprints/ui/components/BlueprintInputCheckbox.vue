@@ -12,7 +12,7 @@ const model = defineModel()
     <VFieldSet>
         <VLabel>
             {{ props.label }}
-            <VInput ref="input" v-model="model" required="true" type="text" />
+            <VInput v-model="model" type="checkbox" />
         </VLabel>
     </VFieldSet>
 </template>

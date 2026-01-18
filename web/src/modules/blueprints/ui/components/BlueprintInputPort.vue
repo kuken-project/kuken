@@ -17,7 +17,7 @@ onMounted(() => {
     <VFieldSet>
         <VLabel>
             {{ props.label }}
-            <VInput :placeholder="props.placeholder" :value="model" required="true" type="number" />
+            <VInput v-model="model" required="true" type="number" />
         </VLabel>
     </VFieldSet>
 </template>

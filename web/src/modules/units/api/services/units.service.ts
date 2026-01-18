@@ -9,6 +9,10 @@ export default {
     },
 
     async createUnit(options: CreateUnitRequest): Promise<Unit> {
-        return httpService.post(`units`, options).then((res: AxiosResponse) => res.data as Unit)
+        return httpService
+            .post(`units`, options, {
+                timeout: 15000
+            })
+            .then((res: AxiosResponse) => res.data as Unit)
     }
 } as const

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import VInput from "@/modules/platform/ui/components/form/VInput.vue"
 import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
 import type { BlueprintBuildInput } from "@/modules/blueprints/api/models/blueprint.model.ts"
@@ -12,7 +11,13 @@ const model = defineModel()
     <VFieldSet>
         <VLabel>
             {{ props.label }}
-            <VInput ref="input" v-model="model" required="true" type="text" />
+            <select v-model="model">
+                <option disabled value="">Please select one</option>
+                <option v-for="option in props.items" :key="option" :value="option">
+                    {{ option }}
+                </option>
+            </select>
+            <p>Selected Value: {{ modelValue }}</p>
         </VLabel>
     </VFieldSet>
 </template>
