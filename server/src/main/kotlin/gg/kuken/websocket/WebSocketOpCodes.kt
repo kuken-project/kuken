@@ -15,4 +15,6 @@ object WebSocketOpCodes {
     const val InstanceLogsRequestFinished: WebSocketOp = 5
 
     const val InstanceStarted: WebSocketOp = 6
+
+    const val InstanceStopped: WebSocketOp = 7
 }

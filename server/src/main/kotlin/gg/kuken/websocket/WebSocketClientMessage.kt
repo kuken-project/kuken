@@ -34,6 +34,16 @@ suspend inline fun <reified T> WebSocketClientMessageContext.respond(
     )
 }
 
+inline fun <reified T> WebSocketClientMessageContext.respondAsync(
+    op: Int = packet.op,
+    data: T? = null,
+) {
+    session.fireAndForget(
+        serializer = WebSocketServerMessageSerializer(serializer<T>()),
+        message = WebSocketServerMessage(op = op, data = data),
+    )
+}
+
 context(_: WebSocketClientMessageContext)
 fun WebSocketClientMessage.string(key: String): String {
     val text = data?.get(key) as? JsonPrimitive

@@ -1,7 +1,7 @@
 package gg.kuken.websocket
 
-import io.ktor.server.websocket.DefaultWebSocketServerSession
-import io.ktor.websocket.Frame
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
@@ -18,6 +18,14 @@ class WebSocketSession(
         message: WebSocketServerMessage<T>,
     ) {
         connection.outgoing.send(Frame.Text(json.encodeToString(serializer, message)))
+        logger.debug("Sent message to WebSocket session {}", id)
+    }
+
+    fun <T> fireAndForget(
+        serializer: KSerializer<WebSocketServerMessage<T>>,
+        message: WebSocketServerMessage<T>,
+    ) {
+        connection.outgoing.trySend(Frame.Text(json.encodeToString(serializer, message)))
         logger.debug("Sent message to WebSocket session {}", id)
     }
 
