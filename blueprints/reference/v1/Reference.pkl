@@ -457,11 +457,36 @@ const function dataSizeInput(_name: InputId, _label: DisplayLabel) = new DataSiz
 // ============================================================================
 // INSTANCE SETTINGS
 // ============================================================================
-instance: InstanceSettings
+instance: InstanceSettings?
 
 class InstanceSettings extends Base {
-  @SourceCode
-  startup: ResolvableProperty
+  startup: String(!isEmpty)?
+
+  command: InstanceCommandExecutor?
+
+  function ssh(_template: String): InstanceCommandExecutor = new SSHInstanceCommandExecutor {
+    template = _template
+  }
+}
+
+abstract class InstanceCommandExecutor {
+  fixed type: "rcon" | "ssh"
+}
+
+class RconInstanceCommandExecutor extends InstanceCommandExecutor {
+  fixed type = "rcon"
+
+  port: ResolvableProperty
+
+  password: ResolvableProperty
+
+  template: String
+}
+
+class SSHInstanceCommandExecutor extends InstanceCommandExecutor {
+  fixed type = "ssh"
+
+  template: String
 }
 
 // ============================================================================
