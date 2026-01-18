@@ -27,21 +27,20 @@ class InstanceEventsRedirector(
                     return@collect
                 }
 
-//                val message = translate(event) ?: return@collect
-//
-//                webSocketManager.broadcasting { session ->
-//
-//                    session.connection.outgoing.send(Frame.Text(json.encodeToString(
-//                        serializer = WebSocketServerMessageSerializer(serializer<T>()),
-//                        message
-//                    )))
-//                }
+                val message = translate(event)
+                val payload =
+                    io.ktor.websocket.Frame
+                        .Text(json.encodeToString(message))
+
+                webSocketManager.broadcasting { session ->
+                    session.connection.outgoing.send(payload)
+                }
             }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private inline fun <reified T : Any> translate(event: InstanceEvent): WebSocketServerMessage<T>? =
+    private fun translate(event: InstanceEvent): WebSocketServerMessage<*> =
         when (event) {
             is InstanceEvent.InstanceStartedEvent -> {
                 WebSocketServerMessage(
@@ -49,5 +48,12 @@ class InstanceEventsRedirector(
                     data = event.instanceId,
                 )
             }
-        } as WebSocketServerMessage<T>?
+
+            is InstanceEvent.InstanceStoppedEvent -> {
+                WebSocketServerMessage(
+                    op = WebSocketOpCodes.InstanceStopped,
+                    data = event.instanceId,
+                )
+            }
+        } as WebSocketServerMessage<*>
 }
