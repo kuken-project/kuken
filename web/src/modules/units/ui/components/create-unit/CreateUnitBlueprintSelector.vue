@@ -2,10 +2,7 @@
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
 import { reactive, unref } from "vue"
-import {
-    type Blueprint,
-    resolveBlueprintSource
-} from "@/modules/blueprints/api/models/blueprint.model.ts"
+import { type Blueprint, resolveBlueprintSource } from "@/modules/blueprints/api/models/blueprint.model.ts"
 import { isNull } from "@/utils"
 import { ProgressiveImage } from "vue-progressive-image"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
@@ -41,14 +38,13 @@ function select(blueprint: Blueprint) {
                     @click="select(blueprint)"
                 >
                     <ProgressiveImage
-                        :src="resolveBlueprintSource(blueprint.spec.assets.icon!.source)"
+                        :src="resolveBlueprintSource(blueprint.spec.assets?.icon)"
                         class="image"
                     />
                     <div class="body">
-                        <h5 class="title" v-text="blueprint.spec.descriptor.name" />
+                        <h5 class="title" v-text="blueprint.spec.metadata.name" />
                         <p class="description">
-                            Version {{ blueprint.spec.descriptor.version }} · Küken Official
-                            Blueprint
+                            Version {{ blueprint.spec.metadata.version }} · Küken Official Blueprint
                             <span class="icon">
                                 <VIcon name="Verified" />
                             </span>
@@ -65,6 +61,7 @@ function select(blueprint: Blueprint) {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-top: 1.2rem;
 }
 
 .blueprint {
@@ -91,6 +88,8 @@ function select(blueprint: Blueprint) {
 .image {
     width: 72px;
     height: 72px;
+    min-width: 72px;
+    min-height: 72px;
     border-radius: 20px;
     display: block;
     background-position: center;
