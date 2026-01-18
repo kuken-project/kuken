@@ -217,12 +217,13 @@ abstract class Base {
   ///
   /// **Example:** `${refs.instance.name}` resolves to the actual instance name at deployment time.
   fixed refs: RuntimeRefs = module.refs
+
+  const function using(_value: ResolvableProperty, _input: (String) -> String) =
+    module.using(_value, _input)
 }
 
-function parameters(text: VarArgs<String>): String = List(text).join("")
-
-function param(property: Property, value: (String) -> String): String =
-  property.ref.value().ifNonNull((result) -> value.apply(result as String)) as String
+const function using(_value: ResolvableProperty, _input: (String) -> String) =
+  if (_value.ref.isDefined()) _input.apply(_value.ref.value()) else ""
 
 /// Marker interface for all property types in the blueprint.
 /// Provides type safety for polymorphic property handling.
@@ -231,9 +232,6 @@ abstract class Property {
 
   hidden ref: Ref = internalPropertyRef("input.\(name).value")
 }
-
-function using(_value: ResolvableProperty, _input: (String) -> String) =
-  if (_value.ref.isDefined()) _input.apply(_value.ref.value()) else ""
 
 // ============================================================================
 // APPLICATION ASSETS
