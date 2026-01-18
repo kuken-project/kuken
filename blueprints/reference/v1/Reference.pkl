@@ -526,8 +526,8 @@ const function env(_name: EnvVarName, _value: EnvVarValue): EnvironmentVariable 
 // HOOKS
 // ============================================================================
 
-hooks: Hooks
+hooks: Hooks?
 
 class Hooks {
-  onInstall: AppResource
+  onInstall: AppResource?
 }
