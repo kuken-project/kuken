@@ -14,40 +14,42 @@ assets {
 // USER-DEFINED INPUT DEFINITIONS
 // ============================================================================
 
-local AuthMode = new SelectInput {
-  name = "auth-mode"
-  label = "Auth Mode"
-  items {
-    "Offline"
-    "Authenticated"
-  }
-}
-
 /// Hytale warns that loading early plugins is unsupported and may cause stability issues.
 local AcceptEarlyPlugins = checkboxInput("accept-early-plugins", "Accept Early Plugins")
+
+/// Allow Server Operators.
+local AllowOperators = checkboxInput("allow-operators", "Allow Server Operators")
+
+/// Authentication mode.
+local AuthMode = selectInput("auth-mode", "Auth Mode", List("Offline", "Authenticated"))
 
 /// Hytale uses Sentry to track crashes. Disable Sentry during active plugin development.
 local DisableSentry = checkboxInput("disable-sentry", "Disable Sentry")
 
-/// Hytale provides a pre-trained AOT Java cache which can significantly improve boot times.
-local UseAOTCache = checkboxInput("use-aot-cache", "Use AOT Cache")
-
-/// Allow Server Operators
-local AllowOperators = checkboxInput("allow-operators", "Allow Server Operators")
-
-/// Installs the Soruce Query plugin, so that your server responds to Source Query A2S requests (player count, server name, etc.)
-local InstallSourceQueryPlugin =
-  checkboxInput("install-source-query-plugin", "Install Source Query plugin")
+/// Installs the Soruce Query plugin, so that your server responds to
+/// Source Query A2S requests (player count, server name, etc.).
+local InstallSourceQueryPlugin = (
+  checkboxInput(
+    "install-source-query-plugin",
+    "Install Source Query plugin",
+  )
+) {
+  default = true
+}
 
 /// The port that the Source Query plugin will use to respond to A2S requests.
 /// This should be different from the main server port. Defaults to the game port + 1.
-local SourceQueryPort = portInput("source-query-plugin", "Source Query Port", 1)
 local SourceQueryPort =
   portInput(
     "source-query-plugin",
     "Source Query Port",
     refs.network.port + 1,
   )
+
+/// Hytale provides a pre-trained AOT Java cache which can significantly improve boot times.
+local UseAOTCache = (checkboxInput("use-aot-cache", "Use AOT Cache")) {
+  default = true
+}
 
 inputs {
   AuthMode
