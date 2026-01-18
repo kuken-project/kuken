@@ -100,11 +100,36 @@ class BlueprintConverter : AutoCloseable {
         val instanceSettings =
             module
                 .getProperty("instance")
-                ?.takeUnless { it is PNull }
-                ?.let { it as PObject }
-                ?.let {
-                    val startup = UniversalPklParser.parseValue<String>(it.getProperty("startup"))
-                    InstanceSettings(startup = startup)
+                ?.takeUnless { instance -> instance is PNull }
+                ?.let { instance -> instance as PObject }
+                ?.let { instance ->
+                    val startup = UniversalPklParser.parseValue<String>(instance.getProperty("startup"))
+                    val commandExecutor =
+                        instance.getProperty("command").let { it as PObject }.let {
+                            when (val type = it.getProperty("type")) {
+                                "rcon" -> {
+                                    val port = UniversalPklParser.parseValue<Int>(it.getProperty("port"))
+                                    val password = UniversalPklParser.parseValue<String>(it.getProperty("password"))
+                                    val template = it.getProperty("template") as String
+
+                                    InstanceSettingsCommandExecutor.Rcon(port, password, template)
+                                }
+
+                                "ssh" -> {
+                                    val template = it.getProperty("template") as String
+
+                                    InstanceSettingsCommandExecutor.SSH(template)
+                                }
+
+                                else -> {
+                                    error("Unknown instance command executor type: $type")
+                                }
+                            }
+                        }
+                    InstanceSettings(
+                        startup = startup,
+                        commandExecutor = commandExecutor,
+                    )
                 }
 
         return ResolvedBlueprint(

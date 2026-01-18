@@ -1,7 +1,9 @@
 package gg.kuken.feature.blueprint.processor
 
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.serializer
 
 @Serializable
 data class ResolvedBlueprint(
@@ -42,7 +44,28 @@ data class AppAssets(
 @Serializable
 data class InstanceSettings(
     val startup: Resolvable<String>,
+    val commandExecutor: InstanceSettingsCommandExecutor,
 )
+
+@Serializable
+sealed class InstanceSettingsCommandExecutor {
+    @OptIn(InternalSerializationApi::class)
+    val type: String get() = this::class.serializer().descriptor.serialName
+
+    @Serializable
+    @SerialName("rcon")
+    data class Rcon(
+        val port: Resolvable<Int>,
+        val password: Resolvable<String>,
+        val template: String,
+    ) : InstanceSettingsCommandExecutor()
+
+    @Serializable
+    @SerialName("ssh")
+    data class SSH(
+        val template: String,
+    ) : InstanceSettingsCommandExecutor()
+}
 
 typealias InputName = String
 typealias InputLabel = String
