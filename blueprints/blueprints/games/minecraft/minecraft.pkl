@@ -41,7 +41,6 @@ inputs {
   JavaVersion
   GameVersion
   ServerType
-  MaxMemory
 }
 
 // ============================================================================
@@ -59,7 +58,6 @@ build {
     new { name = "CREATE_CONSOLE_IN_PIPE"; value = true }
     new { name = "TYPE"; value = ServerType }
     new { name = "VERSION"; value = GameVersion }
-    new { name = "MEMORY"; value = MaxMemory }
   }
 }
 
