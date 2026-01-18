@@ -17,10 +17,17 @@ import {
 
 let state = reactive({ readyToUseBlueprints: [] as Blueprint[] })
 const importUrl = ref("")
+const importError = ref("")
 
-async function performImport() {
-    await blueprintsService.importBlueprint(importUrl.value)
-    window.location.reload()
+function performImport() {
+    blueprintsService
+        .importBlueprint(importUrl.value)
+        .then(() => window.location.reload())
+        .catch((error) => {
+            if (error.code === 1012 /* Validation error */) {
+                importError.value = error.message
+            }
+        })
 }
 </script>
 
@@ -49,7 +56,7 @@ async function performImport() {
                         <div class="blueprintIcon">
                             <img
                                 :alt="`${blueprint.id} icon`"
-                                :src="resolveBlueprintSource(blueprint.spec.assets.icon?.source!)"
+                                :src="resolveBlueprintSource(blueprint.spec.assets?.icon)"
                             />
                         </div>
                     </router-link>
@@ -59,6 +66,9 @@ async function performImport() {
         </VCol>
         <VCol :size="7">
             <h4>Import from URL</h4>
+            <div v-if="importError" class="importError">
+                <pre><code>{{ importError }}</code></pre>
+            </div>
             <VForm @submit.prevent>
                 <VFieldSet>
                     <VLabel>
@@ -158,6 +168,19 @@ form {
         max-width: 128px;
         max-height: 128px;
         border-radius: 20px;
+    }
+}
+
+.importError {
+    border: 2px dashed var(--kt-background-surface-high);
+    border-radius: 20px;
+    background-color: var(--kt-content-negative);
+    padding: 16px;
+    margin-top: 8px;
+    color: #fff;
+
+    pre {
+        text-wrap: wrap;
     }
 }
 </style>
