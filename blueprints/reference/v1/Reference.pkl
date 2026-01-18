@@ -246,7 +246,7 @@ assets: AppAssets?
 class AppAssets {
   /// Application icon displayed in the Küken interface.
   /// Should be a square PNG, SVG, or WebP image, 256x256 pixels maximum.
-  icon: Source
+  icon: Source?
 }
 
 resources: AppResources?
