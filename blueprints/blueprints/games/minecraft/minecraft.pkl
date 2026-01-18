@@ -42,8 +42,6 @@ inputs {
   GameVersion
   ServerType
   MaxMemory
-  RconPassword
-  RconPort
 }
 
 // ============================================================================
@@ -58,15 +56,22 @@ build {
   environmentVariables {
     // Automatically accept the Minecraft EULA, required for server startup.
     new { name = "EULA"; value = true }
-    new { name = "ENABLE_RCON"; value = true }
+    new { name = "CREATE_CONSOLE_IN_PIPE"; value = true }
     new { name = "TYPE"; value = ServerType }
     new { name = "VERSION"; value = GameVersion }
     new { name = "MEMORY"; value = MaxMemory }
-    new { name = "RCON_PASSWORD"; value = RconPassword }
-    new { name = "RCON_PORT"; value = RconPort }
   }
 }
 
+// ============================================================================
+// INSTANCE SETTINGS
+// ============================================================================
+
 instance {
-  startup = "java Xms128M -jar server.jar"
+  startup =
+    """
+    java -jar server.jar
+    """
+
+  command = ssh("mc-send-to-console \(refs.instance.command)")
 }
