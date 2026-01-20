@@ -35,7 +35,7 @@ class WebSocketService {
 
             const data = JSON.parse(e.data)
 
-            if (!data.o) {
+            if (isUndefined(data.o)) {
                 this.logger.error("Missing message op code.")
                 return
             }
