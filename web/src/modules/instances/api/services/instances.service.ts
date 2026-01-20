@@ -1,6 +1,9 @@
 import httpService from "@/modules/platform/api/services/http.service.ts"
 import type { AxiosResponse } from "axios"
 import type { Instance } from "@/modules/instances/api/models/instance.model.ts"
+import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
+import websocketService from "@/modules/platform/api/services/websocket.service.ts"
+import { WebSocketOpCodes } from "@/modules/platform/api/models/websocket.response.ts"
 
 export default {
     async getInstance(instanceId: String): Promise<Instance> {
@@ -24,5 +27,28 @@ export default {
             .then((res: AxiosResponse) => res.data)
     },
 
+    async fetchLogs(
+        instanceId: string,
+        options: { afterSeqId?: number; beforeSeqId?: number; around?: number; batchSize: number }
+    ): Promise<{ frames: Frame[]; hasMore: boolean }> {
+        let unsubscribe: (() => void) | null = null
+        return new Promise(async (resolve, _) => {
+            unsubscribe = websocketService.listen(
+                WebSocketOpCodes.InstanceLogsPacket,
+                (payload: { frames: Frame[]; hasMore: boolean }) => {
+                    console.log("InstanceLogsPacket Payload", payload)
+                    resolve(payload)
+                    unsubscribe?.()
+                }
+            )
+
+            await websocketService.send(WebSocketOpCodes.InstanceLogsPacket, {
+                iid: instanceId,
+                before: options.beforeSeqId,
+                after: options.afterSeqId,
+                around: options.around,
+                limit: options.batchSize
+            })
+        })
     }
 } as const
