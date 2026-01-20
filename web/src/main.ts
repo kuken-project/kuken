@@ -12,6 +12,7 @@ import "highlight.js/styles/atom-one-light.css"
 import hljs from "highlight.js/lib/core"
 import json from "highlight.js/lib/languages/json"
 import hljsVuePlugin from "@highlightjs/vue-plugin"
+import VueVirtualScroller from "vue-virtual-scroller"
 
 hljs.registerLanguage("json", json)
 
@@ -19,6 +20,7 @@ createApp(App)
     .use(createVfm())
     .use(createPinia())
     .use(VueProgressiveImage)
+    .use(VueVirtualScroller)
     .use(router)
     .use(createHead())
     .use(hljsVuePlugin)
