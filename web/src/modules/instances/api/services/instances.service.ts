@@ -20,10 +20,10 @@ export default {
 
     async getLogs(
         instanceId: string,
-        limit: number
+        options: { limit?: number; before?: number; after?: number }
     ): Promise<{ frames: Frame[]; hasMore: boolean }> {
         return httpService
-            .get(`instances/${instanceId}/logs`, { params: { limit } })
+            .get(`instances/${instanceId}/logs`, { params: options })
             .then((res: AxiosResponse) => res.data)
     },
 
