@@ -54,6 +54,7 @@ private fun configureDependencyInjection(config: KukenConfig) =
 
                 single {
                     DockerClient {
+                        apiVersion("1.52")
                         debugHttpCalls(debugHttpCalls = config.devMode)
                     }
                 }
