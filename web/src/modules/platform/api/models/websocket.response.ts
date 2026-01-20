@@ -1,10 +1,13 @@
 export const WebSocketOpCodes = {
+    IllegalState: 0 as const,
     InstanceUnavailable: 1 as const,
     InstanceLogsRequest: 2 as const,
     InstanceLogsRequestStarted: 3 as const,
     InstanceLogsRequestFrame: 4 as const,
     InstanceLogsRequestFinished: 5 as const,
     InstanceStarted: 6 as const
+    InstanceStarted: 6 as const,
+    InstanceStopped: 7 as const,
 } as const
 
 export type WebSocketOp = (typeof WebSocketOpCodes)[keyof typeof WebSocketOpCodes]
