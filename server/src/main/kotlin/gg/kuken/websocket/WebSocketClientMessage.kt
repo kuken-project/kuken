@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.serializer
 import kotlin.uuid.Uuid
 
@@ -45,13 +46,19 @@ inline fun <reified T> WebSocketClientMessageContext.respondAsync(
 }
 
 context(_: WebSocketClientMessageContext)
-fun WebSocketClientMessage.string(key: String): String {
+fun WebSocketClientMessage.string(key: String): String = stringOrNull(key) ?: error("Required key $key not found in packet data")
+
+context(_: WebSocketClientMessageContext)
+fun WebSocketClientMessage.stringOrNull(key: String): String? {
     val text = data?.get(key) as? JsonPrimitive
-    return text?.contentOrNull ?: error("Required key $key not found in packet data")
+    return text?.contentOrNull
 }
 
 context(_: WebSocketClientMessageContext)
-fun WebSocketClientMessage.uuid(key: String): Uuid {
-    val text = string(key)
-    return Uuid.parse(text)
-}
+fun WebSocketClientMessage.long(key: String): Long = longOrNull(key) ?: error("Required key $key not found in packet data")
+
+context(_: WebSocketClientMessageContext)
+fun WebSocketClientMessage.longOrNull(key: String): Long? = (data?.get(key) as? JsonPrimitive?)?.longOrNull
+
+context(_: WebSocketClientMessageContext)
+fun WebSocketClientMessage.uuid(key: String): Uuid = Uuid.parse(string(key))

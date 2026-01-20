@@ -36,4 +36,14 @@ class InstanceRoutes {
         val parent: InstanceRoutes = InstanceRoutes(),
         val instanceId: Uuid,
     )
+
+    @Serializable
+    @Resource("{instanceId}/logs")
+    class FetchLogs(
+        val parent: InstanceRoutes = InstanceRoutes(),
+        val instanceId: Uuid,
+        val limit: Int? = null,
+        val before: Long? = null,
+        val after: Long? = null,
+    )
 }

@@ -1,16 +1,22 @@
 package gg.kuken.feature.instance.http
 
+import gg.kuken.feature.instance.InstanceService
 import gg.kuken.feature.instance.http.routes.command
 import gg.kuken.feature.instance.http.routes.deleteFile
+import gg.kuken.feature.instance.http.routes.fetchLogs
 import gg.kuken.feature.instance.http.routes.getInstanceDetails
 import gg.kuken.feature.instance.http.routes.listFiles
 import gg.kuken.feature.instance.http.routes.readFile
 import gg.kuken.feature.instance.http.routes.writeFile
-import gg.kuken.feature.instance.websocket.InstanceLogsRequestWebSocketClientMessageHandler
+import gg.kuken.feature.instance.websocket.handlers.InstanceLogsPacketWSHandler
+import gg.kuken.feature.instance.websocket.handlers.InstanceLogsRequestWSHandler
 import gg.kuken.http.HttpModule
+import gg.kuken.websocket.WebSocketClientMessage
+import gg.kuken.websocket.WebSocketClientMessageContext
 import gg.kuken.websocket.WebSocketClientMessageHandler
 import gg.kuken.websocket.WebSocketOp
 import gg.kuken.websocket.WebSocketOpCodes
+import gg.kuken.websocket.uuid
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.routing
@@ -27,6 +33,7 @@ internal object InstanceHttpModule : HttpModule() {
                     writeFile()
                     deleteFile()
                     command()
+                    fetchLogs()
                 }
             }
         }
@@ -34,9 +41,17 @@ internal object InstanceHttpModule : HttpModule() {
     override fun webSocketHandlers(): Map<WebSocketOp, WebSocketClientMessageHandler> =
         mapOf(
             WebSocketOpCodes.InstanceLogsRequest to
-                InstanceLogsRequestWebSocketClientMessageHandler(
+                InstanceLogsRequestWSHandler(
+                    instanceService = get(),
+                    dockerClient = get(),
+                ),
+            WebSocketOpCodes.InstanceLogsPacket to
+                InstanceLogsPacketWSHandler(
                     instanceService = get(),
                     dockerClient = get(),
                 ),
         )
 }
+
+context(_: WebSocketClientMessageContext, instanceService: InstanceService)
+suspend fun WebSocketClientMessage.getInstance() = instanceService.getInstance(uuid("iid"))

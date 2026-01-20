@@ -7,9 +7,9 @@ import io.ktor.websocket.readText
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -40,8 +40,8 @@ class WebSocketManager(
         try {
             for (frame in connection.incoming) {
                 if (frame is Frame.Text) {
-                    val packet = decodePacket(frame) ?: continue
-                    packetReceived(packet, session)
+                    val message = decodeMessage(frame) ?: continue
+                    messageReceived(message, session)
                 }
             }
         } catch (_: ClosedReceiveChannelException) {
@@ -51,38 +51,52 @@ class WebSocketManager(
             val closeReason = session.connection.closeReason.await()
             logger.error("WebSocket session handling uncaught error: $closeReason", e)
         } finally {
-            logger.debug("WebSocket session ${session.id} closed")
             detach(session)
         }
     }
 
-    private fun decodePacket(frame: Frame.Text): WebSocketClientMessage? =
+    private fun decodeMessage(frame: Frame.Text): WebSocketClientMessage? =
         try {
             json.decodeFromString<WebSocketClientMessage>(frame.readText())
         } catch (e: SerializationException) {
-            logger.error("Failed to deserialize WebSocket packet text", e)
+            logger.error("Failed to deserialize WebSocket message", e)
             null
         }
 
-    private suspend fun packetReceived(
-        packet: WebSocketClientMessage,
+    private fun messageReceived(
+        message: WebSocketClientMessage,
         session: WebSocketSession,
     ) {
-        val handlerList = handlers[packet.op]
+        val handlerList = handlers[message.op]
         if (handlerList.isNullOrEmpty()) {
-            logger.warn("No WebSocket client message handler registered for op {}", packet.op)
+            logger.warn("No WebSocket client message handler registered for op {}", message.op)
             return
         }
 
-        val context = WebSocketClientMessageContext(packet, session)
+        val context = WebSocketClientMessageContext(message, session)
         handlerList.forEach { handler ->
+            with(handler) { handleMessage(session, context, message) }
+        }
+    }
+
+    private fun WebSocketClientMessageHandler.handleMessage(
+        session: WebSocketSession,
+        context: WebSocketClientMessageContext,
+        message: WebSocketClientMessage,
+    ) {
+        // Use connection as coroutine context so handlers get cancelled when
+        // session underlyning connection gets closed in #detach()
+        @Suppress("CoroutineContextWithJob")
+        launch(session.connection.coroutineContext) {
             try {
-                with(handler) { context.handle() }
+                context.handle()
             } catch (e: Throwable) {
+                // Catch any exceptions so parent coroutine don't get cancelled
                 logger.error(
-                    "Uncaught exception in WebSocket client message handler in {} (op {})",
-                    handler::class.qualifiedName,
-                    packet.op,
+                    "Uncaught exception in WebSocket session message handler. Session: {}. Op: {}. Handler: {}",
+                    session.id,
+                    message.op,
+                    this@handleMessage::class.qualifiedName,
                     e,
                 )
             }
@@ -97,13 +111,14 @@ class WebSocketManager(
         } finally {
             sessions.remove(session)
         }
+
+        logger.debug("WebSocket session ${session.id} closed")
     }
 
     fun register(
         op: WebSocketOp,
         handler: WebSocketClientMessageHandler,
     ) {
-        handler.coroutineContext = Job() + CoroutineName("$op-${handler::class.simpleName ?: "unknown"}")
         handlers.computeIfAbsent(op) { mutableListOf() }.add(handler)
     }
 
