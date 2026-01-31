@@ -25,6 +25,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.decodeFromJsonElement
 
 class SetupService(
     private val accountService: AccountService,
@@ -168,9 +171,9 @@ class SetupService(
             listOf("minecraft/minecraft-java-edition", "hytale/hytale")
                 .map { baseName ->
                     async {
-                        blueprintService.importBlueprint(
-                            BlueprintSpecSource.Remote("$baseRemoteUrl/$baseName.pkl"),
-                        )
+                        val source: BlueprintSpecSource =
+                            Json.decodeFromJsonElement(JsonPrimitive("$baseRemoteUrl/$baseName.pkl"))
+                        blueprintService.importBlueprint(source)
                     }
                 }.awaitAll()
         }
