@@ -54,7 +54,6 @@ import me.devnatan.dockerkt.resource.exec.start
 import me.devnatan.dockerkt.resource.image.ImageNotFoundException
 import me.devnatan.dockerkt.resource.volume.create
 import org.apache.logging.log4j.LogManager
-import java.io.File
 import kotlin.random.Random
 import kotlin.random.nextUInt
 import kotlin.time.Clock
@@ -63,6 +62,10 @@ import kotlin.uuid.toKotlinUuid
 
 private const val LOCAL_RESOURCES_DIR = ".kuken/resources"
 private const val DEFAULT_DOCKER_CONTAINER_WORKING_DIR = "/home/container"
+private const val DEFAULT_DOCKER_INSTALL_WORKING_DIR = "/mnt/server"
+private const val DOCKER_INSTALL_IMAGE = "alpine:latest"
+private const val DOCKER_INSTALL_CONTAINER_FORMAT = "kk-installer-%s"
+private const val DOCKER_INSTALL_VOLUME_FORMAT = "kk-volume-%s"
 
 class DockerInstanceService(
     private val dockerClient: DockerClient,
@@ -468,41 +471,44 @@ class DockerInstanceService(
                 }
         }
 
-    private suspend fun installInstance(
+    private suspend fun tryInstallInstance(
         workingDir: String,
+        instanceId: Uuid,
         onInstall: AppResource?,
     ): String {
+        logger.debug("Blueprint image working directory: $workingDir")
+
         if (onInstall == null) {
             logger.debug("Skipping instance installation, no install hook was set")
-            return DEFAULT_DOCKER_CONTAINER_WORKING_DIR
+            val volume =
+                dockerClient.volumes.create {
+                    name = DOCKER_INSTALL_VOLUME_FORMAT.format(instanceId)
+                }
+
+            return volume.name
         }
 
-        val resourcesDir = File(LOCAL_RESOURCES_DIR)
-
         logger.debug("Preparing installation...")
-        val installScriptFile = File(resourcesDir, onInstall.name)
 
-        logger.debug("Installation file: ${installScriptFile.absolutePath}")
+        val installScriptFile = KukenConfig.tempDir(LOCAL_RESOURCES_DIR, onInstall.name).toFile()
+        logger.debug("Installation file: {}", installScriptFile)
 
         var createdContainer: String? = null
-
-        println("Blueprint image working directory: $workingDir")
-
         val volume =
             dockerClient.volumes.create {
-                name = "kuken-volume-${Random.nextUInt()}"
+                name = DOCKER_INSTALL_VOLUME_FORMAT.format(Random.nextUInt())
             }
 
         try {
-            dockerClient.images.pull("alpine:latest").collect()
+            dockerClient.images.pull(DOCKER_INSTALL_IMAGE).collect()
 
             createdContainer =
                 dockerClient.containers.create {
-                    name = "kuken-installer-${Random.nextUInt()}"
-                    image = "alpine:latest"
+                    name = DOCKER_INSTALL_CONTAINER_FORMAT.format(Random.nextUInt())
+                    image = DOCKER_INSTALL_IMAGE
                     entrypoint = listOf("tail", "-f", "/dev/null")
                     hostConfig {
-                        binds = listOf("${volume.name}:/mnt/server")
+                        binds = listOf("${volume.name}:$DEFAULT_DOCKER_INSTALL_WORKING_DIR")
                     }
                 }
             dockerClient.containers.start(createdContainer)
@@ -513,45 +519,43 @@ class DockerInstanceService(
                 destinationPath = "/tmp",
             )
 
-            val makeExecutable =
+            val makeInstallScriptExecutable =
                 dockerClient.exec.create(createdContainer) {
                     command = listOf("chmod", "+x", "/tmp/${installScriptFile.name}")
                 }
-            dockerClient.exec.start(makeExecutable)
+            dockerClient.exec.start(makeInstallScriptExecutable)
 
-            val execute =
-                dockerClient.exec.create(createdContainer) {
-                    attachStdout = true
-                    attachStderr = true
-                    command = listOf("/tmp/${installScriptFile.name}")
-                }
-            val result =
+            val runScript =
                 dockerClient.exec.start(
-                    execute,
-                    ExecStartOptions(
-                        stream = true,
-                        demux = false,
-                    ),
+                    id =
+                        dockerClient.exec.create(createdContainer) {
+                            attachStdout = true
+                            attachStderr = true
+                            command = listOf("/tmp/${installScriptFile.name}")
+                        },
+                    options =
+                        ExecStartOptions(
+                            stream = true,
+                            demux = false,
+                        ),
                 )
 
-            logger.debug("Exec result: {}", result)
-            require(result is ExecStartResult.Stream)
+            require(runScript is ExecStartResult.Stream) {
+                "Unexpected Docker exec start result type: ${runScript::class.qualifiedName}"
+            }
 
             logger.debug("--- SCRIPT OUTPUT ---")
-            result.output.collect {
-                println(it)
+            runScript.output.collect { log ->
+                logger.debug(log)
             }
             logger.debug("--- SCRIPT OUTPUT ---")
 
             val chmod =
                 dockerClient.exec.create(createdContainer) {
-                    command = listOf("chmod", "-R", "777", "/mnt/server")
+                    command = listOf("chmod", "-R", "777", DEFAULT_DOCKER_INSTALL_WORKING_DIR)
                     attachStdout = true
                 }
-
-            val chmodResult = dockerClient.exec.start(chmod)
-
-            logger.debug("CHMOD result: {}", chmodResult)
+            dockerClient.exec.start(chmod)
         } finally {
             if (createdContainer != null) {
                 dockerClient.containers.remove(createdContainer) { force = true }
@@ -575,7 +579,8 @@ class DockerInstanceService(
             dockerClient.images
                 .inspect(image)
                 .config.workingDir ?: error("Working directory not set")
-        val installationVolume = installInstance(workingDir, onInstall)
+
+        val installationVolume = tryInstallInstance(workingDir, instanceId, onInstall)
 
         val containerId =
             dockerClient.containers.create {
