@@ -2,7 +2,7 @@ services:
   kuken-web:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       args:
         - VITE_GIT_COMMIT=${GIT_COMMIT:-unknown}
         - VITE_GIT_BRANCH=${GIT_BRANCH:-unknown}
@@ -17,7 +17,7 @@ services:
     networks:
       - kuken-app
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health" ]
       interval: 30s
       timeout: 10s
       retries: 3

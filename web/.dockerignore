@@ -28,7 +28,7 @@ coverage
 vitest.config.ts
 
 # Docker
-Dockerfile.dev
+Dockerfile
 .dockerignore
 docker
 bin/build
