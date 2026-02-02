@@ -104,6 +104,7 @@ fun Application.installDefaultFeatures(config: KukenConfig) {
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Patch)
         allowMethod(HttpMethod.Put)
+        allowMethod(HttpMethod.Delete)
         allowXHttpMethodOverride()
         allowHeader(HttpHeaders.Authorization)
         anyHost()
