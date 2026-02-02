@@ -54,6 +54,7 @@ import me.devnatan.dockerkt.resource.exec.start
 import me.devnatan.dockerkt.resource.image.ImageNotFoundException
 import me.devnatan.dockerkt.resource.volume.create
 import org.apache.logging.log4j.LogManager
+import java.nio.file.Paths
 import kotlin.random.Random
 import kotlin.random.nextUInt
 import kotlin.time.Clock
@@ -490,7 +491,7 @@ class DockerInstanceService(
 
         logger.debug("Preparing installation...")
 
-        val installScriptFile = KukenConfig.tempDir(LOCAL_RESOURCES_DIR, onInstall.name).toFile()
+        val installScriptFile = KukenConfig.tempDir(Paths.get(LOCAL_RESOURCES_DIR, onInstall.name)).toFile()
         logger.debug("Installation file: {}", installScriptFile)
 
         var createdContainer: String? = null

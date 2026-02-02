@@ -2,9 +2,11 @@ package gg.kuken.feature.instance.http.routes
 
 import gg.kuken.feature.instance.InstanceFileService
 import gg.kuken.feature.instance.http.InstanceRoutes
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveText
 import io.ktor.server.routing.Route
-import io.ktor.server.routing.put
+import io.ktor.server.resources.put
+import io.ktor.server.response.respond
 import org.koin.ktor.ext.inject
 
 fun Route.writeFile() {
@@ -17,5 +19,6 @@ fun Route.writeFile() {
             filePath = parameters.path,
             contents = contents,
         )
+        call.respond(HttpStatusCode.OK)
     }
 }

@@ -23,6 +23,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import org.apache.logging.log4j.LogManager
 import org.pkl.core.ModuleSource
 import org.pkl.core.PObject
+import java.nio.file.Paths
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
@@ -118,7 +119,7 @@ class BlueprintService(
                     logger.debug("Downloading {}", resourceUrl)
 
                     val client = HttpClient(CIO)
-                    val outputFile = KukenConfig.tempDir("resources", resource.name).toFile()
+                    val outputFile = KukenConfig.tempDir(Paths.get("resources", resource.name)).toFile()
                     outputFile.parentFile.mkdirs()
                     outputFile.createNewFile()
 

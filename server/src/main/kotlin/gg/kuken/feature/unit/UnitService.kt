@@ -36,7 +36,10 @@ internal class UnitService(
                         blueprint = payload.blueprintId,
                         inputs = payload.inputs,
                         env = payload.env,
-                        address = HostPort(null, 25565u),
+                        address = HostPort(
+                            host = payload.inputs["network.host"],
+                            port = payload.inputs["network.port"]?.toUShortOrNull() ?: 25565u
+                        ),
                     ),
             )
 

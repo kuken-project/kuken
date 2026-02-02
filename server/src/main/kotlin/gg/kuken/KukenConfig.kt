@@ -44,7 +44,12 @@ data class KukenConfig(
     }
 
     companion object {
+        const val TMP_FILE_PREFIX = "kuken_"
+
         @JvmStatic
-        fun tempDir(vararg path: String): Path = Files.createTempDirectory(path.joinToString(File.separator))
+        fun tempDir(path: Path): Path = Files.createTempDirectory(path, null)
+
+        @JvmStatic
+        fun tempFile(suffix: String): Path = Files.createTempFile(TMP_FILE_PREFIX, suffix)
     }
 }
