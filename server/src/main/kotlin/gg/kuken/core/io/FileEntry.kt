@@ -5,6 +5,7 @@ import kotlin.time.Instant
 
 @Serializable
 data class FileEntry(
+    val relativePath: String,
     val name: String,
     val size: Long,
     val type: FileType,

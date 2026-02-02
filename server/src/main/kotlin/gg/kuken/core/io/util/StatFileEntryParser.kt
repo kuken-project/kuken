@@ -30,7 +30,8 @@ class StatFileEntryParser {
         val perms = parsePermissions(permissions)
 
         return FileEntry(
-            name = name,
+            relativePath = name,
+            name = name.substringAfterLast("/"),
             size = size,
             type = type,
             createdAt =
