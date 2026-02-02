@@ -3,9 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      secrets:
-        - github_actor
-        - github_token
     image: kuken-server:latest
     container_name: kuken-server
     restart: unless-stopped
@@ -93,9 +90,3 @@ volumes:
     name: kuken_db_data
   kuken_redis_data:
     name: kuken_redis_data
-
-secrets:
-  github_actor:
-    environment: GITHUB_ACTOR
-  github_token:
-    environment: GITHUB_TOKEN
