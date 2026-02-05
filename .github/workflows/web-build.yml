@@ -29,7 +29,7 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Lint
-        run: cd web && yarn lint
+        run: cd web && npm run lint
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -48,4 +48,4 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Build
-        run: cd web && yarn ci && yarn build
+        run: cd web && npm ci && npm run build
