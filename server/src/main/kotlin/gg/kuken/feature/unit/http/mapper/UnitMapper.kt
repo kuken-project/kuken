@@ -9,7 +9,7 @@ class UnitMapper(
     val instanceService: InstanceService,
 ) {
     suspend operator fun invoke(unit: KukenUnit): UnitResponse {
-        val instance = unit.instanceId?.let { instanceService.getInstanceNoRuntime(it) }
+        val instance = unit.instanceId?.let { instanceService.getInstance(it) }
         return UnitResponse(
             id = unit.id.toHexDashString(),
             externalId = unit.externalId,

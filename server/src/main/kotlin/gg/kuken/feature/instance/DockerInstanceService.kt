@@ -189,6 +189,22 @@ class DockerInstanceService(
 
     override suspend fun getInstance(instanceId: Uuid): Instance {
         val instance = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
+
+        return Instance(
+            id = instance.id.value.toKotlinUuid(),
+            status = instance.status.let(InstanceStatus::getByLabel),
+            containerId = instance.containerId,
+            updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
+            address = HostPort(host = instance.host, port = instance.port!!),
+            runtime = null,
+            blueprintId = instance.blueprintId.toKotlinUuid(),
+            createdAt = instance.createdAt,
+            nodeId = instance.nodeId,
+        )
+    }
+
+    override suspend fun getInstanceWithRuntime(instanceId: Uuid): Instance {
+        val instance = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
         val runtime = instance.containerId?.let { id -> tryBuildRuntime(id) }
 
         return Instance(
@@ -198,22 +214,6 @@ class DockerInstanceService(
             updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
             address = HostPort(host = instance.host, port = instance.port!!),
             runtime = runtime,
-            blueprintId = instance.blueprintId.toKotlinUuid(),
-            createdAt = instance.createdAt,
-            nodeId = instance.nodeId,
-        )
-    }
-
-    override suspend fun getInstanceNoRuntime(instanceId: Uuid): Instance {
-        val instance = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
-
-        return Instance(
-            id = instance.id.value.toKotlinUuid(),
-            status = instance.status.let(InstanceStatus::getByLabel),
-            containerId = instance.containerId,
-            updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
-            address = HostPort(host = instance.host, port = instance.port!!),
-            runtime = null,
             blueprintId = instance.blueprintId.toKotlinUuid(),
             createdAt = instance.createdAt,
             nodeId = instance.nodeId,
@@ -746,6 +746,7 @@ class DockerInstanceService(
         commandToRun: String,
     ): Int? {
         val instance = getInstance(instanceId)
+
         val blueprint = blueprintService.getBlueprint(instance.blueprintId)
 
         return -1

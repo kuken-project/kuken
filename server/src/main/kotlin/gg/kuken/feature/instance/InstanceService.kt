@@ -7,7 +7,7 @@ import kotlin.uuid.Uuid
 interface InstanceService {
     suspend fun getInstance(instanceId: Uuid): Instance
 
-    suspend fun getInstanceNoRuntime(instanceId: Uuid): Instance
+    suspend fun getInstanceWithRuntime(instanceId: Uuid): Instance
 
     suspend fun getInstanceContainerId(instanceId: Uuid): String
 
