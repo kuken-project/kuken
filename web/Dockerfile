@@ -10,7 +10,7 @@ ENV NODE_OPTIONS "--max_old_space_size=4096"
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 COPY . .
-RUN ppnpm build
+RUN pnpm build
 
 # Production stage
 FROM nginx:stable-alpine AS production-stage
