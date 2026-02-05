@@ -23,7 +23,7 @@ onUnmounted(() => {
 <template>
   <Resource :resource="() => instancesService.getInstance(instanceId)" @loaded="onInstanceLoaded">
     <template v-if="instance">
-      <router-view :instanceId="instance.id" />
+      <router-view :instance-id="instance.id" />
     </template>
   </Resource>
 </template>

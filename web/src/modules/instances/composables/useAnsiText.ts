@@ -46,7 +46,7 @@ export function useAnsiText(text: string): string {
 
   html = html.replace(/\x1b\[(\d+(?:;\d+)*)m/g, (_, codes) => {
     const codeList = codes.split(";")
-    let styles = []
+    const styles = []
     let result = ""
 
     for (const code of codeList) {
