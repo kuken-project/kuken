@@ -14,7 +14,7 @@ defaults:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: web-ui
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   publish:
@@ -52,8 +52,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=semver,pattern={{version}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern=web-{{version}}
+            type=raw,value=latest,enable=web-{{is_default_branch}}
 
       - name: Get Git commit info
         id: git_info
