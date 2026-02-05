@@ -1,7 +1,24 @@
-@import "abstracts/variables", "abstracts/functions", "abstracts/spacing", "abstracts/colors";
-@import "base/base", "base/reset", "base/typography", "base/grid", "base/transitions";
-@import "vendor/vue3-context-menu.css", "vendor/vue-progressive-image.css",
-  "vendor/vue-loading-overlay.css", "vendor/codemirror";
-@import "components/alert", "components/button", "components/card", "components/form",
-  "components/icon", "components/label", "components/layout", "components/modal",
-  "components/states", "components/stepper", "components/tab";
+@use "abstracts/variables";
+@use "abstracts/functions";
+@use "abstracts/spacing";
+@use "abstracts/colors";
+@use "base/base";
+@use "base/reset";
+@use "base/typography";
+@use "base/grid";
+@use "base/transitions";
+@use "vendor/vue3-context-menu.css";
+@use "vendor/vue-progressive-image.css";
+@use "vendor/vue-loading-overlay.css";
+@use "vendor/codemirror";
+@use "components/alert";
+@use "components/button";
+@use "components/card";
+@use "components/form";
+@use "components/icon";
+@use "components/label";
+@use "components/layout";
+@use "components/modal";
+@use "components/states";
+@use "components/stepper";
+@use "components/tab";
