@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class BlueprintStatus {
-    @SerialName("uptodate")
-    UpToDate,
-
+    @SerialName("unknown")
     Unknown,
 }

@@ -59,7 +59,7 @@ class BlueprintService(
                 id = identityGeneratorService.generate(),
                 header = header,
                 origin = source.uri,
-                status = BlueprintStatus.UpToDate,
+                status = BlueprintStatus.Unknown,
                 createdAt = Clock.System.now(),
             )
 
