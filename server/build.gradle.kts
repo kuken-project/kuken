@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.h2)
     implementation(libs.lettuce)
     implementation(libs.bundles.pkl)
+    implementation(libs.tika)
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
 }

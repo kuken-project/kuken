@@ -16,6 +16,7 @@ validator = "9.1.0.Final"
 hocon = "1.4.5"
 lettuce = "7.2.1.RELEASE"
 pkl = "0.30.2"
+tika = "3.2.3"
 
 [libraries]
 ktx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "ktx-atomicfu" }
@@ -60,6 +61,7 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 pkl-java = { module = "org.pkl-lang:pkl-config-java", version.ref = "pkl" }
 pkl-kotlin = { module = "org.pkl-lang:pkl-config-kotlin", version.ref = "pkl" }
 pkl-codegen = { module = "org.pkl-lang:pkl-codegen-kotlin", version.ref = "pkl" }
+tika = { module = "org.apache.tika:tika-core", version.ref = "tika" }
 
 [bundles]
 exposed = ["exposed-core", "exposed-dao", "exposed-datetime", "exposed-jdbc"]
