@@ -4,6 +4,7 @@ import gg.kuken.feature.instance.InstanceService
 import gg.kuken.feature.instance.http.routes.command
 import gg.kuken.feature.instance.http.routes.deleteFile
 import gg.kuken.feature.instance.http.routes.fetchLogs
+import gg.kuken.feature.instance.http.routes.getFileMetadata
 import gg.kuken.feature.instance.http.routes.getInstanceDetails
 import gg.kuken.feature.instance.http.routes.listFiles
 import gg.kuken.feature.instance.http.routes.readFile
@@ -36,6 +37,7 @@ internal object InstanceHttpModule : HttpModule() {
                     deleteFile()
                     renameFile()
                     uploadFiles()
+                    getFileMetadata()
                     command()
                     fetchLogs()
                 }

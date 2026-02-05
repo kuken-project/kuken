@@ -25,6 +25,8 @@ class InProcessDockerContainerFileSystem(
     override val root: Path get() = error("Not supported")
     val statFileEntryParser = StatFileEntryParser()
 
+    override suspend fun getFile(path: String): FileEntry = throw UnsupportedOperationException("Not supported")
+
     override suspend fun listDirectory(path: String): List<FileEntry> {
         val execId =
             dockerClient.exec.create(containerId) {

@@ -8,6 +8,8 @@ import kotlin.io.path.pathString
 interface FileSystem {
     val root: Path
 
+    suspend fun getFile(path: String): FileEntry
+
     suspend fun listDirectory(path: String): List<FileEntry>
 
     suspend fun readFileContents(path: String): String

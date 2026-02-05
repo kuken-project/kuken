@@ -45,10 +45,12 @@ class HostDockerContainerFileSystem(
         config.engine.instancesDataDirectory
             .resolve(instanceId.toString())
 
+    override suspend fun getFile(path: String): FileEntry = toFileEntry(requireSafePath(path), single = true)
+
     override suspend fun listDirectory(path: String): List<FileEntry> =
         requireSafePath(path)
             .listDirectoryEntries()
-            .map(::toFileEntry)
+            .map { file -> toFileEntry(file, single = false) }
 
     override suspend fun readFileContents(path: String): String = requireSafePath(path).readText()
 
@@ -75,7 +77,10 @@ class HostDockerContainerFileSystem(
         file.renameTo(newFile)
     }
 
-    private fun toFileEntry(path: Path): FileEntry {
+    private fun toFileEntry(
+        path: Path,
+        single: Boolean,
+    ): FileEntry {
         val type =
             when {
                 path.isSymbolicLink() -> FileType.SYMLINK
@@ -92,6 +97,13 @@ class HostDockerContainerFileSystem(
                 null
             }
 
+        val mimeType =
+            if (single) {
+                tika.detect(path.toFile())
+            } else {
+                tika.detect(path.name)
+            }
+
         return FileEntry(
             relativePath = path.relativeToOrSelf(root).pathString,
             name = path.name,
@@ -105,7 +117,7 @@ class HostDockerContainerFileSystem(
             isWritable = path.isWritable(),
             hidden = path.isHidden(),
             permissions = permissions,
-            mimeType = tika.detect(path.name),
+            mimeType = mimeType,
         )
     }
 

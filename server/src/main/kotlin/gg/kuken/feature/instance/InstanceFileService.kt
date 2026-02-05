@@ -30,6 +30,11 @@ class InstanceFileService(
         path: String,
     ): Path = with(fileSystemOf(instanceId)) { safePath(path) }
 
+    suspend fun getFile(
+        instanceId: Uuid,
+        filePath: String,
+    ) = fileSystemOf(instanceId).getFile(filePath)
+
     suspend fun listFiles(
         instanceId: Uuid,
         filePath: String,
