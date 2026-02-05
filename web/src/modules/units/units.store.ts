@@ -1,6 +1,6 @@
-import { defineStore } from "pinia"
-import { isNull } from "@/utils"
 import type { Unit } from "@/modules/units/api/models/unit.model.ts"
+import { isNull } from "@/utils"
+import { defineStore } from "pinia"
 
 type UnitStore = { unit: Unit | null }
 

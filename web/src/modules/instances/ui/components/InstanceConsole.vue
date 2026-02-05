@@ -1,18 +1,18 @@
 <script lang="ts" setup>
+import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
+import instancesService from "@/modules/instances/api/services/instances.service.ts"
+import { useAnsiText } from "@/modules/instances/composables/useAnsiText.ts"
 import { useConsoleFrames } from "@/modules/instances/composables/useConsoleFrames.ts"
 import { useConsoleLoader } from "@/modules/instances/composables/useConsoleLoader.ts"
-import { computed, nextTick, onMounted, onUnmounted, ref, unref, useTemplateRef, watch } from "vue"
-import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
 import { useConsoleWebSocket } from "@/modules/instances/composables/useConsoleWebSocket.ts"
-import { useScroll } from "@vueuse/core"
-import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller"
 import ConsoleLine from "@/modules/instances/ui/components/console/ConsoleLine.vue"
-import instancesService from "@/modules/instances/api/services/instances.service.ts"
-import VInput from "@/modules/platform/ui/components/form/VInput.vue"
-import VForm from "@/modules/platform/ui/components/form/VForm.vue"
-import { useAnsiText } from "@/modules/instances/composables/useAnsiText.ts"
-import { isUndefined } from "@/utils"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
+import VForm from "@/modules/platform/ui/components/form/VForm.vue"
+import VInput from "@/modules/platform/ui/components/form/VInput.vue"
+import { isUndefined } from "@/utils"
+import { useScroll } from "@vueuse/core"
+import { computed, nextTick, onMounted, onUnmounted, ref, unref, useTemplateRef, watch } from "vue"
+import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller"
 
 const props = defineProps<{
   instanceId: string

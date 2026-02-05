@@ -1,10 +1,10 @@
-import httpService from "@/modules/platform/api/services/http.service.ts"
-import type { AxiosResponse } from "axios"
-import type { Instance } from "@/modules/instances/api/models/instance.model.ts"
-import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
-import websocketService from "@/modules/platform/api/services/websocket.service.ts"
-import { WebSocketOpCodes } from "@/modules/platform/api/models/websocket.response.ts"
 import type { VirtualFile } from "@/modules/instances/api/models/file.model.ts"
+import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
+import type { Instance } from "@/modules/instances/api/models/instance.model.ts"
+import { WebSocketOpCodes } from "@/modules/platform/api/models/websocket.response.ts"
+import httpService from "@/modules/platform/api/services/http.service.ts"
+import websocketService from "@/modules/platform/api/services/websocket.service.ts"
+import type { AxiosResponse } from "axios"
 
 export default {
   async getInstance(instanceId: String): Promise<Instance> {

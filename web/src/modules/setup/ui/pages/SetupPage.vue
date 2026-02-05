@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import RootLayout from "@/modules/platform/ui/layouts/RootLayout.vue"
-import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
+import { AUTH_LOGIN_ROUTE } from "@/modules/auth/auth.routes.ts"
+import configService from "@/modules/platform/api/services/config.service.ts"
 import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
-import { type Reactive, reactive } from "vue"
-import setupService from "@/modules/setup/api/services/setup.service.ts"
+import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
+import RootLayout from "@/modules/platform/ui/layouts/RootLayout.vue"
 import { SetupStepType } from "@/modules/setup/api/models/setup.model.ts"
-import SetupStep from "@/modules/setup/ui/components/SetupStep.vue"
+import setupService from "@/modules/setup/api/services/setup.service.ts"
 import SetupCreateAccount from "@/modules/setup/ui/components/SetupCreateAccount.vue"
 import SetupOrganizationName from "@/modules/setup/ui/components/SetupOrganizationName.vue"
+import SetupStep from "@/modules/setup/ui/components/SetupStep.vue"
 import router from "@/router.ts"
-import { AUTH_LOGIN_ROUTE } from "@/modules/auth/auth.routes.ts"
 import { useHead } from "@unhead/vue"
-import configService from "@/modules/platform/api/services/config.service.ts"
+import { type Reactive, reactive } from "vue"
 
 useHead({
   title: `Configure ${configService.appName} organization`

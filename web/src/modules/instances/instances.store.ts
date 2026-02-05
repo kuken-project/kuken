@@ -1,6 +1,6 @@
-import { defineStore } from "pinia"
-import { isNull } from "@/utils"
 import type { Instance } from "@/modules/instances/api/models/instance.model.ts"
+import { isNull } from "@/utils"
+import { defineStore } from "pinia"
 
 type InstancesStore = { instance: Instance | null }
 

@@ -1,10 +1,10 @@
+import type { Account } from "@/modules/accounts/api/models/account.model"
 import httpService from "@/modules/platform/api/services/http.service"
 import localStorageService from "@/modules/platform/api/services/local-storage.service"
 import logService, { type Logger } from "@/modules/platform/api/services/log.service"
 import { isNull } from "@/utils"
-import type { AccessToken } from "../models/access-token.model"
 import type { AxiosError, AxiosResponse } from "axios"
-import type { Account } from "@/modules/accounts/api/models/account.model"
+import type { AccessToken } from "../models/access-token.model"
 
 export const AUTHORIZATION_TOKEN_KEY = "token"
 

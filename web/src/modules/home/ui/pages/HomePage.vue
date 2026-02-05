@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useHead } from "@unhead/vue"
 import { usePlatformStore } from "@/modules/platform/platform.store.ts"
+import { useHead } from "@unhead/vue"
 
 const organizationName = usePlatformStore().getBackendInfo.organization.name
 useHead({

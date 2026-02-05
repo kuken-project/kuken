@@ -1,11 +1,11 @@
-import { isUndefined } from "@/utils"
 import {
   type WebSocketMessage,
   type WebSocketOp
 } from "@/modules/platform/api/models/websocket.response"
+import configService from "@/modules/platform/api/services/config.service"
 import type { Logger } from "@/modules/platform/api/services/log.service"
 import logService from "@/modules/platform/api/services/log.service"
-import configService from "@/modules/platform/api/services/config.service"
+import { isUndefined } from "@/utils"
 
 type WebSocketListener = (arg0: any) => void
 

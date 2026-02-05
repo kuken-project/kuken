@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onBeforeMount, onBeforeUnmount } from "vue"
 import { TabsInjectionKey } from "@/modules/platform/ui/components/InjectionKeys"
 import type { Tab } from "@/modules/platform/ui/components/tabs/VTabList.vue"
+import { computed, inject, onBeforeMount, onBeforeUnmount } from "vue"
 
 const props = defineProps<{
   id: string

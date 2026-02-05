@@ -1,9 +1,9 @@
-import type { Logger } from "@/modules/platform/api/services/log.service"
-import { useAccountsStore } from "../../accounts.store"
-import logService from "@/modules/platform/api/services/log.service"
-import type { Account } from "../models/account.model"
 import httpService from "@/modules/platform/api/services/http.service"
+import type { Logger } from "@/modules/platform/api/services/log.service"
+import logService from "@/modules/platform/api/services/log.service"
 import type { AxiosResponse } from "axios"
+import { useAccountsStore } from "../../accounts.store"
+import type { Account } from "../models/account.model"
 
 class AccountsService {
   private readonly logger!: Logger

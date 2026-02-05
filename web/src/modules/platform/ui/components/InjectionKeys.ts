@@ -1,5 +1,5 @@
-import type { InjectionKey } from "vue"
 import type { Tab } from "@/modules/platform/ui/components/tabs/VTabList.vue"
+import type { InjectionKey } from "vue"
 
 export const TabsInjectionKey: InjectionKey<{
   addTab(tab: Tab): void

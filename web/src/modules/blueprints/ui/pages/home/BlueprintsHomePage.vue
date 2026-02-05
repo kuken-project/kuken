@@ -1,21 +1,20 @@
 <script lang="ts" setup>
-import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
-import Resource from "@/modules/platform/ui/components/Resource.vue"
-import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
-import { reactive, ref } from "vue"
-import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
-import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
-import VForm from "@/modules/platform/ui/components/form/VForm.vue"
-import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
-import VInput from "@/modules/platform/ui/components/form/VInput.vue"
-import VButton from "@/modules/platform/ui/components/button/VButton.vue"
-import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import {
   type Blueprint,
   resolveBlueprintSource
 } from "@/modules/blueprints/api/models/blueprint.model.ts"
-import PageWrapper from "@/modules/platform/ui/components/PageWrapper.vue"
+import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
+import Resource from "@/modules/platform/ui/components/Resource.vue"
+import VButton from "@/modules/platform/ui/components/button/VButton.vue"
+import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
+import VForm from "@/modules/platform/ui/components/form/VForm.vue"
+import VInput from "@/modules/platform/ui/components/form/VInput.vue"
+import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
+import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
+import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
 import VLayout from "@/modules/platform/ui/components/grid/VLayout.vue"
+import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
+import { reactive, ref } from "vue"
 
 let state = reactive({ readyToUseBlueprints: [] as Blueprint[] })
 const importUrl = ref("")

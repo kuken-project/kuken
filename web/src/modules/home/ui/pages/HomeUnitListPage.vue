@@ -46,18 +46,18 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
-import type { Unit } from "@/modules/units/api/models/unit.model.ts"
-import Resource from "@/modules/platform/ui/components/Resource.vue"
-import unitsService from "@/modules/units/api/services/units.service.ts"
-import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
-import { ProgressiveImage } from "vue-progressive-image"
 import { resolveBlueprintSource } from "@/modules/blueprints/api/models/blueprint.model.ts"
-import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
-import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
-import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
+import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
+import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
+import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 import PageWrapper from "@/modules/platform/ui/components/PageWrapper.vue"
+import Resource from "@/modules/platform/ui/components/Resource.vue"
+import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
+import type { Unit } from "@/modules/units/api/models/unit.model.ts"
+import unitsService from "@/modules/units/api/services/units.service.ts"
+import { reactive } from "vue"
+import { ProgressiveImage } from "vue-progressive-image"
 
 let state = reactive({ units: [] as Unit[] })
 </script>

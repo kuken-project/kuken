@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import TheHeader from "@/modules/platform/ui/components/TheHeader.vue"
-import Breadcrumb from "@/modules/platform/ui/components/Breadcrumb.vue"
 </script>
 <template>
   <div class="layout">

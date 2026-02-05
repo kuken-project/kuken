@@ -1,7 +1,7 @@
-import { defineStore } from "pinia"
 import { isNull } from "@/utils"
-import type { Account } from "./api/models/account.model"
+import { defineStore } from "pinia"
 import { computed } from "vue"
+import type { Account } from "./api/models/account.model"
 
 type AccountsState = {
   account: Account | null

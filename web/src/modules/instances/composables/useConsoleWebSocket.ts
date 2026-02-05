@@ -1,7 +1,7 @@
 import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
-import { ref } from "vue"
-import websocketService from "@/modules/platform/api/services/websocket.service.ts"
 import { WebSocketOpCodes } from "@/modules/platform/api/models/websocket.response.ts"
+import websocketService from "@/modules/platform/api/services/websocket.service.ts"
+import { ref } from "vue"
 
 export type UseConsoleWebSocketOptions = {
   instanceId: string

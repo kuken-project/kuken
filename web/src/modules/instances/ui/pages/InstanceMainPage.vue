@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { computed, onUnmounted } from "vue"
 import type { Instance } from "@/modules/instances/api/models/instance.model.ts"
-import Resource from "@/modules/platform/ui/components/Resource.vue"
 import instancesService from "@/modules/instances/api/services/instances.service.ts"
 import { useInstanceStore } from "@/modules/instances/instances.store.ts"
+import Resource from "@/modules/platform/ui/components/Resource.vue"
+import { computed, onUnmounted } from "vue"
 
 defineProps<{ instanceId: string }>()
 

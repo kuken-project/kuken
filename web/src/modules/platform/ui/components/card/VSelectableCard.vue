@@ -19,8 +19,8 @@
   </VCard>
 </template>
 <script setup lang="ts">
-import { ref } from "vue"
 import VCard from "@/modules/platform/ui/components/card/VCard.vue"
+import { ref } from "vue"
 
 const props = defineProps<{
   selected: boolean

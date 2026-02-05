@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { computed } from "vue"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
+import { computed } from "vue"
 
 const props = defineProps<{
   windowStart: number | null

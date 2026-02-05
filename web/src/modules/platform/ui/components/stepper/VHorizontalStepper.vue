@@ -15,8 +15,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref, useSlots, watch } from "vue"
 import { undefinedToNull } from "@/utils"
+import { onMounted, reactive, ref, useSlots, watch } from "vue"
 
 const props = defineProps<{ currentStep: number }>()
 const slots = useSlots()

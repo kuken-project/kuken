@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
-import Resource from "@/modules/platform/ui/components/Resource.vue"
-import { ref } from "vue"
-import BlueprintInputPort from "@/modules/blueprints/ui/components/BlueprintInputPort.vue"
-import BlueprintInputText from "@/modules/blueprints/ui/components/BlueprintInputText.vue"
-import VCard from "@/modules/platform/ui/components/card/VCard.vue"
-import BlueprintInputDataSize from "@/modules/blueprints/ui/components/BlueprintInputDataSize.vue"
-import BlueprintInputPassword from "@/modules/blueprints/ui/components/BlueprintInputPassword.vue"
-import BlueprintInputSelect from "@/modules/blueprints/ui/components/BlueprintInputSelect.vue"
-import BlueprintInputCheckbox from "@/modules/blueprints/ui/components/BlueprintInputCheckbox.vue"
 import type {
   InterpolatedBlueprintProperty,
   ResolveBlueprintResponse
 } from "@/modules/blueprints/api/models/blueprint.spec.model.ts"
-import { isUndefined } from "@/utils"
-import VInput from "@/modules/platform/ui/components/form/VInput.vue"
+import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
+import BlueprintInputCheckbox from "@/modules/blueprints/ui/components/BlueprintInputCheckbox.vue"
+import BlueprintInputDataSize from "@/modules/blueprints/ui/components/BlueprintInputDataSize.vue"
+import BlueprintInputPassword from "@/modules/blueprints/ui/components/BlueprintInputPassword.vue"
+import BlueprintInputPort from "@/modules/blueprints/ui/components/BlueprintInputPort.vue"
+import BlueprintInputSelect from "@/modules/blueprints/ui/components/BlueprintInputSelect.vue"
+import BlueprintInputText from "@/modules/blueprints/ui/components/BlueprintInputText.vue"
+import VCard from "@/modules/platform/ui/components/card/VCard.vue"
 import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
+import VInput from "@/modules/platform/ui/components/form/VInput.vue"
 import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
+import Resource from "@/modules/platform/ui/components/Resource.vue"
+import { isUndefined } from "@/utils"
+import { ref } from "vue"
 
 const props = defineProps<{ blueprintId: string }>()
 const resolution = ref<ResolveBlueprintResponse>()

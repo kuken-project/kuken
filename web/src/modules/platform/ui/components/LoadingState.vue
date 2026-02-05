@@ -2,7 +2,7 @@
   <div ref="root" class="loading" />
 </template>
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef } from "vue"
+import { onMounted, useTemplateRef } from "vue"
 import { useLoading } from "vue-loading-overlay"
 
 const root = useTemplateRef("root")

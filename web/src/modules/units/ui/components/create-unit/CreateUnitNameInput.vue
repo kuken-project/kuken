@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
 import VInput from "@/modules/platform/ui/components/form/VInput.vue"
+import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 
 const model = defineModel<string>({ required: true })
 </script>

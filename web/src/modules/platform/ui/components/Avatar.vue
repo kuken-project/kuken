@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
 import { isNull, isUndefined } from "@/utils"
+import { computed } from "vue"
 import { ProgressiveImage } from "vue-progressive-image"
 
 const props = defineProps<{ src: string | undefined | null }>()

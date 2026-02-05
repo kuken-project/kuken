@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
-import Resource from "@/modules/platform/ui/components/Resource.vue"
-import { reactive, unref } from "vue"
 import { type Blueprint } from "@/modules/blueprints/api/models/blueprint.model.ts"
-import { isNull } from "@/utils"
+import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
+import Resource from "@/modules/platform/ui/components/Resource.vue"
+import { isNull } from "@/utils"
+import { reactive, unref } from "vue"
 
 const selected = defineModel()
 

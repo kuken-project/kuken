@@ -1,5 +1,5 @@
-import { computed, ref } from "vue"
 import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
+import { computed, ref } from "vue"
 
 export type UseConsoleFramesOptions = {
   maxFrames: number

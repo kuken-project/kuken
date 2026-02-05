@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { useRoute } from "vue-router"
-import { computed } from "vue"
 import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
+import { computed } from "vue"
+import { useRoute } from "vue-router"
 
 type Link = { title: PropertyKey; route: string }
 

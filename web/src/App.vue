@@ -5,17 +5,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ModalsContainer } from "vue-final-modal"
-import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
-import { onUnmounted, ref } from "vue"
 import backendService from "@/modules/platform/api/services/backend.service.ts"
-import { useHead } from "@unhead/vue"
 import configService from "@/modules/platform/api/services/config.service.ts"
-import { SETUP_ROUTE } from "@/router.ts"
-import { useRouter } from "vue-router"
-import { usePlatformStore } from "@/modules/platform/platform.store.ts"
 import websocketService from "@/modules/platform/api/services/websocket.service.ts"
+import { usePlatformStore } from "@/modules/platform/platform.store.ts"
+import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
+import { SETUP_ROUTE } from "@/router.ts"
+import { useHead } from "@unhead/vue"
 import { useDark } from "@vueuse/core"
+import { onUnmounted, ref } from "vue"
+import { ModalsContainer } from "vue-final-modal"
+import { useRouter } from "vue-router"
 
 const isLoading = ref(true)
 

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import InstanceConsole from "@/modules/instances/ui/components/InstanceConsole.vue"
-import { useHead } from "@unhead/vue"
-import { useUnitStore } from "@/modules/units/units.store.ts"
 import { useInstanceStore } from "@/modules/instances/instances.store.ts"
+import InstanceConsole from "@/modules/instances/ui/components/InstanceConsole.vue"
 import InstanceConsoleLayout from "@/modules/instances/ui/layouts/InstanceConsoleLayout.vue"
+import { useUnitStore } from "@/modules/units/units.store.ts"
+import { useHead } from "@unhead/vue"
 
 const unit = useUnitStore().getUnit
 useHead({

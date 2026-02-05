@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router"
 import { AuthRoutes } from "@/modules/auth/auth.routes"
 import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 import { HomeRoutes } from "@/modules/home/home.routes"
 import { UnitsRoutes } from "@/modules/units/units.routes.ts"
+import { createRouter, createWebHistory } from "vue-router"
 
 export function importPage(module: string, path: string): () => Promise<unknown> {
   const comps = import.meta.glob(`./modules/**/ui/pages/**/*.vue`)

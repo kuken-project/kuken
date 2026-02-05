@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, ref, useSlots, useTemplateRef, type VNode, type VNodeArrayChildren } from "vue"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 import { onClickOutside } from "@vueuse/core"
+import { computed, ref, useSlots, useTemplateRef, type VNode, type VNodeArrayChildren } from "vue"
 
 const visible = ref(false)
 const props = defineProps({

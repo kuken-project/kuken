@@ -20,10 +20,10 @@
 
 <script lang="ts"></script>
 <script lang="ts" setup>
-import { onMounted, provide, reactive, ref } from "vue"
-import { isUndefined } from "@/utils"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 import { TabsInjectionKey } from "@/modules/platform/ui/components/InjectionKeys"
+import { isUndefined } from "@/utils"
+import { onMounted, provide, reactive, ref } from "vue"
 
 export type Tab = {
   id: string

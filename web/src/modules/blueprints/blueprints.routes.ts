@@ -1,5 +1,5 @@
-import type { RouteRecordRaw } from "vue-router"
 import { importPage } from "@/router"
+import type { RouteRecordRaw } from "vue-router"
 
 const MODULE = "blueprints"
 export const BLUEPRINTS_ROUTE = "blueprints"

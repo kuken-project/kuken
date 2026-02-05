@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed, onUnmounted } from "vue"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
 import unitsService from "@/modules/units/api/services/units.service.ts"
 import { useUnitStore } from "@/modules/units/units.store.ts"
-import { useHead } from "@unhead/vue"
 import { isNull } from "@/utils"
+import { useHead } from "@unhead/vue"
+import { computed, onUnmounted } from "vue"
 
 defineProps<{ unitId: string }>()
 

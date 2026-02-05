@@ -1,6 +1,6 @@
+import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 import { importPage } from "@/router"
 import type { RouteRecordRaw } from "vue-router"
-import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 
 export const AUTH_LOGIN_ROUTE = "auth.login"
 

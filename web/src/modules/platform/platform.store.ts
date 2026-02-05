@@ -1,6 +1,6 @@
-import { defineStore } from "pinia"
 import type { BackendInfo } from "@/modules/platform/api/models/backend-info.ts"
 import { isNull } from "@/utils"
+import { defineStore } from "pinia"
 
 type PlatformStore = { backendInfo: BackendInfo | null }
 

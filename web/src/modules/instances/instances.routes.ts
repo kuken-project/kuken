@@ -1,5 +1,5 @@
-import type { RouteRecordRaw } from "vue-router"
 import { importPage } from "@/router.ts"
+import type { RouteRecordRaw } from "vue-router"
 
 export const InstancesRoutes: Array<RouteRecordRaw> = [
   {

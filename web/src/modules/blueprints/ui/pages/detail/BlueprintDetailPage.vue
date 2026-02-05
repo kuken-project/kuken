@@ -70,19 +70,19 @@
   </Resource>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue"
 import {
   type Blueprint,
   resolveBlueprintSource
 } from "@/modules/blueprints/api/models/blueprint.model"
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
-import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
-import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import VCard from "@/modules/platform/ui/components/card/VCard.vue"
-import { useHead } from "@unhead/vue"
+import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
+import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
 import hljsVuePlugin from "@highlightjs/vue-plugin"
+import { useHead } from "@unhead/vue"
+import { ref } from "vue"
 
 const higlight = hljsVuePlugin.component
 const props = defineProps<{ blueprintId: string }>()

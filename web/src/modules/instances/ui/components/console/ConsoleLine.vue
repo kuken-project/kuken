@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
-import { computed } from "vue"
 import dayjs from "dayjs"
+import { computed } from "vue"
 
 const props = defineProps<{
   frame: Frame

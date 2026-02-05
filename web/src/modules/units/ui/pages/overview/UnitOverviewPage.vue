@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useUnitStore } from "@/modules/units/units.store.ts"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
-import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
 import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
-import PageWrapper from "@/modules/platform/ui/components/PageWrapper.vue"
 import VLayout from "@/modules/platform/ui/components/grid/VLayout.vue"
+import PageWrapper from "@/modules/platform/ui/components/PageWrapper.vue"
+import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
+import { useUnitStore } from "@/modules/units/units.store.ts"
 
 const unit = useUnitStore().getUnit
 </script>

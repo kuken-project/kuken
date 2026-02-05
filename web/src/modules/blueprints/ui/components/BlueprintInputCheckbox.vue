@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
-import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
 import type { BlueprintBuildInputCheckbox } from "@/modules/blueprints/api/models/blueprint.spec.model.ts"
 import VCheckbox from "@/modules/platform/ui/components/form/VCheckbox.vue"
+import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
+import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 
 const props = defineProps<BlueprintBuildInputCheckbox>()

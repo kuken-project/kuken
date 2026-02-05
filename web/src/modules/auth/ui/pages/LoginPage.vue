@@ -42,20 +42,20 @@
   </AuthLayout>
 </template>
 <script lang="ts" setup>
-import VButton from "@/modules/platform/ui/components/button/VButton.vue"
-import VForm from "@/modules/platform/ui/components/form/VForm.vue"
-import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
-import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
-import AuthLayout from "@/modules/auth/ui/layouts/AuthLayout.vue"
-import VInput from "@/modules/platform/ui/components/form/VInput.vue"
-import { reactive, ref } from "vue"
-import authService from "@/modules/auth/api/services/auth.service"
-import type { HttpError } from "@/modules/platform/api/models/error.model"
-import { useRouter } from "vue-router"
 import { useAccountsStore } from "@/modules/accounts/accounts.store"
-import VLayout from "@/modules/platform/ui/components/grid/VLayout.vue"
+import authService from "@/modules/auth/api/services/auth.service"
+import AuthLayout from "@/modules/auth/ui/layouts/AuthLayout.vue"
+import type { HttpError } from "@/modules/platform/api/models/error.model"
 import { usePlatformStore } from "@/modules/platform/platform.store.ts"
+import VButton from "@/modules/platform/ui/components/button/VButton.vue"
+import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
+import VForm from "@/modules/platform/ui/components/form/VForm.vue"
+import VInput from "@/modules/platform/ui/components/form/VInput.vue"
+import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
+import VLayout from "@/modules/platform/ui/components/grid/VLayout.vue"
 import { useHead } from "@unhead/vue"
+import { reactive, ref } from "vue"
+import { useRouter } from "vue-router"
 
 const organizationName = usePlatformStore().getBackendInfo.organization.name
 

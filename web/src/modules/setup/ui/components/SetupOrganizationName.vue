@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
+import VForm from "@/modules/platform/ui/components/form/VForm.vue"
 import VInput from "@/modules/platform/ui/components/form/VInput.vue"
 import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
-import VForm from "@/modules/platform/ui/components/form/VForm.vue"
-import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 
 const organizationName = defineModel("organizationName", { required: true, default: "" })
 const emit = defineEmits(["done"])

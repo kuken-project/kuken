@@ -1,7 +1,7 @@
-import type { RouteRecordRaw } from "vue-router"
-import { importPage } from "@/router.ts"
-import UnitMain from "@/modules/units/ui/components/UnitMain.vue"
 import { InstancesRoutes } from "@/modules/instances/instances.routes.ts"
+import UnitMain from "@/modules/units/ui/components/UnitMain.vue"
+import { importPage } from "@/router.ts"
+import type { RouteRecordRaw } from "vue-router"
 
 export const UnitsRoutes: Array<RouteRecordRaw> = [
   {

@@ -1,6 +1,6 @@
 import type { BackendInfo } from "@/modules/platform/api/models/backend-info.ts"
-import { usePlatformStore } from "@/modules/platform/platform.store"
 import httpService from "@/modules/platform/api/services/http.service.ts"
+import { usePlatformStore } from "@/modules/platform/platform.store"
 import type { AxiosResponse } from "axios"
 
 export default {

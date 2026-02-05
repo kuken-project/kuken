@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
-import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
 import type { BlueprintBuildInputSelect } from "@/modules/blueprints/api/models/blueprint.spec.model.ts"
-import { onMounted } from "vue"
+import VFieldSet from "@/modules/platform/ui/components/form/VFieldSet.vue"
+import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VOption from "@/modules/platform/ui/components/form/VOption.vue"
 import VSelect from "@/modules/platform/ui/components/form/VSelect.vue"
+import { onMounted } from "vue"
 
 const props = defineProps<BlueprintBuildInputSelect>()
 const model = defineModel()

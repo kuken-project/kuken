@@ -27,8 +27,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { RouteLocationRaw } from "vue-router"
 import { computed } from "vue"
+import type { RouteLocationRaw } from "vue-router"
 
 type Props = {
   variant: "default" | "primary"

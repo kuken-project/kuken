@@ -3,9 +3,9 @@ import type {
   BlueprintProperty,
   InterpolatedBlueprintProperty
 } from "@/modules/blueprints/api/models/blueprint.spec.model.ts"
-import { computed, readonly } from "vue"
-import { isUndefined } from "@/utils"
 import BlueprintPropertyInterpolatedElement from "@/modules/blueprints/ui/components/property/BlueprintPropertyInterpolatedElement.vue"
+import { isUndefined } from "@/utils"
+import { computed, readonly } from "vue"
 
 const props = defineProps<{
   property: InterpolatedBlueprintProperty

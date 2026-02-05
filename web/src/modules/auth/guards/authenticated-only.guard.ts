@@ -1,10 +1,10 @@
-import type { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router"
+import type { Account } from "@/modules/accounts/api/models/account.model"
 import accountService from "@/modules/accounts/api/services/accounts.service"
 import authService from "@/modules/auth/api/services/auth.service"
-import { isNull } from "@/utils"
-import type { Account } from "@/modules/accounts/api/models/account.model"
-import logService from "@/modules/platform/api/services/log.service"
 import { AUTH_LOGIN_ROUTE } from "@/modules/auth/auth.routes"
+import logService from "@/modules/platform/api/services/log.service"
+import { isNull } from "@/utils"
+import type { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router"
 
 export const AuthenticatedOnlyGuard: NavigationGuard = (
   to: RouteLocationNormalized,

@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts" setup>
+import logService from "@/modules/platform/api/services/log.service"
 import EmptyState from "@/modules/platform/ui/components/EmptyState.vue"
 import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import { reactive, ref } from "vue"
-import logService from "@/modules/platform/api/services/log.service"
 import { useRouter } from "vue-router"
 
 const emits = defineEmits(["loaded", "error"])

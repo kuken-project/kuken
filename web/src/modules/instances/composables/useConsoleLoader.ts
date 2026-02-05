@@ -1,6 +1,6 @@
 import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
-import { computed, ref } from "vue"
 import instancesService from "@/modules/instances/api/services/instances.service.ts"
+import { computed, ref } from "vue"
 
 export type ConsoleLogsResponse = {
   frames: Frame[]

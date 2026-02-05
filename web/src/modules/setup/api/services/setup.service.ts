@@ -1,6 +1,6 @@
 import httpService from "@/modules/platform/api/services/http.service"
-import type { AxiosError, AxiosResponse } from "axios"
 import type { Setup, SetupRequest } from "@/modules/setup/api/models/setup.model.ts"
+import type { AxiosError, AxiosResponse } from "axios"
 
 class SetupService {
   async getSetup(): Promise<Setup> {
