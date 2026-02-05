@@ -17,9 +17,9 @@ services:
       - DB_USER=kuken
       - DB_PASSWORD=kuken
       - DOCKER_NETWORK=kuken_network
-      - DATA_DIRECTORY=/data/volumes
+      - DATA_DIRECTORY=/var/lib/kuken/data/volumes
     volumes:
-      - /var/lib/kuken:/data/volumes
+      - /var/lib/kuken:/var/lib/kuken
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
       - "host.docker.internal:host-gateway"
