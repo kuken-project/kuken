@@ -44,6 +44,10 @@ class HttpService {
     return this.axios.put(url, data, config)
   }
 
+  putForm<T>(url: string, data?: T, config?: AxiosRequestConfig): AxiosPromise<T> {
+    return this.axios.putForm(url, data, config)
+  }
+
   delete<T>(url: string, config?: AxiosRequestConfig): AxiosPromise<T> {
     return this.axios.delete(url, config)
   }

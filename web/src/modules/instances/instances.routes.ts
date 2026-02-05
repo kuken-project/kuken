@@ -27,7 +27,7 @@ export const InstancesRoutes: Array<RouteRecordRaw> = [
       },
       {
         path: "files",
-        component: importPage("instances", "files/InstanceFiles"),
+        component: importPage("instances", "files/InstanceFileSystem"),
         meta: {
           title: "File System"
         },
@@ -36,16 +36,16 @@ export const InstancesRoutes: Array<RouteRecordRaw> = [
             path: "",
             name: "instance.files",
             props: true,
-            component: importPage("instances", "files/InstanceFileList"),
+            component: importPage("instances", "files/browser/InstanceFileBrowser"),
             meta: {
-              title: "File List"
+              title: "File Browser"
             }
           },
           {
             path: "editor",
             name: "instance.file.editor",
             props: true,
-            component: importPage("instances", "files/InstanceFileEditor"),
+            component: importPage("instances", "files/editor/InstanceFileEditor"),
             meta: {
               title: "File Contents"
             }

@@ -5,16 +5,15 @@ import dayjs from "dayjs"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 import {
   ContextMenu,
-  ContextMenuGroup,
   ContextMenuItem,
   ContextMenuSeparator,
   type MenuOptions
 } from "@imengyu/vue3-context-menu"
-import { markRaw, readonly, ref, shallowRef, toRaw, useTemplateRef } from "vue"
+import { ref, shallowRef, useTemplateRef } from "vue"
 import instancesService from "@/modules/instances/api/services/instances.service.ts"
-import { useInstanceFilesStore } from "@/modules/instances/instance-files.store.ts"
 import { useInstanceStore } from "@/modules/instances/instances.store.ts"
-import { onClickOutside, useManualRefHistory } from "@vueuse/core"
+import { onClickOutside } from "@vueuse/core"
+import VCheckbox from "@/modules/platform/ui/components/form/VCheckbox.vue"
 
 const { file } = defineProps<{ file: VirtualFile }>()
 
@@ -84,6 +83,7 @@ onClickOutside(nameInput, () => {
     class="file"
     @contextmenu="onContextMenu"
   >
+    <VCheckbox @click.stop />
     <div class="icon-wrapper"><VIcon name="File" /></div>
     <form v-if="renaming" @submit.prevent="onFinishRenameFile" @keydown.enter.stop>
       <input ref="name" v-model="fileName" type="text" class="name" />

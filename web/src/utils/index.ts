@@ -85,3 +85,17 @@ export function cybrh3(value: string, seed: number = 0) {
 
   return 4294967296 * (2097151 & h2) + (h1 >>> 0)
 }
+
+export function substringBeforeLast(input: string, search: string): string {
+  return input.substring(0, input.lastIndexOf(search))
+}
+
+export function systemPathSepatator(path: string) {
+  return path.indexOf("/") === -1
+    ? path.indexOf("\\") === -1
+      ? undefined
+      : "\\" /* Windows */
+    : path.indexOf("/") === -1
+      ? undefined
+      : "/" /* UNIX */
+}

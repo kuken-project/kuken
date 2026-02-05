@@ -5,10 +5,9 @@ import Breadcrumb from "@/modules/platform/ui/components/Breadcrumb.vue"
 <template>
   <div class="layout">
     <!-- <TheSidebar /> -->
-    <div class="main">
+    <div class="layout-main">
       <TheHeader />
-      <div class="content">
-        <Breadcrumb />
+      <div class="layout-content">
         <slot />
       </div>
     </div>
@@ -21,7 +20,7 @@ import Breadcrumb from "@/modules/platform/ui/components/Breadcrumb.vue"
   overflow: hidden;
 }
 
-.main {
+.layout-main {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -30,7 +29,7 @@ import Breadcrumb from "@/modules/platform/ui/components/Breadcrumb.vue"
   height: 100%;
 }
 
-.content {
+.layout-content {
   background-color: var(--kt-background-body);
   border-radius: 20px;
   margin: 0 16px 16px 16px;

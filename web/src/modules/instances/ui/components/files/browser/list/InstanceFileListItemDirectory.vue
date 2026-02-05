@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { VirtualFile } from "@/modules/instances/api/models/file.model.ts"
-import { filesize } from "filesize"
-import dayjs from "dayjs"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
+import dayjs from "dayjs"
 
 defineProps<{ file: VirtualFile }>()
 </script>
@@ -18,7 +17,7 @@ defineProps<{ file: VirtualFile }>()
     <div class="icon-wrapper">
       <VIcon name="Folder" />
     </div>
-    <div class="name">{{ file.name }}/</div>
+    <div class="name">{{ file.name }}</div>
     <div class="createdAt">
       {{ dayjs(file.createdAt).format("DD/MMM/YYYY h:mm A") }}
     </div>

@@ -92,5 +92,15 @@ export default {
     return httpService
       .patch(`instances/${instanceId}/files?path=${path}`, { newName })
       .then((res: AxiosResponse) => res.data)
+  },
+
+  async uploadFiles(instanceId: string, path: string, files: FormData): Promise<void> {
+    return httpService
+      .putForm(`instances/${instanceId}/files?path=${path}`, files, {
+        onUploadProgress: (e) => {
+          console.log("uploading...", e)
+        }
+      })
+      .then((res: AxiosResponse) => res.data)
   }
 } as const
