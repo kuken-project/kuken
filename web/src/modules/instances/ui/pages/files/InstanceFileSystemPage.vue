@@ -25,6 +25,5 @@ import InstanceFileBrowserTree from "@/modules/instances/ui/components/files/bro
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow-y: auto;
 }
 </style>
