@@ -71,13 +71,22 @@ onMounted(() => {
   height: 100%;
 
   :deep(.cm-content) {
-    padding: 12px;
+    padding: 0 12px;
   }
 
   &,
   :deep(.cm-gutters),
   :deep(.cm-content) {
     background-color: var(--kt-background-surface) !important;
+  }
+
+  .vue-codemirror,
+  .vue-codemirror:deep(.cm-editor) {
+    height: 100%;
+  }
+
+  :deep(.cm-focused) {
+    outline: none;
   }
 }
 
