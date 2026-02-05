@@ -5,6 +5,7 @@ LABEL MAINTAINER="Natan Vieira Do Nascimento <natanvnascimento@gmail.com>"
 
 WORKDIR /app
 COPY package*.json ./
+COPY pnpm-lock.yaml ./
 ENV NODE_OPTIONS "--max_old_space_size=4096"
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
