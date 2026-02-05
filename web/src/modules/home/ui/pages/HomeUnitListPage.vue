@@ -132,6 +132,10 @@ let state = reactive({ units: [] as Unit[] })
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
+
+      :deep(img) {
+        position: relative;
+      }
     }
 
     .body {
