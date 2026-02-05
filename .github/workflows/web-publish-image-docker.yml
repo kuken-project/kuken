@@ -14,7 +14,7 @@ defaults:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}-webui
+  IMAGE_NAME: webui
 
 jobs:
   publish:
