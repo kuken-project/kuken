@@ -1,4 +1,4 @@
-name: "[Web] Publish Docker Image"
+name: "Publish Web Docker Image"
 
 on:
   push:

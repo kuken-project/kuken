@@ -1,4 +1,4 @@
-name: "[Web] Build"
+name: "Web Build"
 
 on:
   pull_request:
