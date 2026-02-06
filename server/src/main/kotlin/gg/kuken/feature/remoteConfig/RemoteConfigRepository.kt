@@ -25,6 +25,7 @@ class RemoteConfigRepository(
 ) {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(RemoteConfigTable)
         }
     }

@@ -35,6 +35,7 @@ class AccountPermissionRepository(
 ) {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(AccountPermissionsTable)
         }
     }

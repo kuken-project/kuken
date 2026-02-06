@@ -24,6 +24,7 @@ class PermissionRepository(
 ) {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(PermissionsTable, PermissionResourceRulesTable)
         }
     }

@@ -3,6 +3,7 @@ package gg.kuken
 import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigParseOptions
 import io.lettuce.core.RedisClient
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.hocon.decodeFromConfig
 import org.jetbrains.exposed.v1.core.DatabaseConfig
@@ -21,6 +22,7 @@ fun loadConfig(): KukenConfig {
             .withFallback(ConfigFactory.parseResources("kuken.conf", parseOptions))
             .resolve()
 
+    @OptIn(ExperimentalSerializationApi::class)
     return Hocon {}.decodeFromConfig(config)
 }
 

@@ -44,6 +44,7 @@ class UnitRepositoryImpl(
 ) : UnitRepository {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(UnitTable)
         }
     }

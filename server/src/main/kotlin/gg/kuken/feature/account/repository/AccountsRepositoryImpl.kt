@@ -18,6 +18,7 @@ class AccountsRepositoryImpl(
 ) : AccountRepository {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(AccountTable)
         }
     }

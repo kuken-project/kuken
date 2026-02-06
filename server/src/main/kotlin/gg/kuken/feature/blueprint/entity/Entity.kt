@@ -48,6 +48,7 @@ class BlueprintRepositoryImpl(
 ) : BlueprintRepository {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(BlueprintTable)
         }
     }

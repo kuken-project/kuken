@@ -88,7 +88,7 @@ data class BlueprintSpecBuild(
     class EnvKVSerializer : KSerializer<Map<String, Any>> by MapSerializer(String.serializer(), EnvValueSerializer())
 
     class EnvValueSerializer : KSerializer<Any> {
-        @OptIn(InternalSerializationApi::class)
+        @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
         override val descriptor: SerialDescriptor =
             buildSerialDescriptor(
                 serialName = "gg.kuken.feature.blueprint.model.BlueprintSpecBuild.EnvValueSerializer",
@@ -144,7 +144,7 @@ sealed class BlueprintSpecImage {
     ) : BlueprintSpecImage()
 
     class Serializer : KSerializer<BlueprintSpecImage> {
-        @OptIn(InternalSerializationApi::class)
+        @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
         override val descriptor: SerialDescriptor =
             buildSerialDescriptor(
                 serialName = "gg.kuken.feature.blueprint.model.BlueprintSpecImage",

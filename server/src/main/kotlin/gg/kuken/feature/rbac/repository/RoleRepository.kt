@@ -31,6 +31,7 @@ class RoleRepository(
 ) {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(RolesTable, AccountRolesTable, RolePermissionsTable)
         }
     }

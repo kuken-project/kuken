@@ -18,6 +18,7 @@ kotlin {
             "-opt-in=kotlin.uuid.ExperimentalUuidApi,kotlin.time.ExperimentalTime",
             "-Xcontext-parameters",
         )
+        allWarningsAsErrors = true
     }
 }
 

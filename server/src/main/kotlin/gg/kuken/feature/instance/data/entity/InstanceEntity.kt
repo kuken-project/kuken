@@ -48,6 +48,7 @@ class InstanceRepositoryImpl(
 ) : InstanceRepository {
     init {
         transaction(db = database) {
+            @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(InstanceTable)
         }
     }

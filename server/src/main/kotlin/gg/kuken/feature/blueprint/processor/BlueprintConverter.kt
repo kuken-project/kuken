@@ -42,6 +42,8 @@ class BlueprintConverter : AutoCloseable {
         readers: List<ResourceReader>,
     ): ResolveBlueprintInputDefinitions {
         val module = eval(source, readers)
+
+        @Suppress("UNCHECKED_CAST")
         val inputs = collectInputs(module.getProperty("inputs") as List<PObject>)
         val startup =
             module
@@ -63,17 +65,11 @@ class BlueprintConverter : AutoCloseable {
 
         objectCache =
             ObjectCache(
-                inputs =
-                    inputs.associate {
-                        when (val name = it.name) {
-                            is Resolvable.Literal -> name.value to it
-                            else -> "" to it
-                        }
-                    },
+                inputs = inputs.associateBy { it.name },
                 envVars = envVars.associateBy { it.name },
             )
 
-        val assets = module.getPropertyOrNull("assets").let(::convertAssets)
+        val assets = module.getPropertyOrNull("assets").let { convertAssets(it as Any) }
         val metadata =
             BlueprintMetadata(
                 name = module.getProperty("name") as String,
@@ -101,10 +97,9 @@ class BlueprintConverter : AutoCloseable {
 
                     var installResource =
                         obj
-                            .getProperty("onInstall")
-                            ?.takeUnless { it is PNull }
-                            ?.let { (it as PObject).get("source") as String }
-                            .let { source -> resources.firstOrNull { v -> v.source == source } }
+                            .getPropertyOrNull("onInstall")
+                            ?.let { onInstall -> (onInstall as PObject).get("source") as String }
+                            .let { onInstall -> resources.firstOrNull { v -> v.source == onInstall } }
 
                     if (installResource != null) {
                         installResource = AppResource(name = "install", source = installResource.source)
@@ -121,24 +116,23 @@ class BlueprintConverter : AutoCloseable {
 
         val instanceSettings =
             module
-                .getProperty("instance")
-                ?.takeUnless { instance -> instance is PNull }
+                .getPropertyOrNull("instance")
                 ?.let { instance -> instance as PObject }
                 ?.let { instance ->
                     val startup = UniversalPklParser.parseValue<String>(instance.getProperty("startup"))
                     val commandExecutor =
-                        instance.getProperty("command")?.takeUnless { it is PNull }?.let { it as PObject }?.let {
-                            when (val type = it.getProperty("type")) {
+                        instance.getPropertyOrNull("command")?.let { command -> command as PObject }?.let { command ->
+                            when (val type = command.getProperty("type")) {
                                 "rcon" -> {
-                                    val port = UniversalPklParser.parseValue<Int>(it.getProperty("port"))
-                                    val password = UniversalPklParser.parseValue<String>(it.getProperty("password"))
-                                    val template = it.getProperty("template") as String
+                                    val port = UniversalPklParser.parseValue<Int>(command.getProperty("port"))
+                                    val password = UniversalPklParser.parseValue<String>(command.getProperty("password"))
+                                    val template = command.getProperty("template") as String
 
                                     InstanceSettingsCommandExecutor.Rcon(port, password, template)
                                 }
 
                                 "ssh" -> {
-                                    val template = it.getProperty("template") as String
+                                    val template = command.getProperty("template") as String
 
                                     InstanceSettingsCommandExecutor.SSH(template)
                                 }
@@ -192,6 +186,7 @@ class BlueprintConverter : AutoCloseable {
             }
 
             "select" -> {
+                @Suppress("UNCHECKED_CAST")
                 val items = inputObj.getProperty("items") as Map<String, String>
                 SelectInput(name, label, description, items)
             }
