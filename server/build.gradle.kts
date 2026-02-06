@@ -75,6 +75,10 @@ ktor {
 }
 
 graalvmNative {
+    agent {
+        defaultMode.set("standard")
+    }
+
     binaries {
         named("main") {
             fallback.set(false)
@@ -84,6 +88,9 @@ graalvmNative {
                 "--install-exit-handlers",
                 "--add-modules=jdk.unsupported",
                 "--initialize-at-build-time=kotlin",
+                "--initialize-at-build-time=org.pkl.core.runtime.VmLanguageProvider",
+                "--initialize-at-build-time=kotlinx.serialization",
+                "--initialize-at-build-time=org.hibernate.validator.internal.engine.ConfigurationImpl",
                 "--initialize-at-run-time=kotlin.uuid.SecureRandomHolder",
                 "--initialize-at-run-time=org.bouncycastle",
                 "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
@@ -92,11 +99,18 @@ graalvmNative {
                 "--initialize-at-run-time=io.netty.channel.unix.Errors",
                 "--initialize-at-run-time=io.netty.channel.unix.IovArray",
                 "--initialize-at-run-time=io.netty.channel.unix.Limits",
-                "--initialize-at-build-time=org.pkl.core.runtime.VmLanguageProvider",
+                "--initialize-at-run-time=kotlin.uuid.SecureRandomHolder",
+                "--initialize-at-run-time=org.bouncycastle",
+                "--initialize-at-run-time=org.hibernate.validator",
+                "--initialize-at-run-time=org.hibernate.validator.internal",
+                "--initialize-at-build-time=org.hibernate.validator.internal.util.logging.Log_\$logger",
+                "--initialize-at-build-time=org.jboss.logging",
+                "--initialize-at-build-time=org.apache.logging.log4j",
                 "-J--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED",
                 "-H:+ReportUnsupportedElementsAtRuntime",
                 "-H:+ReportExceptionStackTraces",
                 "-H:+UnlockExperimentalVMOptions",
+                "-H:+AddAllCharsets",
             )
 
             imageName.set("kuken-server")
