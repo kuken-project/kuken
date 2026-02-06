@@ -45,7 +45,7 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.h2)
     implementation(libs.lettuce)
-    implementation(libs.bundles.pkl)
+    implementation(libs.pkl)
     implementation(libs.tika)
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
@@ -80,24 +80,24 @@ graalvmNative {
             fallback.set(false)
             verbose.set(true)
 
-            buildArgs.add("--initialize-at-build-time=kotlin")
-            buildArgs.add("--initialize-at-run-time=kotlin.uuid.SecureRandomHolder")
-            buildArgs.add("--initialize-at-run-time=org.bouncycastle")
-
-            buildArgs.add("--initialize-at-run-time=io.netty.channel.epoll.Epoll")
-            buildArgs.add("--initialize-at-run-time=io.netty.channel.epoll.Native")
-            buildArgs.add("--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop")
-            buildArgs.add("--initialize-at-run-time=io.netty.channel.unix.Errors")
-            buildArgs.add("--initialize-at-run-time=io.netty.channel.unix.IovArray")
-            buildArgs.add("--initialize-at-run-time=io.netty.channel.unix.Limits")
-
-            buildArgs.add("--add-modules=jdk.unsupported")
-            buildArgs.add("-J--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED")
-            buildArgs.add("-H:+AllowIncompleteClasspath")
-
-            buildArgs.add("--install-exit-handlers")
-            buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
-            buildArgs.add("-H:+ReportExceptionStackTraces")
+            buildArgs.addAll(
+                "--install-exit-handlers",
+                "--add-modules=jdk.unsupported",
+                "--add-modules=jdk.unsupported",
+                "--initialize-at-build-time=kotlin",
+                "--initialize-at-run-time=kotlin.uuid.SecureRandomHolder",
+                "--initialize-at-run-time=org.bouncycastle",
+                "--initialize-at-run-time=io.netty.channel.epoll.Epoll",
+                "--initialize-at-run-time=io.netty.channel.epoll.Native",
+                "--initialize-at-run-time=io.netty.channel.epoll.EpollEventLoop",
+                "--initialize-at-run-time=io.netty.channel.unix.Errors",
+                "--initialize-at-run-time=io.netty.channel.unix.IovArray",
+                "--initialize-at-run-time=io.netty.channel.unix.Limits",
+                "-J--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED",
+                "-H:+ReportUnsupportedElementsAtRuntime",
+                "-H:+ReportExceptionStackTraces",
+                "-H:+UnlockExperimentalVMOptions",
+            )
 
             imageName.set("kuken-server")
             mainClass.set(application.mainClass)

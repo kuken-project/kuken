@@ -58,9 +58,7 @@ hocon = { module = "com.typesafe:config", version.ref = "hocon" }
 lettuce = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
-pkl-java = { module = "org.pkl-lang:pkl-config-java", version.ref = "pkl" }
-pkl-kotlin = { module = "org.pkl-lang:pkl-config-kotlin", version.ref = "pkl" }
-pkl-codegen = { module = "org.pkl-lang:pkl-codegen-kotlin", version.ref = "pkl" }
+pkl = { module = "org.pkl-lang:pkl-config-java", version.ref = "pkl" }
 tika = { module = "org.apache.tika:tika-core", version.ref = "tika" }
 
 [bundles]
@@ -83,7 +81,6 @@ ktor = ["ktor-server-core",
     "ktor-client-core",
     "ktor-client-cio"
 ]
-pkl = ["pkl-java", "pkl-kotlin", "pkl-codegen"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
