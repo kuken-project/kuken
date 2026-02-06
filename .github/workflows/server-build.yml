@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    name: Build - ${{ matrix.os }}
+    name: Native - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     strategy:
