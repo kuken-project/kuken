@@ -1,28 +1,16 @@
 services:
-  kuken-web:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
       args:
         - VITE_GIT_COMMIT=${GIT_COMMIT:-unknown}
         - VITE_GIT_BRANCH=${GIT_BRANCH:-unknown}
-    container_name: kuken-web
+    container_name: kuken-webui
     ports:
-      - "80:80"
+      - "0:80"
     environment:
       - NODE_ENV=production
     volumes:
       - ./logs:/var/log/nginx
     restart: unless-stopped
-    networks:
-      - kuken-app
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-networks:
-  kuken-app:
-    driver: bridge
