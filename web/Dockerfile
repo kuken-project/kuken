@@ -28,10 +28,7 @@ ENV VITE_GIT_BRANCH ${GIT_BRANCH}
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
 
-# Expose Nginx default ports
 EXPOSE 80
-EXPOSE 443
 
-# Run appplication
 RUN chmod +x ./entrypoint.sh
 CMD ["./entrypoint.sh"]
