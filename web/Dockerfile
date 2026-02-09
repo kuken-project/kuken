@@ -22,8 +22,8 @@ COPY entrypoint.sh entrypoint.sh
 # Git info. Must be set in --build-arg (see bin/build)
 ARG GIT_BRANCH
 ARG GIT_COMMIT
-ENV VITE_GIT_COMMIT=${GIT_COMMIT}
-ENV VITE_GIT_BRANCH=${GIT_BRANCH}
+ENV VITE_GIT_COMMIT ${GIT_COMMIT}
+ENV VITE_GIT_BRANCH ${GIT_BRANCH}
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
