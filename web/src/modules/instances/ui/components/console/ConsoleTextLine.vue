@@ -1,20 +1,18 @@
 <script lang="ts" setup>
-import type { Frame } from "@/modules/instances/api/models/frame.model.ts"
+import type { ConsoleFrame } from "@/modules/instances/api/models/frame.model.ts"
 import dayjs from "dayjs"
 import { computed } from "vue"
 
 const props = defineProps<{
-  frame: Frame
+  frame: ConsoleFrame
   text: string
 }>()
 
 const emit = defineEmits<{
-  copyLink: [frame: Frame]
+  copyLink: [frame: ConsoleFrame]
 }>()
 
-const formattedTime = computed(() =>
-  dayjs(props.frame.timestamp).format("dddd, MMMM D, YYYY h:mm A")
-)
+const formattedTime = computed(() => dayjs(props.frame.type).format("dddd, MMMM D, YYYY h:mm A"))
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 package gg.kuken.feature.instance
 
 import gg.kuken.KukenConfig
+import gg.kuken.core.ResourceId
 import gg.kuken.core.docker.DockerNetworkService
 import gg.kuken.feature.account.IdentityGeneratorService
 import gg.kuken.feature.blueprint.BlueprintProcessor
@@ -31,22 +32,28 @@ import gg.kuken.feature.instance.model.InstanceRuntimeMount
 import gg.kuken.feature.instance.model.InstanceRuntimeNetwork
 import gg.kuken.feature.instance.model.InstanceRuntimeSingleNetwork
 import gg.kuken.feature.instance.model.InstanceStatus
+import gg.kuken.feature.instance.util.FramePersistentIdGenerator
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import kotlinx.serialization.InternalSerializationApi
 import me.devnatan.dockerkt.DockerClient
 import me.devnatan.dockerkt.models.PortBinding
 import me.devnatan.dockerkt.models.container.hostConfig
 import me.devnatan.dockerkt.models.exec.ExecStartOptions
 import me.devnatan.dockerkt.models.exec.ExecStartResult
+import me.devnatan.dockerkt.models.image.ImagePull
 import me.devnatan.dockerkt.models.portBindings
 import me.devnatan.dockerkt.resource.container.ContainerNotFoundException
 import me.devnatan.dockerkt.resource.container.create
@@ -66,7 +73,6 @@ import kotlin.uuid.Uuid
 import kotlin.uuid.toKotlinUuid
 
 private const val LOCAL_RESOURCES_DIR = ".kuken/resources"
-private const val DEFAULT_DOCKER_CONTAINER_WORKING_DIR = "/home/container"
 private const val DEFAULT_DOCKER_INSTALL_WORKING_DIR = "/mnt/server"
 private const val DOCKER_INSTALL_IMAGE = "alpine:latest"
 private const val DOCKER_INSTALL_CONTAINER_FORMAT = "kk-installer-%s"
@@ -81,6 +87,7 @@ class DockerInstanceService(
     private val dockerNetworkService: DockerNetworkService,
     private val blueprintSpecProvider: BlueprintSpecProvider,
     private val blueprintProcessor: BlueprintProcessor,
+    private val activityLogStore: ActivityLogStore,
 ) : InstanceService,
     CoroutineScope by CoroutineScope(Default + CoroutineName("DockerInstanceService")) {
     companion object {
@@ -321,25 +328,49 @@ class DockerInstanceService(
             }
 
             is GenerateRuntimeResult.MissingDockerImage -> {
-                launch {
-                    pullDockerImage(image).collect { pullStatus ->
-                        logger.debug(
-                            "Updating instance {} with new status due to Docker image pull: {}",
-                            instanceId,
-                            pullStatus.label,
-                        )
-                        instanceRepository.update(instanceId) {
-                            this.status = pullStatus.label
+                pullDockerImage(image).collect { (code, pullStatus) ->
+                    val instanceStatus: InstanceStatus =
+                        when (code) {
+                            -1 -> InstanceStatus.ImageNotFound
+                            0 -> InstanceStatus.ImagePullNeeded
+                            1 -> InstanceStatus.ImagePullFailed
+                            2 -> InstanceStatus.ImagePullCompleted
+                            3 -> InstanceStatus.ImagePullInProgress
+                            else -> error("Unknown image pull status code: $code")
                         }
 
-                        if (pullStatus == InstanceStatus.ImagePullCompleted) {
-                            tryGenerateRuntime(instanceId, image, generatedName, options, onInstall)
-                        }
+                    logger.debug(
+                        "Updating instance {} with new status due to Docker image pull: {}",
+                        instanceId,
+                        instanceStatus.label,
+                    )
+
+                    if (pullStatus != null) {
+                        activityLogStore.append(
+                            ResourceId(instanceId),
+                            LogEntry.Activity(
+                                ts = System.currentTimeMillis(),
+                                activity = ActivityType.UPDATE,
+                                step = "image-pull",
+                                progress = pullStatus.progressDetail?.current ?: 0,
+                                msg = pullStatus.statusText,
+                                seqId = -1,
+                                persistentId = FramePersistentIdGenerator.generate(System.currentTimeMillis(), pullStatus.statusText),
+                            ),
+                        )
+                    }
+
+                    instanceRepository.update(instanceId) {
+                        this.status = instanceStatus.label
+                    }
+
+                    if (instanceStatus == InstanceStatus.ImagePullCompleted) {
+                        tryGenerateRuntime(instanceId, image, generatedName, options, onInstall)
                     }
                 }
             }
 
-            else -> {
+            is GenerateRuntimeResult.NetworkConnectFailed, is GenerateRuntimeResult.RuntimeCreationFailed -> {
                 logger.error("Unexpected instance {} runtime generation result: {}", instanceId, result)
             }
         }
@@ -451,20 +482,26 @@ class DockerInstanceService(
         ) : GenerateRuntimeResult()
     }
 
-    private fun pullDockerImage(image: String): Flow<InstanceStatus> =
+    private fun pullDockerImage(image: String): Flow<Pair<Int, ImagePull?>> =
         flow {
             dockerClient.images
                 .pull(image)
                 .onStart {
                     logger.debug("Pulling image $image")
-                    emit(InstanceStatus.ImagePullInProgress)
+                    emit(0 to null)
                 }.catch { exception ->
                     logger.error("Failed to pull image: {}", image, exception)
-                    emit(InstanceStatus.ImagePullFailed)
+                    if (exception is ImageNotFoundException) {
+                        emit(-1 to null)
+                        currentCoroutineContext().cancel()
+                    } else {
+                        emit(1 to null)
+                    }
                 }.onCompletion {
-                    emit(InstanceStatus.ImagePullCompleted)
+                    emit(2 to null)
                     logger.debug("Image {} pull completed.", image)
-                }.collect { pull ->
+                }.flowOn(Dispatchers.IO)
+                .collect { pull ->
                     logger.debug(
                         "{} {}: {}/{} ({})",
                         pull.statusText,
@@ -473,6 +510,7 @@ class DockerInstanceService(
                         pull.progressDetail?.total ?: "???",
                         pull.id,
                     )
+                    emit(3 to pull)
                 }
         }
 

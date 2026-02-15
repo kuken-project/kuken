@@ -1,32 +1,29 @@
 package gg.kuken.feature.instance.websocket
 
-import gg.kuken.feature.instance.model.ConsoleLogFrame
+import gg.kuken.feature.instance.LogEntry
 import io.ktor.util.AttributeKey
 import kotlinx.atomicfu.atomic
-import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentLinkedDeque
+import kotlin.uuid.Uuid
 
 private const val DEFAULT_MAX_BUFFER_SIZE = 50_000
 internal val InstanceLogsConsoleSessionAttributeKey =
     AttributeKey<InstanceLogsConsoleSession>("instance-console-session")
 
 class InstanceLogsConsoleSession(
-    val instanceId: String,
+    val instanceId: Uuid,
     val maxBufferSize: Int = DEFAULT_MAX_BUFFER_SIZE,
 ) {
-    companion object {
-        val log = LoggerFactory.getLogger(InstanceLogsConsoleSession::class.java)
-    }
-
     private val seqCounter = atomic(0L)
-    private val frameBuffer = ConcurrentLinkedDeque<ConsoleLogFrame>()
+    private val frameBuffer = ConcurrentLinkedDeque<LogEntry>()
 
-    val currentSeq: Long get() = seqCounter.value
-    val bufferSize: Int get() = frameBuffer.size
-
-    fun addLog(frame: ConsoleLogFrame): ConsoleLogFrame {
+    fun addLog(frame: LogEntry): LogEntry {
         val seqId = seqCounter.incrementAndGet()
-        val frame = frame.copy(seqId = seqId)
+        val frame =
+            when (frame) {
+                is LogEntry.Activity -> frame.copy(seqId = seqId)
+                is LogEntry.Console -> frame.copy(seqId = seqId)
+            }
 
         frameBuffer.addLast(frame)
 
@@ -40,7 +37,7 @@ class InstanceLogsConsoleSession(
     fun getFramesBefore(
         beforeSeqId: Long,
         limit: Int,
-    ): Pair<List<ConsoleLogFrame>, Boolean> {
+    ): Pair<List<LogEntry>, Boolean> {
         val frames =
             frameBuffer
                 .filter { frame -> frame.seqId < beforeSeqId }
@@ -57,7 +54,7 @@ class InstanceLogsConsoleSession(
     fun getFramesAfter(
         afterSeqId: Long,
         limit: Int,
-    ): Pair<List<ConsoleLogFrame>, Boolean> {
+    ): Pair<List<LogEntry>, Boolean> {
         val frames =
             frameBuffer
                 .filter { frame -> frame.seqId > afterSeqId }
@@ -73,12 +70,12 @@ class InstanceLogsConsoleSession(
     fun getFramesAround(
         timestamp: Long,
         limit: Int,
-    ): List<ConsoleLogFrame> {
+    ): List<LogEntry> {
         val halfLimit = limit / 2
         val allFrames = frameBuffer.toList()
         val pivot =
             allFrames
-                .indexOfFirst { frame -> frame.timestamp >= timestamp }
+                .indexOfFirst { frame -> frame.ts >= timestamp }
                 .takeIf { idx -> idx >= 0 } ?: allFrames.lastIndex
 
         val startIdx = (pivot - halfLimit).coerceAtLeast(0)
@@ -87,7 +84,5 @@ class InstanceLogsConsoleSession(
         return allFrames.subList(startIdx, endIdx + 1).toList()
     }
 
-    fun getRecentFrames(limit: Int): List<ConsoleLogFrame> = frameBuffer.toList().takeLast(limit)
-
-    fun findByPersistentId(persistentId: String): ConsoleLogFrame? = frameBuffer.find { frame -> frame.persistentId == persistentId }
+    fun getRecentFrames(limit: Int): List<LogEntry> = frameBuffer.toList().takeLast(limit)
 }

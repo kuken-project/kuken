@@ -1,8 +1,10 @@
 package gg.kuken.feature.instance.websocket.handlers
 
+import gg.kuken.core.ResourceId
+import gg.kuken.feature.instance.ActivityLogStore
+import gg.kuken.feature.instance.InstanceNotFoundException
 import gg.kuken.feature.instance.InstanceService
-import gg.kuken.feature.instance.http.getInstance
-import gg.kuken.feature.instance.model.ConsoleLogFrame
+import gg.kuken.feature.instance.LogEntry
 import gg.kuken.feature.instance.websocket.InstanceLogsConsoleSession
 import gg.kuken.feature.instance.websocket.InstanceLogsConsoleSessionAttributeKey
 import gg.kuken.websocket.WebSocketClientMessageContext
@@ -11,35 +13,42 @@ import gg.kuken.websocket.WebSocketOpCodes
 import gg.kuken.websocket.long
 import gg.kuken.websocket.respond
 import gg.kuken.websocket.respondAsync
+import gg.kuken.websocket.uuid
 import io.ktor.utils.io.CancellationException
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import me.devnatan.dockerkt.DockerClient
+import me.devnatan.dockerkt.models.Stream
 import me.devnatan.dockerkt.models.container.ContainerLogsOptions
 import me.devnatan.dockerkt.models.container.ContainerLogsResult
 import me.devnatan.dockerkt.resource.container.ContainerNotFoundException
+import kotlin.uuid.Uuid
 
 class InstanceLogsRequestWSHandler(
     val instanceService: InstanceService,
     val dockerClient: DockerClient,
+    val activityLogStore: ActivityLogStore,
 ) : WebSocketClientMessageHandler() {
     override suspend fun WebSocketClientMessageContext.handle() {
-        val instance = with(instanceService) { packet.getInstance() }
+        val instanceId = packet.uuid("iid")
         val since = packet.long("since")
 
-        val containerId = instance.containerId
-        if (containerId == null) {
-            respond(WebSocketOpCodes.InstanceUnavailable)
-            return
-        }
+        val containerId =
+            try {
+                instanceService.getInstanceContainerId(instanceId)
+            } catch (_: InstanceNotFoundException) {
+                return respond(WebSocketOpCodes.InstanceUnavailable)
+            }
 
         val consoleSession =
             session.connection.call.attributes.computeIfAbsent(InstanceLogsConsoleSessionAttributeKey) {
-                InstanceLogsConsoleSession(instance.id.toString())
+                InstanceLogsConsoleSession(instanceId)
             }
 
         try {
-            captureLogs(containerId, since) { frame ->
+            captureLogs(instanceId, containerId, since) { frame ->
                 val frame = consoleSession.addLog(frame)
                 respondAsync(
                     op = WebSocketOpCodes.InstanceLogsRequestFrame,
@@ -55,9 +64,29 @@ class InstanceLogsRequestWSHandler(
     }
 
     private suspend fun captureLogs(
+        instanceId: Uuid,
         containerId: String,
         since: Long,
-        onFrame: (ConsoleLogFrame) -> Unit,
+        onFrame: (LogEntry) -> Unit,
+    ) {
+        coroutineScope {
+            launch {
+                fetchRuntimeLogs(containerId, since, onFrame)
+            }
+
+            launch {
+                activityLogStore
+                    .query(
+                        resource = ResourceId(instanceId),
+                    ).forEach(onFrame)
+            }
+        }
+    }
+
+    private suspend fun fetchRuntimeLogs(
+        containerId: String,
+        since: Long,
+        onFrame: (LogEntry) -> Unit,
     ) {
         val options =
             ContainerLogsOptions(
@@ -75,10 +104,10 @@ class InstanceLogsRequestWSHandler(
 
         try {
             logs.output
-                .map { frame -> ConsoleLogFrame.fromText(frame.value.removeSuffix("\n"), frame.stream) }
+                .map { frame -> LogEntry.Console.fromText(frame.value.removeSuffix("\n"), frame.stream) }
                 .let { flow ->
                     if (since > 0) {
-                        flow.filter { frame -> frame.timestamp >= since }
+                        flow.filter { frame -> frame.ts >= since }
                     } else {
                         flow
                     }

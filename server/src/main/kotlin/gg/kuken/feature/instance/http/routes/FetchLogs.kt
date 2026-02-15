@@ -1,9 +1,9 @@
 package gg.kuken.feature.instance.http.routes
 
 import gg.kuken.feature.instance.InstanceService
+import gg.kuken.feature.instance.LogEntry
 import gg.kuken.feature.instance.http.InstanceRoutes
 import gg.kuken.feature.instance.http.dto.FetchLogsResponse
-import gg.kuken.feature.instance.model.ConsoleLogFrame
 import io.ktor.server.resources.get
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -40,7 +40,7 @@ fun Route.fetchLogs() {
             splitted.mapNotNull { content ->
                 if (content.isEmpty()) return@mapNotNull null
 
-                ConsoleLogFrame
+                LogEntry.Console
                     .fromText(content, Stream.StdOut)
                     .copy(seqId = seqCounter.incrementAndGet())
             }

@@ -13,7 +13,7 @@ val RBACDI =
         }
 
         single<PermissionRepository>(createdAtStart = true) {
-            PermissionRepository(database = get())
+            PermissionRepository(database = get(), resourceIdFactory = get())
         }
 
         single<RoleRepository>(createdAtStart = true) {

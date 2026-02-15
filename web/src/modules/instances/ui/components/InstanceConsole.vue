@@ -5,7 +5,8 @@ import { useAnsiText } from "@/modules/instances/composables/useAnsiText.ts"
 import { useConsoleFrames } from "@/modules/instances/composables/useConsoleFrames.ts"
 import { useConsoleLoader } from "@/modules/instances/composables/useConsoleLoader.ts"
 import { useConsoleWebSocket } from "@/modules/instances/composables/useConsoleWebSocket.ts"
-import ConsoleLine from "@/modules/instances/ui/components/console/ConsoleLine.vue"
+import ConsoleActivityLine from "@/modules/instances/ui/components/console/ConsoleActivityLine.vue"
+import ConsoleTextLine from "@/modules/instances/ui/components/console/ConsoleTextLine.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import VForm from "@/modules/platform/ui/components/form/VForm.vue"
 import VInput from "@/modules/platform/ui/components/form/VInput.vue"
@@ -223,11 +224,11 @@ const searchResults = computed(() => {
   if (!searchQuery.value.trim()) result = frames.value
   else {
     const query = searchQuery.value.toLowerCase()
-    result = frames.value.filter((f) => f.value.toLowerCase().includes(query))
+    result = frames.value.filter((f) => f.msg.toLowerCase().includes(query))
   }
 
   return result.map((f) => {
-    return { ...f, value: highlightSearch(useAnsiText(f.value)) }
+    return { ...f, value: highlightSearch(useAnsiText(f.msg)) }
   })
 })
 
@@ -277,11 +278,18 @@ const highlightSearch = (text: string) => {
       >
         <template #default="{ item, index, active }">
           <DynamicScrollerItem :active="active" :data-index="index" :item="item">
-            <ConsoleLine
+            <ConsoleTextLine
+              v-if="item.type === 'console'"
               :key="item.seqId"
               :frame="item"
               :text="item.value"
               @copy-link="copyAnchorLink"
+            />
+            <ConsoleActivityLine
+              v-if="item.type === 'activity'"
+              :key="item.seqId"
+              :frame="item"
+              :text="item.msg"
             />
           </DynamicScrollerItem>
         </template>

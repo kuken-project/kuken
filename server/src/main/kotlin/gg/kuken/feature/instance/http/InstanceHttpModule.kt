@@ -50,6 +50,7 @@ internal object InstanceHttpModule : HttpModule() {
                 InstanceLogsRequestWSHandler(
                     instanceService = get(),
                     dockerClient = get(),
+                    activityLogStore = get(),
                 ),
             WebSocketOpCodes.InstanceLogsPacket to
                 InstanceLogsPacketWSHandler(

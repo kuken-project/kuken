@@ -10,6 +10,7 @@ enum class InstanceStatus(
     NetworkAssignmentFailed(label = "network-assignment-failed"),
     Unavailable(label = "unavailable"),
     Unknown(label = "unknown"),
+    ImageNotFound(label = "image-not-found"),
     ImagePullInProgress(label = "image-pull"),
     ImagePullNeeded(label = "image-pull-needed"),
     ImagePullFailed(label = "image-pull-failed"),

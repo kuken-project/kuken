@@ -1,5 +1,6 @@
 package gg.kuken.feature.rbac.repository
 
+import gg.kuken.core.ResourceIdFactory
 import gg.kuken.feature.rbac.entity.PermissionResourceRulesTable
 import gg.kuken.feature.rbac.entity.PermissionsTable
 import gg.kuken.feature.rbac.model.Permission
@@ -13,14 +14,13 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import java.util.UUID
 import kotlin.time.Clock
-import kotlin.uuid.Uuid
 import kotlin.uuid.toJavaUuid
 import kotlin.uuid.toKotlinUuid
 
 class PermissionRepository(
     database: Database,
+    private val resourceIdFactory: ResourceIdFactory,
 ) {
     init {
         transaction(db = database) {
@@ -36,11 +36,11 @@ class PermissionRepository(
         description: String,
     ): Permission =
         suspendTransaction {
-            val id = UUID.randomUUID()
+            val id = resourceIdFactory.generate()
             val now = Clock.System.now()
 
             PermissionsTable.insert {
-                it[PermissionsTable.id] = id
+                it[PermissionsTable.id] = id.value.toJavaUuid()
                 it[PermissionsTable.name] = name
                 it[PermissionsTable.resource] = resource
                 it[PermissionsTable.action] = action
@@ -49,7 +49,7 @@ class PermissionRepository(
             }
 
             Permission(
-                id = id.toKotlinUuid(),
+                id = id.value,
                 name = name,
                 resource = resource,
                 action = action,
@@ -63,15 +63,6 @@ class PermissionRepository(
             PermissionsTable
                 .selectAll()
                 .where { PermissionsTable.name eq name }
-                .map { it.toPermission() }
-                .singleOrNull()
-        }
-
-    suspend fun getPermissionById(id: Uuid): Permission? =
-        suspendTransaction {
-            PermissionsTable
-                .selectAll()
-                .where { PermissionsTable.id eq id.toJavaUuid() }
                 .map { it.toPermission() }
                 .singleOrNull()
         }

@@ -21,6 +21,7 @@ val InstancesDI =
                 dockerNetworkService = DockerNetworkService(dockerClient = get()),
                 blueprintSpecProvider = get(),
                 blueprintProcessor = get(),
+                activityLogStore = get(),
             )
         }
 
