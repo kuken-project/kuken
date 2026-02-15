@@ -1,9 +1,9 @@
 package gg.kuken.feature.blueprint.http.routes
 
 import gg.kuken.feature.blueprint.BlueprintNotFoundException
-import gg.kuken.feature.blueprint.BlueprintService
 import gg.kuken.feature.blueprint.http.BlueprintRoutes
 import gg.kuken.feature.blueprint.http.dto.BlueprintResponse
+import gg.kuken.feature.blueprint.service.BlueprintService
 import gg.kuken.http.HttpError
 import gg.kuken.http.util.respondError
 import gg.kuken.http.util.validateOrThrow

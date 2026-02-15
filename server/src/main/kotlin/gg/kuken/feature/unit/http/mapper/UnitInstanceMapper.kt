@@ -1,7 +1,7 @@
 package gg.kuken.feature.unit.http.mapper
 
-import gg.kuken.feature.blueprint.BlueprintService
 import gg.kuken.feature.blueprint.http.dto.BlueprintResponse
+import gg.kuken.feature.blueprint.service.BlueprintService
 import gg.kuken.feature.instance.model.Instance
 import gg.kuken.feature.unit.http.dto.UnitResponse
 

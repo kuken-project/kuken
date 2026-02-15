@@ -1,8 +1,5 @@
-package gg.kuken.feature.blueprint
+package gg.kuken.feature.blueprint.processor
 
-import gg.kuken.feature.blueprint.processor.BlueprintConverter
-import gg.kuken.feature.blueprint.processor.ResolveBlueprintInputDefinitions
-import gg.kuken.feature.blueprint.processor.ResolvedBlueprint
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.pkl.core.ModuleSource
 import org.pkl.core.resource.ResourceReader

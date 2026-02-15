@@ -1,9 +1,9 @@
 package gg.kuken.feature.blueprint.http.routes
 
-import gg.kuken.feature.blueprint.BlueprintService
 import gg.kuken.feature.blueprint.http.BlueprintRoutes
 import gg.kuken.feature.blueprint.http.dto.BlueprintResponse
 import gg.kuken.feature.blueprint.http.dto.ListBlueprintsResponse
+import gg.kuken.feature.blueprint.service.BlueprintService
 import io.ktor.server.resources.get
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route

@@ -1,8 +1,8 @@
 package gg.kuken.feature.setup
 
 import gg.kuken.feature.account.AccountService
-import gg.kuken.feature.blueprint.BlueprintService
 import gg.kuken.feature.blueprint.BlueprintSpecSource
+import gg.kuken.feature.blueprint.service.BlueprintService
 import gg.kuken.feature.rbac.Permissions.ManageAccounts
 import gg.kuken.feature.rbac.Permissions.ManageBlueprints
 import gg.kuken.feature.rbac.Permissions.ManageInstances

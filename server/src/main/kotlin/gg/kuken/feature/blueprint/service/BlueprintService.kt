@@ -1,12 +1,16 @@
-package gg.kuken.feature.blueprint
+package gg.kuken.feature.blueprint.service
 
 import gg.kuken.KukenConfig
 import gg.kuken.feature.account.IdentityGeneratorService
+import gg.kuken.feature.blueprint.BlueprintNotFoundException
+import gg.kuken.feature.blueprint.BlueprintSpecProvider
+import gg.kuken.feature.blueprint.BlueprintSpecSource
 import gg.kuken.feature.blueprint.entity.BlueprintEntity
 import gg.kuken.feature.blueprint.model.Blueprint
 import gg.kuken.feature.blueprint.model.BlueprintHeader
 import gg.kuken.feature.blueprint.model.BlueprintStatus
 import gg.kuken.feature.blueprint.processor.BlueprintConverter
+import gg.kuken.feature.blueprint.processor.BlueprintProcessor
 import gg.kuken.feature.blueprint.processor.NoopBlueprintResourceReader
 import gg.kuken.feature.blueprint.processor.ResolveBlueprintInputDefinitions
 import gg.kuken.feature.blueprint.processor.ResolvedBlueprint
@@ -119,7 +123,7 @@ class BlueprintService(
                     logger.debug("Downloading {}", resourceUrl)
 
                     val client = HttpClient(CIO)
-                    val outputFile = KukenConfig.tempDir(Paths.get("resources", resource.name)).toFile()
+                    val outputFile = KukenConfig.Companion.tempDir(Paths.get("resources", resource.name)).toFile()
                     outputFile.parentFile.mkdirs()
                     outputFile.createNewFile()
 

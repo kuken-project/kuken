@@ -2,7 +2,9 @@ package gg.kuken.feature.blueprint
 
 import gg.kuken.feature.blueprint.entity.BlueprintRepositoryImpl
 import gg.kuken.feature.blueprint.processor.BlueprintConverter
+import gg.kuken.feature.blueprint.processor.BlueprintProcessor
 import gg.kuken.feature.blueprint.repository.BlueprintRepository
+import gg.kuken.feature.blueprint.service.BlueprintService
 import org.koin.dsl.module
 
 val BlueprintDI =
