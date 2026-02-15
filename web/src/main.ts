@@ -1,5 +1,6 @@
 import App from "@/App.vue"
 import "@/assets/styles/main.scss"
+import { setupI18n } from "@/i18n.ts"
 import configService from "@/modules/platform/api/services/config.service"
 import logService from "@/modules/platform/api/services/log.service"
 import router from "@/router"
@@ -24,6 +25,7 @@ dayjs.extend(localizedFormat)
 hljs.registerLanguage("json", json)
 
 createApp(App)
+  .use(setupI18n())
   .use(createVfm())
   .use(createPinia())
   .use(VueProgressiveImage)

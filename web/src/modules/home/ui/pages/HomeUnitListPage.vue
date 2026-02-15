@@ -1,7 +1,7 @@
 <template>
   <PageWrapper>
     <VContainer>
-      <VTitle>Welcome</VTitle>
+      <VTitle>{{ t("home.welcome.pageTitle") }}</VTitle>
       <VCol :size="4">
         <div class="header">
           <h4>Your Server List</h4>
@@ -56,10 +56,12 @@ import Resource from "@/modules/platform/ui/components/Resource.vue"
 import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
 import type { Unit } from "@/modules/units/api/models/unit.model.ts"
 import unitsService from "@/modules/units/api/services/units.service.ts"
+import { useI18n } from "petite-vue-i18n"
 import { reactive } from "vue"
 import { ProgressiveImage } from "vue-progressive-image"
 
 let state = reactive({ units: [] as Unit[] })
+const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>
