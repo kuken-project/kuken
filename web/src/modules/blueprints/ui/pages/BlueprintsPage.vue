@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { useHead } from "@unhead/vue"
+import { useI18n } from "petite-vue-i18n"
 
+const { t } = useI18n()
 useHead({
-  title: "Game Directory"
+  title: t("blueprints.home.docTitle")
 })
 </script>
 

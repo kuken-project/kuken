@@ -1,4 +1,8 @@
 {
   "home.welcome.docTitle": "Welcome to {organizationName}",
-  "home.welcome.pageTitle": "Welcome"
+  "home.welcome.pageTitle": "Welcome",
+  "blueprints.home.docTitle": "Game Directory",
+  "blueprints.home.pageTitle": "Game Directory",
+  "blueprints.home.library.title": "Your Library",
+  "blueprints.home.library.subtitle": "Games that are available to create new servers immediately."
 }
