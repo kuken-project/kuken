@@ -7,4 +7,6 @@ object Permissions {
     const val ManageInstances = "instance.manage"
     const val ManageBlueprints = "blueprint.manage"
     const val ManageUnits = "unit.manage"
+
+    const val ListUnits = "unit.list"
 }

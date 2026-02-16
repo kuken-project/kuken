@@ -2,6 +2,7 @@ package gg.kuken.feature.rbac.service
 
 import gg.kuken.feature.rbac.model.Permission
 import gg.kuken.feature.rbac.model.PermissionCheckResult
+import gg.kuken.feature.rbac.model.PermissionName
 import gg.kuken.feature.rbac.model.PermissionPolicy
 import gg.kuken.feature.rbac.model.PermissionSource
 import gg.kuken.feature.rbac.repository.AccountPermissionRepository
@@ -14,24 +15,24 @@ class PermissionService(
     private val roleRepository: RoleRepository,
     private val accountPermissionRepository: AccountPermissionRepository,
 ) {
+    val emptyPermissionCheckResult =
+        PermissionCheckResult(
+            hasPermission = false,
+            source = null,
+            sourceId = null,
+            sourceName = null,
+            policy = null,
+            appliedRule = null,
+        )
+
     suspend fun checkPermission(
         accountId: Uuid,
         permissionName: String,
         resourceId: Uuid? = null,
     ): PermissionCheckResult {
-        val emptyPermissionCheckResult =
-            PermissionCheckResult(
-                hasPermission = false,
-                source = null,
-                sourceId = null,
-                sourceName = null,
-                policy = null,
-                appliedRule = null,
-            )
-
         val permission =
             permissionRepository.getPermissionByName(permissionName)
-                ?: return emptyPermissionCheckResult
+                ?: return checkWildcardPermission(accountId, permissionName, resourceId)
 
         val directCheck = checkDirectPermissions(accountId, permission, resourceId)
         if (directCheck.hasPermission) {
@@ -43,8 +44,22 @@ class PermissionService(
             return roleCheck
         }
 
+        if (!permissionName.endsWith("manage")) {
+            return checkWildcardPermission(accountId, permissionName, resourceId)
+        }
+
         return emptyPermissionCheckResult
     }
+
+    private suspend fun checkWildcardPermission(
+        accountId: Uuid,
+        permissionName: String,
+        resourceId: Uuid? = null,
+    ) = checkPermission(
+        accountId = accountId,
+        permissionName = permissionName.substringBefore(".") + ".manage",
+        resourceId = resourceId,
+    )
 
     suspend fun hasPermission(
         accountId: Uuid,
@@ -169,6 +184,20 @@ class PermissionService(
             policy = null,
             appliedRule = null,
         )
+    }
+
+    suspend fun getEffectivePermissions(accountId: Uuid): List<PermissionName> {
+        val effectivePermissions = mutableListOf<PermissionName>()
+        val allPermissions = permissionRepository.getAllPermissions()
+
+        for (permission in allPermissions) {
+            val check = checkPermission(accountId, permission.name, null)
+            if (check.hasPermission) {
+                effectivePermissions.add(permission.name)
+            }
+        }
+
+        return effectivePermissions
     }
 
     suspend fun getEffectivePermissionsWithSource(accountId: Uuid): List<Pair<Permission, PermissionCheckResult>> {
