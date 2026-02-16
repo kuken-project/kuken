@@ -2,7 +2,7 @@
 
 package gg.kuken.feature.auth.http.dto
 
-import gg.kuken.feature.account.model.Account
+import gg.kuken.feature.rbac.model.PermissionName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Instant
@@ -14,12 +14,5 @@ data class VerifyResponse(
     @SerialName("createdAt") val createdAt: Instant,
     @SerialName("updatedAt") val updatedAt: Instant,
     @SerialName("lastLoggedInAt") val lastLoggedInAt: Instant?,
-) {
-    constructor(account: Account) : this(
-        id = account.id.toString(),
-        email = account.email,
-        createdAt = account.createdAt,
-        updatedAt = account.createdAt,
-        lastLoggedInAt = account.lastLoggedInAt,
-    )
-}
+    @SerialName("permissions") val permissions: List<PermissionName>,
+)
