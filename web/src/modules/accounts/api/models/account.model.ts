@@ -6,4 +6,5 @@ export type Account = {
   updatedAt: string
   lastLoggedInAt: string
   avatar: string
+  permissions: string[]
 }

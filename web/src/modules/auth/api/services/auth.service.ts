@@ -54,7 +54,8 @@ class AuthService {
       email: entity.email,
       createdAt: entity["created-at"],
       updatedAt: entity["updated-at"],
-      lastLoggedInAt: entity["last-logged-in-at"]
+      lastLoggedInAt: entity["last-logged-in-at"],
+      permissions: entity["permissions"]
     } as Account
   }
 }
