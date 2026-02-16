@@ -26,8 +26,8 @@ if (isLoggedIn) {
       </div>
     </div>
     <div class="create-button">
-      <VButton variant="primary">Create new server</VButton>
-      <VButton variant="primary" v-if="isAdmin" :to="{ name: 'organization' }">Org</VButton>
+      <VButton variant="primary" :to="{ name: 'units.create' }">Create new server</VButton>
+      <VButton v-if="isAdmin" variant="primary" :to="{ name: 'organization' }">Org</VButton>
     </div>
   </header>
 </template>

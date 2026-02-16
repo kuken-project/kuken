@@ -7,6 +7,9 @@
   <template v-else-if="error && error.code === 2002">
     <!-- Do nothing -->
   </template>
+  <slot v-else-if="state.prohibited" key="prohibited" name="prohibited">
+    <div class="prohibited">{{ t("resource.nopermission") }}</div>
+  </slot>
   <slot v-else key="content" :refresh="load" />
 </template>
 
@@ -15,18 +18,21 @@ import logService from "@/modules/platform/api/services/log.service"
 import EmptyState from "@/modules/platform/ui/components/EmptyState.vue"
 import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
+import { useI18n } from "petite-vue-i18n"
 import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 
+const { t } = useI18n()
 const emits = defineEmits(["loaded", "error"])
 const props = defineProps({
   resource: { required: true, type: Function<Promise<unknown>> },
   includeRefreshButton: { required: false, default: true },
-  redirectNotAllowed: { required: false, default: true }
+  redirectNotAllowed: { required: false, default: false }
 })
 const state = reactive({
   isLoading: true,
-  isEmpty: false
+  isEmpty: false,
+  prohibited: false
 })
 const error = ref<Error | null>(null)
 
@@ -49,12 +55,10 @@ function onDataLoaded(value: unknown) {
 
 const router = useRouter()
 function onError(errorArg: Error) {
-  if (
-    errorArg.code &&
-    errorArg.code === 2002 /* Insufficient permissions */ &&
-    props.redirectNotAllowed
-  ) {
-    router.replace({ name: "access-denied" })
+  if (errorArg.code && errorArg.code === 2002 /* Insufficient permissions */) {
+    if (props.redirectNotAllowed) router.replace({ name: "not-allowed" })
+    else state.prohibited = true
+
     return
   }
 
@@ -72,5 +76,8 @@ load()
 
 .button:not(:last-child) {
   margin-right: 0.8rem;
+}
+
+.prohibited {
 }
 </style>
