@@ -5,7 +5,6 @@ import gg.kuken.core.security.Hash
 import gg.kuken.feature.account.entity.toDomain
 import gg.kuken.feature.account.model.Account
 import gg.kuken.feature.account.repository.AccountRepository
-import gg.kuken.feature.rbac.service.PermissionService
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
@@ -33,7 +32,6 @@ class AccountServiceImpl(
     private val accountsRepository: AccountRepository,
     private val hashAlgorithm: Hash,
     private val eventDispatcher: EventDispatcher,
-    private val permissionService: PermissionService,
 ) : AccountService {
     override suspend fun listAccounts(): List<Account> = accountsRepository.findAll().map { entity -> entity.toDomain() }
 

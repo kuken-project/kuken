@@ -15,7 +15,6 @@ val AccountDI =
                 accountsRepository = get(),
                 hashAlgorithm = get(),
                 eventDispatcher = get(),
-                permissionService = get(),
             )
         }
     }
