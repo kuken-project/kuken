@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.tika)
     testImplementation(libs.ktx.coroutines.test)
     testImplementation(kotlin("test"))
+    testImplementation(libs.ktor.client.mock)
 }
 
 tasks {
