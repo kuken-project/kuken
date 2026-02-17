@@ -29,6 +29,8 @@ class BlueprintConverter : AutoCloseable {
                 .addResourceReaders(readers)
                 .build()
 
+        val schema = evaluator.evaluateSchema(source)
+
         return evaluator.evaluate(source)
     }
 

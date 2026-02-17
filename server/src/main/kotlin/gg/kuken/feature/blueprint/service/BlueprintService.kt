@@ -26,7 +26,6 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
 import org.apache.logging.log4j.LogManager
 import org.pkl.core.ModuleSource
-import org.pkl.core.PObject
 import java.nio.file.Paths
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
@@ -85,13 +84,6 @@ class BlueprintService(
                 name = converted.getProperty("name") as String,
                 version = converted.getProperty("version") as String,
                 url = converted.getProperty("url") as String,
-                author = converted.getProperty("author") as String,
-                assets =
-                    converted.getProperty("assets").let { it as PObject }.let { assets ->
-                        BlueprintHeader.Assets(
-                            icon = json.decodeFromJsonElement(JsonPrimitive(assets.getProperty("icon") as String)),
-                        )
-                    },
             )
 
         return saveBlueprint(source, header)
@@ -123,7 +115,7 @@ class BlueprintService(
                     logger.debug("Downloading {}", resourceUrl)
 
                     val client = HttpClient(CIO)
-                    val outputFile = KukenConfig.Companion.tempDir(Paths.get("resources", resource.name)).toFile()
+                    val outputFile = KukenConfig.tempDir(Paths.get("resources", resource.name)).toFile()
                     outputFile.parentFile.mkdirs()
                     outputFile.createNewFile()
 
@@ -155,13 +147,8 @@ class BlueprintService(
             header =
                 BlueprintHeader(
                     name = entity.name,
-                    author = entity.author,
                     url = entity.url,
                     version = entity.version,
-                    assets =
-                        BlueprintHeader.Assets(
-                            icon = json.decodeFromJsonElement(JsonPrimitive(entity.assetsIcon)),
-                        ),
                 ),
             createdAt = entity.createdAt,
             status = entity.status,

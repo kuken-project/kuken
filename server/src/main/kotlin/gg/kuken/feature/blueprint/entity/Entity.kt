@@ -20,12 +20,10 @@ import kotlin.uuid.toJavaUuid
 object BlueprintTable : UUIDTable("blueprints") {
     val name = varchar("name", 255)
     val version = varchar("version", 255)
-    val author = varchar("author", 255)
     val url = varchar("url", 255)
     val origin = varchar("origin", 255)
     val createdAt = timestamp("created_at")
     val status = enumeration<BlueprintStatus>("status")
-    val assetsIcon = varchar("a_icon", 255)
 }
 
 class BlueprintEntity(
@@ -35,12 +33,10 @@ class BlueprintEntity(
 
     var name: String by BlueprintTable.name
     var version: String by BlueprintTable.version
-    var author: String by BlueprintTable.author
     var url: String by BlueprintTable.url
     var origin: String by BlueprintTable.origin
     var createdAt: Instant by BlueprintTable.createdAt
     var status: BlueprintStatus by BlueprintTable.status
-    var assetsIcon by BlueprintTable.assetsIcon
 }
 
 class BlueprintRepositoryImpl(
@@ -73,10 +69,8 @@ class BlueprintRepositoryImpl(
         suspendTransaction(db = database) {
             BlueprintEntity.new(id.toJavaUuid()) {
                 this.name = header.name
-                this.author = header.author
                 this.url = header.url
                 this.version = header.version
-                this.assetsIcon = header.assets.icon.uri
                 this.origin = origin
                 this.createdAt = createdAt
                 this.status = status
