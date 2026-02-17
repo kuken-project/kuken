@@ -26,8 +26,8 @@ const { t } = useI18n()
 const emits = defineEmits(["loaded", "error"])
 const props = defineProps({
   resource: { required: true, type: Function<Promise<unknown>> },
-  includeRefreshButton: { required: false, default: true },
-  redirectNotAllowed: { required: false, default: false }
+  includeRefreshButton: { type: Boolean, required: false, default: true },
+  redirectNotAllowed: { type: Boolean, required: false, default: false }
 })
 const state = reactive({
   isLoading: true,
