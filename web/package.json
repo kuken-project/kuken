@@ -32,7 +32,7 @@
     "vue-final-modal": "^4.5.5",
     "vue-loading-overlay": "^6.0.6",
     "vue-progressive-image": "^5.0.6",
-    "vue-router": "4.6.4",
+    "vue-router": "5.0.2",
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "vue3-icon": "^3.0.3",
     "vue3-resize-bounding": "^2.1.2"
