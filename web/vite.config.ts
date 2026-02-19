@@ -1,14 +1,14 @@
 import vue from "@vitejs/plugin-vue"
 import { fileURLToPath, URL } from "node:url"
-import { defineConfig, splitVendorChunkPlugin } from "vite"
+import { defineConfig } from "vite"
 
-// @ts-ignore
+// @ts-expect-error JSON Module import
 import pkg from "./package.json"
 
 process.env.VITE_APP_VERSION = pkg.version
 
 export default defineConfig({
-  plugins: [splitVendorChunkPlugin(), vue()],
+  plugins: [vue()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url))
