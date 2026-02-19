@@ -24,13 +24,18 @@ jobs:
       - name: Checkout Application Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install PNPM
+      - name: Set up PNPM
         uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        uses: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm install --frozen-lockfile && pnpm build
+        run: pnpm build
