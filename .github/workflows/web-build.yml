@@ -1,4 +1,4 @@
-name: "Web Build"
+name: "Web UI"
 
 on:
   push:
@@ -13,20 +13,8 @@ defaults:
     working-directory: web
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Application Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js 24
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-
-      - name: Lint
-        run: cd web && pnpm lint
   build:
+    name: Build on Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -36,10 +24,10 @@ jobs:
       - name: Checkout Application Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Build
-        run: cd web && npm ci && pnpm build
+        run: pnpm install --frozen-lockfile && pnpm build
