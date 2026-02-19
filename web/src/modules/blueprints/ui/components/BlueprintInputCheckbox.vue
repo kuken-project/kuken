@@ -6,7 +6,7 @@ import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 
 const props = defineProps<BlueprintBuildInputCheckbox>()
-const model = defineModel({ type: Boolean, default: props.default ?? false })
+const model = defineModel({ type: Boolean })
 </script>
 
 <template>
