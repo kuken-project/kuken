@@ -90,5 +90,5 @@ kotlin-atomicfu = { id = "org.jetbrains.kotlin.plugin.atomicfu", version.ref = "
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinter = { id = "org.jmailen.kotlinter", version = "5.4.2" }
 ktor = { id = "io.ktor.plugin", version = "3.4.0" }
-graalvm-native = { id = "org.graalvm.buildtools.native", version = "0.11.3" }
+graalvm-native = { id = "org.graalvm.buildtools.native", version = "0.11.4" }
 dokka = { id = "org.jetbrains.dokka", version = "2.1.0" }
