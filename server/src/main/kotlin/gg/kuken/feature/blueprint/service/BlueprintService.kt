@@ -25,6 +25,10 @@ import io.ktor.client.plugins.onDownload
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpHeaders
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -98,7 +102,29 @@ class BlueprintService(
         val header = module.toBlueprintHeader()
         val saved = saveBlueprint(source, header)
 
-        val icon = module.get<PObject?>("assets")?.get<String?>("icon")
+        supervisorScope {
+            val saveIcon = async {
+                val icon = module.get<PObject?>("assets")?.get<String?>("icon")
+                if (icon != null) {
+                    saveResource(
+                        blueprintId = saved.id,
+                        blueprintSource = saved.origin,
+                        resourceOrigin = icon,
+                    )
+                }
+            }
+
+            val saveFile = async {
+                saveResource(
+                    blueprintId = saved.id,
+                    blueprintSource = saved.origin,
+                    resourceOrigin = source.uri,
+                )
+            }
+
+            listOf(saveIcon, saveFile).awaitAll()
+        }
+
         return saved
     }
 
