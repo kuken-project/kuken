@@ -53,6 +53,11 @@ header {
     text-decoration: none;
   }
 
+  .create-button [type="button"] {
+    background-color: var(--kt-content-primary-oncolor-overlay);
+    border-color: var(--kt-content-primary-oncolor-overlay);
+  }
+
   .avatar {
     width: 48px;
     height: 48px;
@@ -65,6 +70,7 @@ header {
       margin: auto;
       font-size: 21px;
       font-weight: bold;
+      color: var(--kt-content-primary-oncolor);
     }
   }
 }
