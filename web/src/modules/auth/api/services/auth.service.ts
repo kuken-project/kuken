@@ -49,12 +49,10 @@ class AuthService {
 
     const entity = res.data
     return {
-      id: entity.id,
-      username: entity.username,
+      id: entity.accountId,
       email: entity.email,
       createdAt: entity["created-at"],
       updatedAt: entity["updated-at"],
-      lastLoggedInAt: entity["last-logged-in-at"],
       permissions: entity["permissions"]
     } as Account
   }
