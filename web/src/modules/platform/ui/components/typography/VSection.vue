@@ -12,5 +12,6 @@ section {
 
 .description {
   color: var(--kt-content-neutral);
+  margin-bottom: 2.4rem;
 }
 </style>
