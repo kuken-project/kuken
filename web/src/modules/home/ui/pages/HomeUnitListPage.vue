@@ -3,10 +3,12 @@
     <VContainer>
       <VTitle>{{ t("home.welcome.pageTitle") }}</VTitle>
       <VCol :size="4">
-        <div class="header">
-          <h4>Your Server List</h4>
-          <span class="count" v-text="state.units.length" />
-        </div>
+        <VSection>
+          <div class="header">
+            <h4>Your Server List</h4>
+            <span class="count" v-text="state.units.length" />
+          </div>
+        </VSection>
         <Resource
           :resource="unitsService.listUnits"
           @loaded="(data: Unit[]) => (state.units = data)"
@@ -53,6 +55,7 @@ import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 import PageWrapper from "@/modules/platform/ui/components/PageWrapper.vue"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
+import VSection from "@/modules/platform/ui/components/typography/VSection.vue"
 import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
 import type { Unit } from "@/modules/units/api/models/unit.model.ts"
 import unitsService from "@/modules/units/api/services/units.service.ts"
