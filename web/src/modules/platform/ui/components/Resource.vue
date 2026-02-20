@@ -77,7 +77,13 @@ load()
 .button:not(:last-child) {
   margin-right: 0.8rem;
 }
-
+</style>
+<style lang="scss" scoped>
 .prohibited {
+  color: var(--kt-content-negative);
+  background-color: var(--kt-content-negative-overlay);
+  text-align: center;
+  border-radius: 12px;
+  padding: 16px;
 }
 </style>
