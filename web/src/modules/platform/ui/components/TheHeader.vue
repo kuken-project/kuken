@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useAccount, useAccountsStore } from "@/modules/accounts/accounts.store.ts"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
+import VLayout from "@/modules/platform/ui/components/grid/VLayout.vue"
 
 const { isLoggedIn } = useAccountsStore()
 let username: string
@@ -20,15 +21,17 @@ if (isLoggedIn) {
     <template v-if="$slots.default">
       <slot />
     </template>
-    <div v-if="isLoggedIn" class="profile">
-      <div class="avatar">
-        {{ username }}
+    <VLayout direction="horizontal" gap="sm" :style="{ alignItems: 'center' }">
+      <div class="create-button">
+        <VButton variant="primary" :to="{ name: 'units.create' }">Create new server</VButton>
+        <VButton v-if="isAdmin" variant="primary" :to="{ name: 'organization' }">Org</VButton>
       </div>
-    </div>
-    <div class="create-button">
-      <VButton variant="primary" :to="{ name: 'units.create' }">Create new server</VButton>
-      <VButton v-if="isAdmin" variant="primary" :to="{ name: 'organization' }">Org</VButton>
-    </div>
+      <router-link :to="{ name: 'profile' }" v-if="isLoggedIn" class="profile">
+        <div class="avatar">
+          <span>{{ username }}</span>
+        </div>
+      </router-link>
+    </VLayout>
   </header>
 </template>
 
@@ -39,16 +42,30 @@ header {
   flex-direction: row;
   align-items: center;
   width: 100%;
+  justify-content: space-between;
 
   .logo img {
     max-width: 72px;
     user-select: none;
   }
 
+  .profile {
+    text-decoration: none;
+  }
+
   .avatar {
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
+    background-color: var(--kt-content-primary-oncolor-overlay);
+    position: relative;
+    display: flex;
+
+    span {
+      margin: auto;
+      font-size: 21px;
+      font-weight: bold;
+    }
   }
 }
 </style>
