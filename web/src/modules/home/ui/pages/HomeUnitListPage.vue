@@ -4,41 +4,43 @@
       <VTitle>{{ t("home.welcome.pageTitle") }}</VTitle>
       <VCol :size="4">
         <VSection>
-          <div class="header">
-            <h4>Your Server List</h4>
-            <span class="count" v-text="state.units.length" />
-          </div>
+          <template #title>
+            <div class="header">
+              <h4>Your Server List</h4>
+              <span class="count" v-text="state.units.length" />
+            </div>
+          </template>
+          <Resource
+            :resource="unitsService.listUnits"
+            @loaded="(data: Unit[]) => (state.units = data)"
+          >
+            <div class="serverList">
+              <router-link
+                v-for="unit in state.units"
+                :key="unit.id"
+                :to="{
+                  name: 'unit',
+                  params: { unitId: unit.id }
+                }"
+                class="serverListItem"
+              >
+                <ProgressiveImage
+                  :src="resolveBlueprintSource(unit.instance.blueprint.header.assets.icon)"
+                  class="image"
+                />
+                <div class="body">
+                  <h5 class="title" v-text="unit.name" />
+                  <p class="description">
+                    {{ unit.instance.blueprint.header.name }}
+                    <span class="icon">
+                      <VIcon name="Verified" />
+                    </span>
+                  </p>
+                </div>
+              </router-link>
+            </div>
+          </Resource>
         </VSection>
-        <Resource
-          :resource="unitsService.listUnits"
-          @loaded="(data: Unit[]) => (state.units = data)"
-        >
-          <div class="serverList">
-            <router-link
-              v-for="unit in state.units"
-              :key="unit.id"
-              :to="{
-                name: 'unit',
-                params: { unitId: unit.id }
-              }"
-              class="serverListItem"
-            >
-              <ProgressiveImage
-                :src="resolveBlueprintSource(unit.instance.blueprint.header.assets.icon)"
-                class="image"
-              />
-              <div class="body">
-                <h5 class="title" v-text="unit.name" />
-                <p class="description">
-                  {{ unit.instance.blueprint.header.name }}
-                  <span class="icon">
-                    <VIcon name="Verified" />
-                  </span>
-                </p>
-              </div>
-            </router-link>
-          </div>
-        </Resource>
       </VCol>
       <VCol :size="4">
         <VButton to="blueprints" variant="primary"> Go to blueprints </VButton>
