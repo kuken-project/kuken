@@ -10,6 +10,7 @@ import gg.kuken.feature.remoteConfig.RemoteConfigService
 import gg.kuken.feature.setup.http.SetupHttpModule
 import gg.kuken.feature.unit.http.UnitHttpModule
 import gg.kuken.websocket.WebSocketManager
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.EmbeddedServer
@@ -18,6 +19,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.plugins.openapi.openAPI
 import io.ktor.server.plugins.swagger.swaggerUI
 import io.ktor.server.response.respond
+import io.ktor.server.routing.RoutingCall
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import io.ktor.server.websocket.webSocket
@@ -87,7 +89,9 @@ class Http(
             installDefaultFeatures(appConfig)
             routing {
                 webSocket { webSocketManager.connect(this) }
-                get("/") { call.respond(respondServerInfo()) }
+                get("/") {
+                    with(call) { respondServerInfo() }
+                }
             }
 
             registerHttpModules()
@@ -105,15 +109,23 @@ class Http(
         )
     }
 
-    private suspend fun respondServerInfo(): ServerInfo {
+    private suspend fun RoutingCall.respondServerInfo() {
         val remoteConfigService by inject<RemoteConfigService>()
-        return ServerInfo(
-            organization =
-                ServerInfo.Organization(
-                    name = remoteConfigService.getConfigValue(RemoteConfig.OrganizationName),
-                ),
-            production = !appConfig.devMode,
-            version = "0.0.1",
+        val needsSetup = !remoteConfigService.isConfigValueSet(RemoteConfig.OrganizationName)
+        if (needsSetup) {
+            response.status(HttpStatusCode.Locked)
+            return
+        }
+
+        respond(
+            ServerInfo(
+                organization =
+                    ServerInfo.Organization(
+                        name = remoteConfigService.getConfigValue(RemoteConfig.OrganizationName),
+                    ),
+                production = !appConfig.devMode,
+                version = "0.0.1",
+            ),
         )
     }
 
