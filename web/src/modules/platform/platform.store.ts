@@ -17,7 +17,7 @@ export const usePlatformStore = defineStore("platform", {
     }
   },
   actions: {
-    updateBackendInfo(backendInfo: BackendInfo) {
+    updateBackendInfo(backendInfo: BackendInfo | null) {
       this.backendInfo = backendInfo
     }
   }

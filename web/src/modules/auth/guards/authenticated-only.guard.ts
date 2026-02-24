@@ -1,8 +1,8 @@
 import type { Account } from "@/modules/accounts/api/models/account.model"
 import accountService from "@/modules/accounts/api/services/accounts.service"
 import authService from "@/modules/auth/api/services/auth.service"
-import { AUTH_LOGIN_ROUTE } from "@/modules/auth/auth.routes"
 import logService from "@/modules/platform/api/services/log.service"
+import { usePlatformStore } from "@/modules/platform/platform.store.ts"
 import type { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router"
 
 export const AuthenticatedOnlyGuard: NavigationGuard = (
@@ -10,21 +10,34 @@ export const AuthenticatedOnlyGuard: NavigationGuard = (
   _from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) => {
+  const platformStore = usePlatformStore()
+
+  // Missing backend info means app is initializing or backend info is missing (http error?)
+  // In that case we can just skip here because App.vue will handle it properly
+  if (!platformStore.hasBackendInfo) return next(undefined)
+
   if (accountService.isLoggedIn) return next()
 
-  const isGoingToLogin = to.name === AUTH_LOGIN_ROUTE
   const localToken = authService.getLocalAccessToken()
-  if (localToken === null) return isGoingToLogin ? next() : next({ name: AUTH_LOGIN_ROUTE })
+  if (localToken === null) return gotoLoginOrProceed(to, next)
 
   authService
     .verify(localToken!)
-    .then(async (account: Account) => {
-      await accountService.updateAccount(account)
-      next()
+    .then((account: Account | null) => {
+      if (account === null) {
+        return gotoLoginOrProceed(to, next)
+      }
+
+      accountService.updateAccount(account).finally(next)
     })
     .catch((error: Error) => {
       logService.debug("Unable to verify local token", error)
-      if (isGoingToLogin) next()
-      else next({ name: AUTH_LOGIN_ROUTE })
+      gotoLoginOrProceed(to, next)
     })
+}
+
+function gotoLoginOrProceed(to: RouteLocationNormalized, next: NavigationGuardNext) {
+  const isGoingToLogin = to.name === "login"
+  if (isGoingToLogin) next()
+  else next({ name: "login" })
 }

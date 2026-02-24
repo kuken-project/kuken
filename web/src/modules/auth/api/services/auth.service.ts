@@ -42,19 +42,29 @@ class AuthService {
       })
   }
 
-  async verify(accessToken: AccessToken): Promise<Account> {
-    const res: AxiosResponse = await httpService.get("auth", {
-      headers: { Authorization: `Bearer ${accessToken.token}` }
-    })
-
-    const entity = res.data
-    return {
-      id: entity.accountId,
-      email: entity.email,
-      createdAt: entity["created-at"],
-      updatedAt: entity["updated-at"],
-      permissions: entity["permissions"]
-    } as Account
+  async verify(accessToken: AccessToken): Promise<Account | null> {
+    return httpService
+      .get("auth", {
+        headers: { Authorization: `Bearer ${accessToken.token}` }
+      })
+      .then((res: AxiosResponse) => {
+        const entity = res.data
+        return {
+          id: entity.accountId,
+          email: entity.email,
+          createdAt: entity["created-at"],
+          updatedAt: entity["updated-at"],
+          permissions: entity["permissions"]
+        } as Account
+      })
+      .catch((error: AxiosError) => {
+        if (error.response?.status === 401 /* Unauthorized */) {
+          console.error("Not authorized :(")
+          return null
+        } else {
+          throw error
+        }
+      })
   }
 }
 

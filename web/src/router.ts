@@ -1,5 +1,4 @@
 import { AccountsRoutes } from "@/modules/accounts/accounts.routes.ts"
-import { AuthRoutes } from "@/modules/auth/auth.routes"
 import { AuthenticatedOnlyGuard } from "@/modules/auth/guards/authenticated-only.guard"
 import { HomeRoutes } from "@/modules/home/home.routes"
 import { OrganizationRoutes } from "@/modules/organization/organization.routes.ts"
@@ -11,12 +10,18 @@ export function importPage(module: string, path: string): () => Promise<unknown>
   return comps[`./modules/${module}/ui/pages/${path}Page.vue`]!
 }
 
-export const SETUP_ROUTE = "setup"
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    ...AuthRoutes,
+    {
+      path: "/login",
+      name: "login",
+      beforeEnter: [AuthenticatedOnlyGuard],
+      component: () => import("@/modules/auth/ui/pages/LoginPage.vue"),
+      meta: {
+        title: "Log In"
+      }
+    },
     {
       path: "/",
       component: importPage("platform", "Root"),
@@ -25,7 +30,7 @@ const router = createRouter({
     },
     {
       path: "/setup",
-      name: SETUP_ROUTE,
+      name: "setup",
       component: importPage("setup", "Setup"),
       meta: {
         title: "Set Up"
@@ -34,12 +39,14 @@ const router = createRouter({
     {
       path: "/access-denied",
       name: "access-denied",
-      component: importPage("platform", "AccessDenied")
+      component: importPage("platform", "AccessDenied"),
+      beforeEnter: [AuthenticatedOnlyGuard]
     },
     {
       path: "/:pathMatch(.*)*",
       name: "not-found",
-      component: importPage("platform", "NotFound")
+      component: importPage("platform", "NotFound"),
+      beforeEnter: [AuthenticatedOnlyGuard]
     }
   ]
 })

@@ -8,12 +8,10 @@
 import backendService from "@/modules/platform/api/services/backend.service.ts"
 import configService from "@/modules/platform/api/services/config.service.ts"
 import websocketService from "@/modules/platform/api/services/websocket.service.ts"
-import { usePlatformStore } from "@/modules/platform/platform.store.ts"
 import LoadingState from "@/modules/platform/ui/components/LoadingState.vue"
-import { SETUP_ROUTE } from "@/router.ts"
 import { useHead } from "@unhead/vue"
 import { useDark } from "@vueuse/core"
-import { onUnmounted, ref } from "vue"
+import { onMounted, onUnmounted, ref } from "vue"
 import { ModalsContainer } from "vue-final-modal"
 import { useRouter } from "vue-router"
 
@@ -36,19 +34,23 @@ useDark({
   valueDark: "dark"
 })
 
-const platformStore = usePlatformStore()
 const router = useRouter()
 
-backendService
-  .getInfo()
-  .catch(console.error)
-  .finally(() => {
-    if (!platformStore.hasBackendInfo) {
-      router.push({ name: SETUP_ROUTE }).finally(() => (isLoading.value = false))
-    } else {
+onMounted(() => {
+  backendService.syncBackendInfo().then((syncSucceeded: boolean) => {
+    const isInSetupPage = router.currentRoute.value.name === "setup"
+
+    if (syncSucceeded || isInSetupPage) {
       isLoading.value = false
+      return
     }
+
+    // Postpone `isLoading` state until the backend sync is done to ensure current page,
+    // which will thrown an error because backend info is not available
+    // do not get rendered between first app ticks, backend sync and redirect to the setup page
+    router.replace({ name: "setup" }).finally(() => (isLoading.value = false))
   })
+})
 
 onUnmounted(() => websocketService.close())
 </script>

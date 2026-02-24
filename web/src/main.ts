@@ -24,7 +24,7 @@ dayjs.extend(localizedFormat)
 
 hljs.registerLanguage("json", json)
 
-createApp(App)
+const app = createApp(App)
   .use(setupI18n())
   .use(createVfm())
   .use(createPinia())
@@ -34,6 +34,7 @@ createApp(App)
   .use(createHead())
   .use(hljsVuePlugin)
   .use(ContextMenu)
-  .mount("#app")
+
+router.isReady().then(() => app.mount("#app"))
 
 logService.info(configService.toVersionInfoString())

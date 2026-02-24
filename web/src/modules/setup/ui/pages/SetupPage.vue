@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { AUTH_LOGIN_ROUTE } from "@/modules/auth/auth.routes.ts"
 import configService from "@/modules/platform/api/services/config.service.ts"
 import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
 import VTitle from "@/modules/platform/ui/components/typography/VTitle.vue"
@@ -54,7 +53,7 @@ async function completeSetup() {
     }
   })
 
-  window.location.href = router.resolve({ name: AUTH_LOGIN_ROUTE }).href
+  window.location.href = router.resolve({ name: "login" }).href
 }
 
 async function proceedSetup() {

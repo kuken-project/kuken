@@ -1,7 +1,6 @@
 import type { KukenError } from "@/modules/platform/api/models/error.model"
 import { HttpError } from "@/modules/platform/api/models/error.model"
 import configService from "@/modules/platform/api/services/config.service"
-import logService from "@/modules/platform/api/services/log.service"
 import { isUndefined } from "@/utils"
 import type { AxiosInstance, AxiosPromise, AxiosRequestConfig, AxiosResponse } from "axios"
 import Axios, { AxiosError } from "axios"
@@ -22,12 +21,11 @@ class HttpService {
       (response: AxiosResponse) => response,
       (error: AxiosError) => {
         const data = error.response?.data as { code?: string }
-        if (isUndefined(data?.code)) {
-          logService.error("Unhandled HTTP error", error)
-          throw error
+        if (!isUndefined(data?.code)) {
+          throw new HttpError(data as KukenError)
         }
 
-        throw new HttpError(data as KukenError)
+        throw error
       }
     )
   }
