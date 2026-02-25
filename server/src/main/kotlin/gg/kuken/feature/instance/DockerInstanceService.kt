@@ -157,6 +157,12 @@ class DockerInstanceService(
 
         logger.debug("Instance {} creation result: {}", instanceId, createResult)
         return handleInitialInstanceCreationResult(createResult, instanceId, blueprint.id)
+        val instance = handleInitialInstanceCreationResult(createResult, instanceId, blueprint.id)
+
+        blueprintLockRepository.save(instanceId, lock)
+        logger.debug("Blueprint lock created for instance {}", instanceId)
+
+        return instance
     }
 
     private suspend fun tryGenerateRuntime(
