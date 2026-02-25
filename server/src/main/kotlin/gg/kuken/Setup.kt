@@ -9,6 +9,7 @@ import kotlinx.serialization.hocon.decodeFromConfig
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.Slf4jSqlDebugLogger
 import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 import java.io.File
 import java.sql.SQLException
@@ -44,18 +45,19 @@ class DatabaseFactory(
     private val appConfig: KukenConfig,
 ) {
     fun create(): Database =
-        Database.connect(
-            url = appConfig.db.url,
-            user = appConfig.db.user,
-            password = appConfig.db.password,
-            databaseConfig =
-                DatabaseConfig {
-                    useNestedTransactions = true
-                    if (appConfig.devMode) {
-                        sqlLogger = Slf4jSqlDebugLogger
-                    }
-                },
-        )
+        Database
+            .connect(
+                url = appConfig.db.url,
+                user = appConfig.db.user,
+                password = appConfig.db.password,
+                databaseConfig =
+                    DatabaseConfig {
+                        useNestedTransactions = true
+                        if (appConfig.devMode) {
+                            sqlLogger = Slf4jSqlDebugLogger
+                        }
+                    },
+            ).also { TransactionManager.defaultDatabase = it }
 }
 
 suspend fun checkDatabaseConnection(database: Database) {

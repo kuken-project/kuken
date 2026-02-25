@@ -24,14 +24,14 @@ class RemoteConfigRepository(
     private val database: Database,
 ) {
     init {
-        transaction(db = database) {
+        transaction {
             @Suppress("DEPRECATION")
             SchemaUtils.createMissingTablesAndColumns(RemoteConfigTable)
         }
     }
 
     suspend fun findConfigValue(key: String): String? =
-        suspendTransaction(db = database, readOnly = true) {
+        suspendTransaction(readOnly = true) {
             RemoteConfigTable
                 .select(RemoteConfigTable.key, RemoteConfigTable.value)
                 .where { RemoteConfigTable.key eq key }
@@ -39,14 +39,12 @@ class RemoteConfigRepository(
                 .singleOrNull()
         }
 
-    suspend fun updateConfigValue(
+    fun updateConfigValue(
         key: String,
         value: String,
-    ) = suspendTransaction(db = database) {
-        RemoteConfigTable.upsert {
-            it[RemoteConfigTable.key] = key
-            it[RemoteConfigTable.value] = value
-        }
+    ) = RemoteConfigTable.upsert {
+        it[RemoteConfigTable.key] = key
+        it[RemoteConfigTable.value] = value
     }
 
     suspend fun existsConfigValue(key: String): Boolean =
