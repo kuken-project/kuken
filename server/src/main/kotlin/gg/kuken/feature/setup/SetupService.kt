@@ -2,6 +2,7 @@ package gg.kuken.feature.setup
 
 import gg.kuken.feature.account.AccountService
 import gg.kuken.feature.blueprint.BlueprintSpecSource
+import gg.kuken.feature.blueprint.fromString
 import gg.kuken.feature.blueprint.service.BlueprintService
 import gg.kuken.feature.rbac.Permissions.ManageAccounts
 import gg.kuken.feature.rbac.Permissions.ManageBlueprints
@@ -26,8 +27,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.decodeFromJsonElement
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class SetupService(
     private val accountService: AccountService,
@@ -37,6 +38,10 @@ class SetupService(
     private val roleRepository: RoleRepository,
     private val blueprintService: BlueprintService,
 ) {
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(SetupService::class.java)
+    }
+
     val requiredSetupSteps = linkedSetOf(Step.OrganizationName, Step.CreateAccount)
 
     suspend fun currentState(): SetupState {
@@ -167,15 +172,27 @@ class SetupService(
 
     suspend fun importBlueprints() =
         coroutineScope {
-            val baseRemoteUrl =
-                "https://raw.githubusercontent.com/kuken-project/blueprints/refs/heads/main/blueprints/games"
-            listOf("minecraft/minecraft-java-edition", "hytale/hytale")
-                .map { baseName ->
+            val urlsToDownload =
+                listOf(
+                    "https://github.com/kuken-project/blueprints/blob/main/blueprints/games/minecraft/minecraft-vanilla.pkl",
+                    "https://github.com/kuken-project/blueprints/blob/main/blueprints/games/minecraft/minecraft-paper.pkl",
+                    "https://github.com/kuken-project/blueprints/blob/main/blueprints/games/hytale/hytale.pkl",
+                )
+
+            urlsToDownload
+                .map { url ->
                     async {
-                        val source: BlueprintSpecSource =
-                            Json.decodeFromJsonElement(JsonPrimitive("$baseRemoteUrl/$baseName.pkl"))
-                        blueprintService.importBlueprint(source)
+                        val source = with(Json) { BlueprintSpecSource.fromString(url) }
+                        importBlueprint(source)
                     }
                 }.awaitAll()
         }
+
+    private suspend fun importBlueprint(source: BlueprintSpecSource) {
+        try {
+            blueprintService.importBlueprint(source)
+        } catch (e: Throwable) {
+            log.error("Failed to import blueprint from {}", source, e)
+        }
+    }
 }
