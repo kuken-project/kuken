@@ -10,7 +10,7 @@ import SetupOrganizationName from "@/modules/setup/ui/components/SetupOrganizati
 import SetupStep from "@/modules/setup/ui/components/SetupStep.vue"
 import router from "@/router.ts"
 import { useHead } from "@unhead/vue"
-import { type Reactive, reactive } from "vue"
+import { onMounted, type Reactive, reactive } from "vue"
 
 useHead({
   title: `Configure ${configService.appName} organization`
@@ -34,15 +34,6 @@ const setup: Reactive<PendingSetup> = reactive({
     orgName: ""
   }
 })
-
-async function init() {
-  const remoteSetup = await setupService.getSetup()
-  for (const step of remoteSetup.remainingSteps) {
-    remainingSteps.push(step.type)
-  }
-
-  setup.currentStep = remainingSteps[0]!
-}
 
 async function completeSetup() {
   await setupService.completeSetup({
@@ -88,7 +79,16 @@ const steps: Array<SetupStepInterface> = [
   }
 ]
 
-init()
+onMounted(async () => {
+  const remoteSetup = await setupService.getSetup()
+  if (remoteSetup.completed) return router.push("/")
+
+  for (const step of remoteSetup.remainingSteps) {
+    remainingSteps.push(step.type)
+  }
+
+  setup.currentStep = remainingSteps[0]!
+})
 </script>
 <template>
   <RootLayout>
