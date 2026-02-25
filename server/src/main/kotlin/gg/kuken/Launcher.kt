@@ -30,7 +30,7 @@ import org.koin.dsl.module
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-val log: Logger = LoggerFactory.getLogger("Kuken")
+private val log: Logger = LoggerFactory.getLogger("Kuken")
 
 fun main() {
     val config = loadConfig()
