@@ -54,4 +54,11 @@ class InstanceRoutes {
         val before: Long? = null,
         val after: Long? = null,
     )
+
+    @Serializable
+    @Resource("{instanceId}/rebuild")
+    class Rebuild(
+        val parent: InstanceRoutes = InstanceRoutes(),
+        val instanceId: Uuid,
+    )
 }

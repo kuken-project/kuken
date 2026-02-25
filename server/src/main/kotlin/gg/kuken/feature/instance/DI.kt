@@ -5,8 +5,11 @@ import gg.kuken.core.docker.DockerImageService
 import gg.kuken.core.docker.DockerImageServiceImpl
 import gg.kuken.core.docker.DockerNetworkService
 import gg.kuken.feature.blueprint.BlueprintPropertyResolver
+import gg.kuken.feature.instance.data.FilesystemBlueprintLockRepository
 import gg.kuken.feature.instance.data.entity.InstanceRepositoryImpl
+import gg.kuken.feature.instance.data.repository.BlueprintLockRepository
 import gg.kuken.feature.instance.data.repository.InstanceRepository
+import gg.kuken.feature.instance.service.BlueprintLockBuilder
 import gg.kuken.feature.instance.service.DockerContainerServiceImpl
 import gg.kuken.feature.instance.service.DockerExecCommandExecutor
 import gg.kuken.feature.instance.service.InstanceCommandExecutor
@@ -20,19 +23,24 @@ val InstancesDI =
             InstanceRepositoryImpl(database = get())
         }
 
-        // NEW: Blueprint property resolver
+        single<BlueprintLockRepository> {
+            FilesystemBlueprintLockRepository(kukenConfig = get())
+        }
+
+        factory<BlueprintLockBuilder> {
+            BlueprintLockBuilder(blueprintPropertyResolver = get())
+        }
+
         factory<BlueprintPropertyResolver> {
             BlueprintPropertyResolver()
         }
 
-        // NEW: Instance runtime builder
         factory<InstanceRuntimeBuilder> {
             InstanceRuntimeBuilder(
                 dockerClient = get(),
             )
         }
 
-        // NEW: Instance installer
         factory<InstanceInstaller> {
             InstanceInstaller(
                 dockerClient = get(),
@@ -40,7 +48,6 @@ val InstancesDI =
             )
         }
 
-        // NEW: Docker container service
         factory<DockerContainerService> {
             DockerContainerServiceImpl(
                 dockerClient = get(),
@@ -48,14 +55,12 @@ val InstancesDI =
             )
         }
 
-        // NEW: Docker image service
         factory<DockerImageService> {
             DockerImageServiceImpl(
                 dockerClient = get(),
             )
         }
 
-        // NEW: Instance command executor
         factory<InstanceCommandExecutor> {
             DockerExecCommandExecutor(
                 dockerClient = get(),
@@ -80,6 +85,8 @@ val InstancesDI =
                 dockerContainerService = get(),
                 dockerImageService = get(),
                 instanceCommandExecutor = get(),
+                blueprintLockBuilder = get(),
+                blueprintLockRepository = get(),
             )
         }
 

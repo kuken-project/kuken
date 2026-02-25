@@ -8,6 +8,7 @@ import gg.kuken.feature.instance.http.routes.getFileMetadata
 import gg.kuken.feature.instance.http.routes.getInstanceDetails
 import gg.kuken.feature.instance.http.routes.listFiles
 import gg.kuken.feature.instance.http.routes.readFile
+import gg.kuken.feature.instance.http.routes.rebuildInstance
 import gg.kuken.feature.instance.http.routes.renameFile
 import gg.kuken.feature.instance.http.routes.uploadFiles
 import gg.kuken.feature.instance.http.routes.writeFile
@@ -39,6 +40,7 @@ internal object InstanceHttpModule : HttpModule() {
                     uploadFiles()
                     getFileMetadata()
                     command()
+                    rebuildInstance()
                     fetchLogs()
                 }
             }

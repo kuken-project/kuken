@@ -11,10 +11,13 @@ import gg.kuken.feature.blueprint.BlueprintSpecProvider
 import gg.kuken.feature.blueprint.processor.AppResource
 import gg.kuken.feature.blueprint.processor.BlueprintProcessor
 import gg.kuken.feature.blueprint.processor.BlueprintResolutionContext
+import gg.kuken.feature.blueprint.processor.BlueprintResolutionContextEnv
+import gg.kuken.feature.blueprint.processor.BlueprintResolutionContextInputs
 import gg.kuken.feature.blueprint.processor.InstanceBlueprintResourceReader
 import gg.kuken.feature.blueprint.processor.ResolvedBlueprintRefs
 import gg.kuken.feature.blueprint.service.BlueprintService
 import gg.kuken.feature.instance.data.entity.InstanceEntity
+import gg.kuken.feature.instance.data.repository.BlueprintLockRepository
 import gg.kuken.feature.instance.data.repository.InstanceRepository
 import gg.kuken.feature.instance.model.CreateInstanceOptions
 import gg.kuken.feature.instance.model.DockerImagePullStatus
@@ -22,6 +25,7 @@ import gg.kuken.feature.instance.model.HostPort
 import gg.kuken.feature.instance.model.ImageUpdatePolicy
 import gg.kuken.feature.instance.model.Instance
 import gg.kuken.feature.instance.model.InstanceStatus
+import gg.kuken.feature.instance.service.BlueprintLockBuilder
 import gg.kuken.feature.instance.service.InstanceCommandExecutor
 import gg.kuken.feature.instance.service.InstanceRuntimeBuilder
 import gg.kuken.feature.instance.util.FramePersistentIdGenerator
@@ -48,6 +52,8 @@ class DockerInstanceService(
     private val dockerContainerService: DockerContainerService,
     private val dockerImageService: DockerImageService,
     private val instanceCommandExecutor: InstanceCommandExecutor,
+    private val blueprintLockBuilder: BlueprintLockBuilder,
+    private val blueprintLockRepository: BlueprintLockRepository,
 ) : InstanceService,
     CoroutineScope by CoroutineScope(Default + CoroutineName("DockerInstanceService")) {
     companion object {
@@ -127,6 +133,14 @@ class DockerInstanceService(
                 readers = listOf(resourceReader),
             )
 
+        val lock =
+            blueprintLockBuilder.buildLock(
+                blueprintId = blueprintId,
+                resolvedBlueprint = processedBlueprint,
+                context = resolutionContext,
+                inputs = options.inputs,
+            )
+
         val env =
             processedBlueprint.build.environmentVariables
                 .map { env -> env.name to blueprintPropertyResolver.resolve(env.value, processedBlueprint, resolutionContext) }
@@ -156,13 +170,136 @@ class DockerInstanceService(
             )
 
         logger.debug("Instance {} creation result: {}", instanceId, createResult)
-        return handleInitialInstanceCreationResult(createResult, instanceId, blueprint.id)
         val instance = handleInitialInstanceCreationResult(createResult, instanceId, blueprint.id)
 
         blueprintLockRepository.save(instanceId, lock)
         logger.debug("Blueprint lock created for instance {}", instanceId)
 
         return instance
+    }
+
+    override suspend fun rebuildInstance(
+        instanceId: Uuid,
+        inputs: BlueprintResolutionContextInputs,
+        env: BlueprintResolutionContextEnv,
+    ): Instance {
+        logger.debug("Rebuilding instance {}", instanceId)
+        val entity = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
+        val blueprintId = entity.blueprintId.toKotlinUuid()
+        val blueprint = blueprintService.getBlueprint(blueprintId)
+        val address = HostPort(host = entity.host, port = entity.port!!)
+        val generatedName = generateContainerName(instanceId, "kk-{id}")
+
+        val resolutionContext =
+            BlueprintResolutionContext(
+                instanceId = instanceId,
+                instanceName = generatedName,
+                inputs = inputs,
+                env = env,
+                address = address,
+            )
+
+        val resourceReader =
+            InstanceBlueprintResourceReader(
+                inputValues = inputs,
+                refProvider = { key ->
+                    when (key) {
+                        ResolvedBlueprintRefs.INSTANCE_ID -> instanceId
+                        ResolvedBlueprintRefs.INSTANCE_NAME -> generatedName
+                        ResolvedBlueprintRefs.NETWORK_HOST -> address.host
+                        ResolvedBlueprintRefs.NETWORK_PORT -> address.port.toString()
+                    }
+                },
+            )
+        val processedBlueprint =
+            blueprintProcessor.process(
+                input = blueprintSpecProvider.provide(blueprint.origin),
+                readers = listOf(resourceReader),
+            )
+
+        val lock =
+            blueprintLockBuilder.buildLock(
+                blueprintId = blueprintId,
+                resolvedBlueprint = processedBlueprint,
+                context = resolutionContext,
+                inputs = inputs,
+            )
+
+        val resolvedEnv =
+            processedBlueprint.build.environmentVariables
+                .map { envVar -> envVar.name to blueprintPropertyResolver.resolve(envVar.value, processedBlueprint, resolutionContext) }
+                .filter { (_, value) -> value != null }
+                .associate { (key, value) -> key to value!! }
+
+        val image =
+            requireNotNull(
+                blueprintPropertyResolver.resolve(
+                    property = processedBlueprint.build.docker.image,
+                    blueprint = processedBlueprint,
+                    context = resolutionContext,
+                ),
+            ) { "Docker image cannot be null" }
+
+        val oldContainerId = entity.containerId
+        if (oldContainerId != null) {
+            logger.debug("Removing old container {} for instance {}", oldContainerId, instanceId)
+            dockerContainerService.removeContainer(oldContainerId, force = true)
+        }
+
+        val options =
+            CreateInstanceOptions(
+                address = address,
+                blueprint = blueprintId,
+                inputs = inputs,
+                env = resolvedEnv,
+            )
+
+        val createResult =
+            tryGenerateRuntime(
+                instanceId = instanceId,
+                options = options,
+                image = image,
+                generatedName = generatedName,
+                onInstall = processedBlueprint.hooks.onInstall,
+            )
+
+        logger.debug("Instance {} rebuild result: {}", instanceId, createResult)
+
+        val newStatus =
+            when (createResult) {
+                is GenerateRuntimeResult.Done -> InstanceStatus.Created
+                is GenerateRuntimeResult.MissingDockerImage -> InstanceStatus.ImagePullNeeded
+                is GenerateRuntimeResult.RuntimeCreationFailed -> InstanceStatus.Unavailable
+                is GenerateRuntimeResult.NetworkConnectFailed -> InstanceStatus.NetworkAssignmentFailed
+            }
+
+        val newContainerId =
+            when (createResult) {
+                is GenerateRuntimeResult.Done -> createResult.runtimeIdentifier
+                is GenerateRuntimeResult.NetworkConnectFailed -> createResult.runtimeIdentifier
+                else -> null
+            }
+
+        instanceRepository.update(instanceId) {
+            this.status = newStatus.label
+            this.containerId = newContainerId
+        }
+
+        blueprintLockRepository.save(instanceId, lock)
+        logger.debug("Blueprint lock updated for instance {}", instanceId)
+
+        val runtime = newContainerId?.let { instanceRuntimeBuilder.tryBuildRuntime(it) }
+        return Instance(
+            id = instanceId,
+            status = newStatus,
+            containerId = newContainerId,
+            updatePolicy = entity.updatePolicy.let(ImageUpdatePolicy::getById),
+            address = address,
+            runtime = runtime,
+            blueprintId = blueprintId,
+            createdAt = entity.createdAt,
+            nodeId = entity.nodeId,
+        )
     }
 
     private suspend fun tryGenerateRuntime(
