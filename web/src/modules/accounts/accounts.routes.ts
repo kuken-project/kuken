@@ -9,7 +9,7 @@ export const AccountsRoutes: Array<RouteRecordRaw> = [
       {
         path: "",
         name: "profile",
-        component: importPage("accounts", "ProfileOverview")
+        component: () => import("@/modules/accounts/ui/pages/overview/ProfileOverviewPage.vue")
       }
     ]
   }

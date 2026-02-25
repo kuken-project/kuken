@@ -2,7 +2,6 @@ import type { Account } from "@/modules/accounts/api/models/account.model"
 import httpService from "@/modules/platform/api/services/http.service"
 import localStorageService from "@/modules/platform/api/services/local-storage.service"
 import logService, { type Logger } from "@/modules/platform/api/services/log.service"
-import { isNull } from "@/utils"
 import type { AxiosError, AxiosResponse } from "axios"
 import type { AccessToken } from "../models/access-token.model"
 
@@ -13,11 +12,6 @@ class AuthService {
 
   constructor() {
     this.logger = logService.create(AuthService.name)
-    httpService.axios.interceptors.request.use((request) => {
-      const localToken = this.getLocalAccessToken()
-      if (!isNull(localToken)) request.headers!["Authorization"] = `Bearer ${localToken.token}`
-      return request
-    })
   }
 
   getLocalAccessToken(): AccessToken | null {

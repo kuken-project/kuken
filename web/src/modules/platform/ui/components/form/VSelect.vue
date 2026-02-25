@@ -35,6 +35,9 @@ function select(option: string) {
 }
 
 const selectionText = computed(() => {
+  console.log("Slots", $slots.default!())
+  console.log("First slot", $slots.default!()[0]!)
+  console.log("Children", $slots.default!()[0]!.children)
   const selectedCmp = $slots.default!()[0]!.children.find(
     (vnode) => vnode.props!.key === model.value
   )
@@ -102,12 +105,13 @@ onClickOutside(container, () => {
 .options {
   position: absolute;
   border: 1px solid var(--kt-border-low);
-  border-radius: 20px;
+  border-radius: 8px;
   background-color: var(--kt-background-body);
   padding: 0.8rem;
   transform: translateY(0.8rem);
   z-index: 1;
   min-width: 200px;
+  width: 100%;
   right: 0;
 }
 

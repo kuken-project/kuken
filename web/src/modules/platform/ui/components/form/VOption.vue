@@ -9,7 +9,7 @@
 .option {
   cursor: pointer;
   padding: 8px;
-  border-radius: 12px;
+  border-radius: 4px;
   transition: background-color linear 0.15s;
   color: var(--kt-content-neutral);
 

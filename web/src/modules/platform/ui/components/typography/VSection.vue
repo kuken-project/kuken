@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 <template>
   <section>
-    <h4><slot name="title" /></h4>
+    <h5><slot name="title" /></h5>
     <p v-if="$slots.description" class="description"><slot name="description" /></p>
     <div class="content">
       <slot />
@@ -10,11 +10,12 @@
 </template>
 <style lang="scss">
 section {
-  margin-bottom: 2.4rem;
+  margin-bottom: 3.2rem;
 
   .description {
     color: var(--kt-content-neutral);
     margin-bottom: 2.4rem;
+    margin-top: 0.4rem;
   }
 
   .content {

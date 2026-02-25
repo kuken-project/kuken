@@ -1,5 +1,11 @@
 {
   "resource.nopermission": "You don't have the permissions to view this resource.",
+  "locale.en": "English (US)",
+  "permission.account.manage": "Manage users",
+  "permission.blueprint.manage": "Manage blueprints",
+  "permission.blueprint.import": "Import blueprints",
+  "permission.unit.manage": "Manage servers",
+  "permission.role.manage": "Manage roles",
   "home.welcome.docTitle": "Welcome to {organizationName}",
   "home.welcome.pageTitle": "Welcome",
   "blueprints.home.docTitle": "Game Directory",
@@ -10,7 +16,10 @@
   "profile.docTitle": "Profile",
   "profile.pageTitle": "Personal Settings",
   "profile.appearence.title": "Appearence",
+  "profile.appearence.description": "Choose between light, dark or system theme to match your preferences or device settings.",
   "profile.appearence.theme.label.light": "Light",
   "profile.appearence.theme.label.dark": "Dark",
-  "profile.appearence.theme.label.auto": "System Preference"
+  "profile.appearence.theme.label.auto": "System Preference",
+  "profile.language.title": "Language",
+  "profile.language.description": "Select your preferred language for the interface and system messages."
 }
