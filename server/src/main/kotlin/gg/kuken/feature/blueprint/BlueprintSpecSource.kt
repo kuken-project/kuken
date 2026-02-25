@@ -28,6 +28,8 @@ sealed class BlueprintSpecSource {
         override val uri: String,
     ) : BlueprintSpecSource() {
         val filePath: String get() = uri.substringAfter(FILE_PROTOCOL)
+
+        override fun toString(): String = filePath
     }
 
     @Serializable
@@ -37,6 +39,8 @@ sealed class BlueprintSpecSource {
         val secure: Boolean = _url.startsWith(INTERNET_SECURE_PROTOCOL),
     ) : BlueprintSpecSource() {
         override val uri: String get() = _url
+
+        override fun toString(): String = uri
     }
 
     class Serializer : KSerializer<BlueprintSpecSource> {

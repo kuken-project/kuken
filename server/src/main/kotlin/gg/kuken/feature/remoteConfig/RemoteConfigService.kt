@@ -1,5 +1,7 @@
 package gg.kuken.feature.remoteConfig
 
+import gg.kuken.core.database.dbQuery
+
 class RemoteConfigService(
     private val remoteConfigRepository: RemoteConfigRepository,
 ) {
@@ -11,7 +13,7 @@ class RemoteConfigService(
     suspend fun setConfigValue(
         key: RemoteConfigKey,
         value: String,
-    ) {
+    ) = dbQuery {
         remoteConfigRepository.updateConfigValue(key.name, value)
     }
 }
