@@ -16,7 +16,7 @@
     "@codemirror/lang-yaml": "^6.1.2",
     "@highlightjs/vue-plugin": "^2.1.0",
     "@imengyu/vue3-context-menu": "^1.5.4",
-    "@unhead/vue": "^2.1.4",
+    "@unhead/vue": "^2.1.7",
     "@vueuse/core": "^14.1.0",
     "axios": "1.13.5",
     "codemirror": "^6.0.2",
