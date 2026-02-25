@@ -1,8 +1,9 @@
+import authService from "@/modules/auth/api/services/auth.service.ts"
 import type { KukenError } from "@/modules/platform/api/models/error.model"
 import { HttpError } from "@/modules/platform/api/models/error.model"
 import configService from "@/modules/platform/api/services/config.service"
 import { isUndefined } from "@/utils"
-import type { AxiosInstance, AxiosPromise, AxiosRequestConfig, AxiosResponse } from "axios"
+import type { AxiosInstance, AxiosPromise, AxiosRequestConfig } from "axios"
 import Axios, { AxiosError } from "axios"
 
 class HttpService {
@@ -18,7 +19,7 @@ class HttpService {
     })
 
     this.axios.interceptors.response.use(
-      (response: AxiosResponse) => response,
+      (response) => response,
       (error: AxiosError) => {
         const data = error.response?.data as { code?: string }
         if (!isUndefined(data?.code)) {
@@ -28,6 +29,12 @@ class HttpService {
         throw error
       }
     )
+
+    this.axios.interceptors.request.use((request) => {
+      const localToken = authService.getLocalAccessToken()
+      if (localToken !== null) request.headers!["Authorization"] = `Bearer ${localToken.token}`
+      return request
+    })
   }
 
   get<T>(url: string, config?: AxiosRequestConfig): AxiosPromise<T> {
