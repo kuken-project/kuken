@@ -25,7 +25,7 @@ object BlueprintTable : UUIDTable("blueprints") {
     val url = varchar("url", 255)
     val author = varchar("author", 255).default("")
     val icon = blob("icon").nullable()
-    val origin = varchar("origin", 255)
+    val origin = varchar("origin", 255).uniqueIndex()
     val createdAt = timestamp("created_at")
     val status = enumeration<BlueprintStatus>("status")
 }
