@@ -24,7 +24,7 @@ class AccountEntity(
 }
 
 object AccountTable : UUIDTable("accounts") {
-    val email = varchar("email", length = 255)
+    val email = varchar("email", length = 255).uniqueIndex()
     val displayName = varchar("display_name", length = 255).nullable()
     val hash = varchar("hash", length = 255)
     val createdAt = timestamp("created_at")

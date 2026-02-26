@@ -1,7 +1,9 @@
 package gg.kuken.feature.unit.data.entity
 
+import gg.kuken.feature.instance.data.entity.InstanceTable
 import gg.kuken.feature.unit.data.repository.UnitRepository
 import gg.kuken.feature.unit.model.KukenUnit
+import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.dao.UUIDEntity
@@ -21,7 +23,7 @@ object UnitTable : UUIDTable("units") {
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
     val deletedAt = timestamp("deleted_at").nullable()
-    val instanceId = uuid("instance_id").nullable()
+    val instanceId = uuid("instance_id").references(InstanceTable.id, onDelete = ReferenceOption.SET_NULL).nullable()
     val status = varchar("status", length = 255)
 }
 

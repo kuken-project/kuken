@@ -1,7 +1,9 @@
 package gg.kuken.feature.instance.data.entity
 
+import gg.kuken.feature.blueprint.entity.BlueprintTable
 import gg.kuken.feature.instance.data.repository.InstanceRepository
 import gg.kuken.feature.instance.model.Instance
+import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.core.eq
@@ -20,7 +22,7 @@ import kotlin.uuid.toJavaUuid
 object InstanceTable : UUIDTable("instances") {
     val imageUpdatePolicy = varchar("image_update_policy", length = 64)
     val containerId = varchar("cid", length = 255).nullable()
-    val blueprintId = uuid("bid")
+    val blueprintId = uuid("bid").references(BlueprintTable.id, onDelete = ReferenceOption.CASCADE)
     val host = varchar("host", length = 255).nullable()
     val port = ushort("port").nullable()
     val status = varchar("status", length = 255)
