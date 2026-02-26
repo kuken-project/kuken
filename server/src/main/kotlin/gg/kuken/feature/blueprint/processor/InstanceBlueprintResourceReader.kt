@@ -9,7 +9,7 @@ class InstanceBlueprintResourceReader(
     val refProvider: (key: ResolvedBlueprintRefs) -> Any?,
 ) : ResourceReader {
     private companion object {
-        val REGEX = Regex("__(\\w+)__(\\w+(?:\\.\\w+)*)__")
+        val REGEX = Regex("__(\\w+)__\\w+:([\\w.]+)__")
     }
 
     override fun getUriScheme(): String = "kuken"
