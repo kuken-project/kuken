@@ -32,4 +32,5 @@ class BlueprintRoutes {
         val parent: BlueprintRoutes = BlueprintRoutes(),
         val blueprintId: Uuid,
     )
+
 }

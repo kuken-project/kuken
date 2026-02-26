@@ -18,6 +18,7 @@ import gg.kuken.feature.blueprint.processor.ResolvedBlueprint
 import gg.kuken.feature.blueprint.processor.get
 import gg.kuken.feature.blueprint.processor.toBlueprintHeader
 import gg.kuken.feature.blueprint.repository.BlueprintRepository
+import gg.kuken.feature.instance.data.repository.InstanceRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -59,6 +60,7 @@ class BlueprintService(
     private val blueprintProcessor: BlueprintProcessor,
     private val kukenConfig: KukenConfig,
     private val httpClient: HttpClient,
+    private val instanceRepository: InstanceRepository,
 ) {
     private val logger = LogManager.getLogger(BlueprintService::javaClass)
 

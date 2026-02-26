@@ -24,6 +24,7 @@ val BlueprintDI =
                 blueprintProcessor = get(),
                 kukenConfig = get(),
                 httpClient = HttpClient(CIO),
+                instanceRepository = get(),
             )
         }
 
