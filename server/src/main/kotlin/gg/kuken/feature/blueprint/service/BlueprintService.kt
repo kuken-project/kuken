@@ -38,8 +38,8 @@ import org.pkl.core.PModule
 import org.pkl.core.PObject
 import java.net.URI
 import java.nio.file.Path
-import java.util.Base64
 import java.nio.file.Paths
+import java.util.Base64
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.createDirectories
@@ -147,8 +147,11 @@ class BlueprintService(
                 if (blueprintSource is BlueprintSpecSource.Local) {
                     val baseDir = Path(blueprintSource.filePath).toAbsolutePath().normalize()
                     val resourceFile = baseDir.resolve(resourceSource.filePath).normalize()
-                    if (!resourceFile.startsWith(baseDir) || !resourceFile.exists()) null
-                    else resourceFile.readBytes()
+                    if (!resourceFile.startsWith(baseDir) || !resourceFile.exists()) {
+                        null
+                    } else {
+                        resourceFile.readBytes()
+                    }
                 } else {
                     val safePath =
                         resourceSource.filePath
@@ -255,6 +258,8 @@ class BlueprintService(
     ): T {
         logger.debug("Downloading blueprint resource...: {}", url)
         val outputFile = KukenConfig.tempFile()
+        val filename: String
+        val rawContents: ByteArray
 
         try {
             val httpResponse: HttpResponse =
@@ -264,16 +269,20 @@ class BlueprintService(
                     }
                 }
 
-            val filename =
+            filename =
                 httpResponse.headers[HttpHeaders.ContentDisposition]
                     ?.substringAfter("filename=")
                     ?.removeSurrounding("\"")
                     ?: url.substringAfterLast("/")
 
-            val responseBody: ByteArray = httpResponse.body()
-            outputFile.writeBytes(responseBody)
+            rawContents = httpResponse.body()
+
+            outputFile.writeBytes(rawContents)
             logger.debug("Download finished: {} from {}", filename, url)
-            return payload(outputFile, responseBody, filename)
+            return payload(outputFile, rawContents, filename)
+        } catch (e: Throwable) {
+            logger.error("Failed to download blueprint resource: {}", url, e)
+            throw e
         } finally {
             outputFile.deleteIfExists()
         }
