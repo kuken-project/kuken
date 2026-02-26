@@ -7,7 +7,7 @@
             <div class="header">
               <div
                 :style="{
-                  backgroundImage: `url(${resolveBlueprintSource(blueprint.header.assets?.icon)})`
+                  backgroundImage: `url(${iconAsBase64PNG(blueprint.header.icon)})`
                 }"
                 class="icon"
               />
@@ -70,10 +70,7 @@
   </Resource>
 </template>
 <script lang="ts" setup>
-import {
-  type Blueprint,
-  resolveBlueprintSource
-} from "@/modules/blueprints/api/models/blueprint.model"
+import { type Blueprint, iconAsBase64PNG } from "@/modules/blueprints/api/models/blueprint.model"
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"

@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import {
-  type Blueprint,
-  resolveBlueprintSource
-} from "@/modules/blueprints/api/models/blueprint.model.ts"
+import { type Blueprint, iconAsBase64PNG } from "@/modules/blueprints/api/models/blueprint.model.ts"
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
 import PageWrapper from "@/modules/platform/ui/components/PageWrapper.vue"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
@@ -67,7 +64,7 @@ function performImport() {
                   <div class="blueprintIcon">
                     <img
                       :alt="`${blueprint.id} icon`"
-                      :src="resolveBlueprintSource(blueprint.header.assets.icon)"
+                      :src="iconAsBase64PNG(blueprint.header.icon)"
                     />
                   </div>
                 </router-link>

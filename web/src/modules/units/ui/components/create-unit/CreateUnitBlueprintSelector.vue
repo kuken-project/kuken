@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Blueprint } from "@/modules/blueprints/api/models/blueprint.model.ts"
+import { type Blueprint, iconAsBase64PNG } from "@/modules/blueprints/api/models/blueprint.model.ts"
 import blueprintsService from "@/modules/blueprints/api/services/blueprints.service.ts"
 import VIcon from "@/modules/platform/ui/components/icons/VIcon.vue"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
@@ -36,7 +36,10 @@ function select(blueprint: Blueprint) {
           class="blueprint"
           @click="select(blueprint)"
         >
-          <div :style="`background-image: url(${blueprint.header.assets.icon})`" class="image" />
+          <div
+            :style="`background-image: url(${iconAsBase64PNG(blueprint.header.icon)})`"
+            class="image"
+          />
           <div class="body">
             <h5 class="title" v-text="blueprint.header.name" />
             <p class="description">

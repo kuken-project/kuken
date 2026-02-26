@@ -25,7 +25,7 @@
                 class="serverListItem"
               >
                 <ProgressiveImage
-                  :src="resolveBlueprintSource(unit.instance.blueprint.header.assets.icon)"
+                  :src="iconAsBase64PNG(unit.instance.blueprint.header.icon)"
                   class="image"
                 />
                 <div class="body">
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { resolveBlueprintSource } from "@/modules/blueprints/api/models/blueprint.model.ts"
+import { iconAsBase64PNG } from "@/modules/blueprints/api/models/blueprint.model.ts"
 import VButton from "@/modules/platform/ui/components/button/VButton.vue"
 import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
 import VContainer from "@/modules/platform/ui/components/grid/VContainer.vue"

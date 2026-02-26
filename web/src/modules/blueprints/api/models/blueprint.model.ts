@@ -9,11 +9,9 @@ export type BlueprintHeader = {
   version: string
   author: string
   url: string
-  assets: {
-    icon: string
-  }
+  icon: string
 }
 
-export function resolveBlueprintSource(source?: string): string {
-  return source ?? "https://avatars.githubusercontent.com/u/253088926"
+export function iconAsBase64PNG(icon: string): string {
+  return `data:image/png;base64,${icon}`
 }
