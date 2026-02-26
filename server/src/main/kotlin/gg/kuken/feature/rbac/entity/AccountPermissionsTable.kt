@@ -11,7 +11,6 @@ object AccountPermissionsTable : UUIDTable("account_permissions") {
     val permissionId = reference("permission_id", PermissionsTable, onDelete = ReferenceOption.CASCADE)
     val policy = enumerationByName<PermissionPolicy>("policy", 50).default(PermissionPolicy.AllowAll)
     val grantedAt = timestamp("granted_at")
-    val grantedBy = uuid("granted_by").references(AccountTable.id, onDelete = ReferenceOption.CASCADE)
     val expiresAt = timestamp("expires_at").nullable()
 
     init {

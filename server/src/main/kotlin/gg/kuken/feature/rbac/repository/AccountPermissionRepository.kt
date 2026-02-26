@@ -72,7 +72,6 @@ class AccountPermissionRepository(
     suspend fun grantDirectPermission(
         accountId: Uuid,
         permissionId: Uuid,
-        grantedBy: Uuid,
         policy: PermissionPolicy = PermissionPolicy.AllowAll,
         allowedResourceIds: List<UUID> = emptyList(),
         deniedResourceIds: List<UUID> = emptyList(),
@@ -88,7 +87,6 @@ class AccountPermissionRepository(
                 it[AccountPermissionsTable.permissionId] = permissionId.toJavaUuid()
                 it[AccountPermissionsTable.policy] = policy
                 it[grantedAt] = now
-                it[AccountPermissionsTable.grantedBy] = grantedBy.toJavaUuid()
                 it[AccountPermissionsTable.expiresAt] = expiresAt
             }
 
@@ -204,7 +202,6 @@ class AccountPermissionRepository(
             permissionId = this[AccountPermissionsTable.permissionId].value.toKotlinUuid(),
             policy = this[AccountPermissionsTable.policy],
             grantedAt = this[AccountPermissionsTable.grantedAt],
-            grantedBy = this[AccountPermissionsTable.grantedBy].toKotlinUuid(),
             expiresAt = this[AccountPermissionsTable.expiresAt],
         )
 

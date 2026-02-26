@@ -12,6 +12,5 @@ data class AccountPermission(
     val permissionId: Uuid,
     val policy: PermissionPolicy = PermissionPolicy.AllowAll,
     val grantedAt: Instant,
-    val grantedBy: Uuid,
     val expiresAt: Instant? = null,
 )
