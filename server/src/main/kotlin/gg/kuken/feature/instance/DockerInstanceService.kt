@@ -69,27 +69,10 @@ class DockerInstanceService(
             containerId = instance.containerId,
             updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
             address = HostPort(host = instance.host, port = instance.port!!),
-            runtime = null,
             blueprintId = instance.blueprintId.toKotlinUuid(),
             createdAt = instance.createdAt,
             nodeId = instance.nodeId,
-        )
-    }
-
-    override suspend fun getInstanceWithRuntime(instanceId: Uuid): Instance {
-        val instance = instanceRepository.findById(instanceId) ?: throw InstanceNotFoundException()
-        val runtime = instance.containerId?.let { id -> instanceRuntimeBuilder.tryBuildRuntime(id) }
-
-        return Instance(
-            id = instance.id.value.toKotlinUuid(),
-            status = instance.status.let(InstanceStatus::getByLabel),
-            containerId = instance.containerId,
-            updatePolicy = instance.updatePolicy.let(ImageUpdatePolicy::getById),
-            address = HostPort(host = instance.host, port = instance.port!!),
-            runtime = runtime,
-            blueprintId = instance.blueprintId.toKotlinUuid(),
-            createdAt = instance.createdAt,
-            nodeId = instance.nodeId,
+            blueprintOutdated = instance.blueprintOutdated,
         )
     }
 
@@ -289,14 +272,12 @@ class DockerInstanceService(
         blueprintLockRepository.save(instanceId, lock)
         logger.debug("Blueprint lock updated for instance {}", instanceId)
 
-        val runtime = newContainerId?.let { instanceRuntimeBuilder.tryBuildRuntime(it) }
         return Instance(
             id = instanceId,
             status = newStatus,
             containerId = newContainerId,
             updatePolicy = entity.updatePolicy.let(ImageUpdatePolicy::getById),
             address = address,
-            runtime = runtime,
             blueprintId = blueprintId,
             createdAt = entity.createdAt,
             nodeId = entity.nodeId,
@@ -500,7 +481,6 @@ class DockerInstanceService(
         containerId: String?,
         address: HostPort?,
     ): Instance {
-        val runtime = if (containerId == null) null else instanceRuntimeBuilder.buildRuntime(containerId)
         val instance =
             Instance(
                 id = instanceId,
@@ -508,7 +488,6 @@ class DockerInstanceService(
                 updatePolicy = ImageUpdatePolicy.Always,
                 containerId = containerId,
                 address = address,
-                runtime = runtime,
                 blueprintId = blueprintId,
                 createdAt = Clock.System.now(),
                 nodeId = kukenConfig.node,
