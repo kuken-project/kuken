@@ -122,6 +122,7 @@ class BlueprintPropertyResolver {
                 when (refT) {
                     ResolvedBlueprintRefs.INSTANCE_ID -> context.instanceId.toString()
                     ResolvedBlueprintRefs.INSTANCE_NAME -> context.instanceName
+                    ResolvedBlueprintRefs.INSTANCE_MEMORY -> "1024"
                     ResolvedBlueprintRefs.NETWORK_HOST -> context.address.host.toString()
                     ResolvedBlueprintRefs.NETWORK_PORT -> context.address.port.toString()
                 }

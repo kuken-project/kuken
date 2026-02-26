@@ -105,6 +105,7 @@ class DockerInstanceService(
                     when (key) {
                         ResolvedBlueprintRefs.INSTANCE_ID -> instanceId
                         ResolvedBlueprintRefs.INSTANCE_NAME -> generatedName
+                        ResolvedBlueprintRefs.INSTANCE_MEMORY -> "1024"
                         ResolvedBlueprintRefs.NETWORK_HOST -> options.address.host
                         ResolvedBlueprintRefs.NETWORK_PORT -> options.address.port.toString()
                     }
@@ -189,6 +190,7 @@ class DockerInstanceService(
                     when (key) {
                         ResolvedBlueprintRefs.INSTANCE_ID -> instanceId
                         ResolvedBlueprintRefs.INSTANCE_NAME -> generatedName
+                        ResolvedBlueprintRefs.INSTANCE_MEMORY -> "1024"
                         ResolvedBlueprintRefs.NETWORK_HOST -> address.host
                         ResolvedBlueprintRefs.NETWORK_PORT -> address.port.toString()
                     }
