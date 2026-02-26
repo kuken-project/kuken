@@ -155,7 +155,7 @@ class BlueprintConverter : AutoCloseable {
 
     public fun extractResources(module: PModule): List<AppResource> =
         module
-            .getPropertyOrNull("resources")
+            .get("resources")
             ?.let { resources ->
                 @Suppress("UNCHECKED_CAST")
                 val list = resources as List<PObject>
