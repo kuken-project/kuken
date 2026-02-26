@@ -9,6 +9,7 @@ fun PModule.toBlueprintHeader() =
         name = getProperty("name") as String,
         version = getProperty("version") as String,
         url = getProperty("url") as String,
+        author = getProperty("author") as String,
     )
 
 inline operator fun <reified T> Composite.get(path: String): T {

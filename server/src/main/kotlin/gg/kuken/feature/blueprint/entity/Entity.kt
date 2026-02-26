@@ -5,6 +5,8 @@ import gg.kuken.feature.blueprint.model.BlueprintStatus
 import gg.kuken.feature.blueprint.repository.BlueprintRepository
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.statements.api.ExposedBlob
 import org.jetbrains.exposed.v1.dao.UUIDEntity
 import org.jetbrains.exposed.v1.dao.UUIDEntityClass
 import org.jetbrains.exposed.v1.datetime.timestamp
@@ -21,6 +23,8 @@ object BlueprintTable : UUIDTable("blueprints") {
     val name = varchar("name", 255)
     val version = varchar("version", 255)
     val url = varchar("url", 255)
+    val author = varchar("author", 255).default("")
+    val icon = blob("icon").nullable()
     val origin = varchar("origin", 255)
     val createdAt = timestamp("created_at")
     val status = enumeration<BlueprintStatus>("status")
@@ -34,6 +38,8 @@ class BlueprintEntity(
     var name: String by BlueprintTable.name
     var version: String by BlueprintTable.version
     var url: String by BlueprintTable.url
+    var author: String by BlueprintTable.author
+    var icon by BlueprintTable.icon
     var origin: String by BlueprintTable.origin
     var createdAt: Instant by BlueprintTable.createdAt
     var status: BlueprintStatus by BlueprintTable.status

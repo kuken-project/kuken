@@ -7,4 +7,6 @@ data class BlueprintHeader(
     val name: String,
     val version: String,
     val url: String,
+    val author: String,
+    val icon: String? = null,
 )
