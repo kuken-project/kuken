@@ -25,7 +25,7 @@ object InstanceTable : UUIDTable("instances") {
     val port = ushort("port").nullable()
     val status = varchar("status", length = 255)
     val createdAt = timestamp("created_at")
-    val nodeId = varchar("node", length = 255)
+    val nodeId = varchar("node", length = 255).index()
     val blueprintOutdated = bool("blueprint_outdated").default(false)
 }
 
