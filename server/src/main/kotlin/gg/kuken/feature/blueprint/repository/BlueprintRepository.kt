@@ -11,13 +11,22 @@ interface BlueprintRepository {
 
     suspend fun find(id: Uuid): BlueprintEntity?
 
+    suspend fun findByOrigin(origin: String): BlueprintEntity?
+
     suspend fun create(
         id: Uuid,
         origin: String,
         createdAt: Instant,
         status: BlueprintStatus,
         header: BlueprintHeader,
+        icon: ByteArray? = null,
     ): BlueprintEntity
+
+    suspend fun update(
+        id: Uuid,
+        header: BlueprintHeader,
+        icon: ByteArray? = null,
+    ): BlueprintEntity?
 
     suspend fun delete(id: Uuid)
 }

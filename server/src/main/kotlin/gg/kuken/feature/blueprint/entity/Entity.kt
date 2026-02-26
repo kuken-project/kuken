@@ -65,21 +65,48 @@ class BlueprintRepositoryImpl(
             BlueprintEntity.findById(id.toJavaUuid())
         }
 
+    override suspend fun findByOrigin(origin: String): BlueprintEntity? =
+        suspendTransaction(db = database) {
+            BlueprintEntity
+                .find { BlueprintTable.origin eq origin }
+                .firstOrNull()
+        }
+
     override suspend fun create(
         id: Uuid,
         origin: String,
         createdAt: Instant,
         status: BlueprintStatus,
         header: BlueprintHeader,
+        icon: ByteArray?,
     ): BlueprintEntity =
         suspendTransaction(db = database) {
             BlueprintEntity.new(id.toJavaUuid()) {
                 this.name = header.name
                 this.url = header.url
                 this.version = header.version
+                this.author = header.author
+                this.icon = icon?.let { ExposedBlob(it) }
                 this.origin = origin
                 this.createdAt = createdAt
                 this.status = status
+            }
+        }
+
+    override suspend fun update(
+        id: Uuid,
+        header: BlueprintHeader,
+        icon: ByteArray?,
+    ): BlueprintEntity? =
+        suspendTransaction(db = database) {
+            BlueprintEntity.findById(id.toJavaUuid())?.apply {
+                this.name = header.name
+                this.version = header.version
+                this.url = header.url
+                this.author = header.author
+                if (icon != null) {
+                    this.icon = ExposedBlob(icon)
+                }
             }
         }
 
