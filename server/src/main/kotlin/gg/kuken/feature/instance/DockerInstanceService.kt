@@ -283,6 +283,7 @@ class DockerInstanceService(
         instanceRepository.update(instanceId) {
             this.status = newStatus.label
             this.containerId = newContainerId
+            this.blueprintOutdated = false
         }
 
         blueprintLockRepository.save(instanceId, lock)
@@ -299,6 +300,7 @@ class DockerInstanceService(
             blueprintId = blueprintId,
             createdAt = entity.createdAt,
             nodeId = entity.nodeId,
+            blueprintOutdated = false,
         )
     }
 

@@ -16,6 +16,7 @@ class Instance(
     val blueprintId: Uuid,
     val createdAt: Instant,
     val nodeId: String,
+    val blueprintOutdated: Boolean = false,
 )
 
 val Instance.containerIdOrThrow: String

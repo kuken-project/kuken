@@ -17,4 +17,6 @@ interface InstanceRepository {
         id: Uuid,
         update: InstanceEntity.() -> Unit,
     ): InstanceEntity?
+
+    suspend fun markOutdatedByBlueprintId(blueprintId: Uuid)
 }

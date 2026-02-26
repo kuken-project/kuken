@@ -26,6 +26,7 @@ object InstanceTable : UUIDTable("instances") {
     val status = varchar("status", length = 255)
     val createdAt = timestamp("created_at")
     val nodeId = varchar("node", length = 255)
+    val blueprintOutdated = bool("blueprint_outdated").default(false)
 }
 
 class InstanceEntity(
@@ -41,6 +42,7 @@ class InstanceEntity(
     var status by InstanceTable.status
     var createdAt by InstanceTable.createdAt
     var nodeId by InstanceTable.nodeId
+    var blueprintOutdated by InstanceTable.blueprintOutdated
 }
 
 class InstanceRepositoryImpl(
@@ -94,4 +96,12 @@ class InstanceRepositoryImpl(
         suspendTransaction(db = database) {
             InstanceEntity.findById(id.toJavaUuid())?.apply(update)
         }
+
+    override suspend fun markOutdatedByBlueprintId(blueprintId: Uuid) {
+        suspendTransaction(db = database) {
+            InstanceEntity
+                .find { InstanceTable.blueprintId eq blueprintId.toJavaUuid() }
+                .forEach { it.blueprintOutdated = true }
+        }
+    }
 }
