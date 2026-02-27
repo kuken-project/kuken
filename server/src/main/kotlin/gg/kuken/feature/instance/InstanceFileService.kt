@@ -14,11 +14,11 @@ class InstanceFileService(
     val config: KukenConfig,
 ) {
     suspend fun fileSystemOf(instanceId: Uuid): FileSystem {
-        val containerId = instanceService.getInstanceContainerId(instanceId)
-
         // FIXME val isRunning = dockerClient.containers.inspect(containerId).state.isRunning
         // FIXME isRunning
         return if (false) {
+            val containerId = instanceService.getInstanceContainerId(instanceId)
+
             InProcessDockerContainerFileSystem(containerId, dockerClient)
         } else {
             HostDockerContainerFileSystem(instanceId, dockerClient, config)
