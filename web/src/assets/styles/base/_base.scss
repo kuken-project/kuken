@@ -8,16 +8,18 @@
 }
 
 body[color-scheme="dark"] {
-  --kt-background-body: #252526;
-  --kt-background-surface: #1e1e1e;
+  --kt-background-body: #111114;
+  --kt-background-surface: #0a0a0c;
   --kt-background-surface-overlay: rgba(0, 0, 0, 0.1);
-  --kt-background-surface-hover: #161616;
-  --kt-background-surface-high: #2d2d30;
-  --kt-content-neutral: #b3b3b3;
-  --kt-content-neutral-low: #808080;
-  --kt-content-neutral-high: #fff;
-  --kt-border-medium: rgba(255, 255, 255, 0.14);
-  --kt-border-low: rgba(255, 255, 255, 0.08);
+  --kt-background-surface-hover: #18181d;
+  --kt-background-surface-high: #222228;
+  --kt-background-primary: #0a0a0c;
+  --kt-content-neutral: #9a9ab0;
+  --kt-content-neutral-low: #5e5e74;
+  --kt-content-neutral-high: #eaeaee;
+  --kt-content-primary: #E56832;
+  --kt-border-medium: #1d1d25;
+  --kt-border-low: #2a2a33;
 }
 
 hr {
