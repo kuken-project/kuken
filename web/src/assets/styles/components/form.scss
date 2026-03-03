@@ -10,11 +10,12 @@
   width: 100%;
   border-radius: 8px;
   letter-spacing: 0.25px;
-  background-color: var(--kt-background-surface-high);
+  border: 1.5px solid var(--kt-border-medium);
+  background-color: transparent;
   color: var(--kt-content-neutral-high);
 
-  &:hover {
-    border-color: var(--kt-content-neutral-low);
+  &:hover, &:focus {
+    border-color: var(--kt-border-low);
   }
 
   &[readonly] {
@@ -30,7 +31,7 @@
   }
 
   &::placeholder {
-    opacity: 0.54;
+    color: var(--kt-content-neutral-low);
     font-weight: 400;
     font-family: var(--kt-body-font), sans-serif;
   }
