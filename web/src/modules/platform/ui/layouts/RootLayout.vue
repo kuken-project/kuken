@@ -24,7 +24,7 @@ import TheHeader from "@/modules/platform/ui/components/TheHeader.vue"
   flex-grow: 1;
   flex-direction: column;
   overflow-y: hidden;
-  background-color: #d85f34;
+  background-color: var(--kt-background-primary);
   height: 100%;
 }
 
