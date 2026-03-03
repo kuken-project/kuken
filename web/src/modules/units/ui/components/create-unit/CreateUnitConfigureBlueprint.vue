@@ -17,7 +17,10 @@ import VLabel from "@/modules/platform/ui/components/form/VLabel.vue"
 import VCol from "@/modules/platform/ui/components/grid/VCol.vue"
 import Resource from "@/modules/platform/ui/components/Resource.vue"
 import { isUndefined } from "@/utils"
+import { useI18n } from "petite-vue-i18n"
 import { ref } from "vue"
+
+const { t } = useI18n()
 
 const props = defineProps<{ blueprintId: string }>()
 const resolution = ref<ResolveBlueprintResponse>()
@@ -42,22 +45,23 @@ function onSpecLoaded(result: ResolveBlueprintResponse) {
     @loaded="onSpecLoaded"
   >
     <template v-if="resolution">
-      <div class="content">
-        <VCol :size="8">
-          <VFieldSet>
-            <VLabel>Server host</VLabel>
-            <VInput v-model="model['network.host']" autofocus type="text" placeholder="0.0.0.0" />
-          </VFieldSet>
-        </VCol>
-        <VCol :size="4">
-          <VFieldSet>
-            <VLabel>Server port</VLabel>
-            <VInput v-model="model['network.port']" required="true" type="number" />
-          </VFieldSet>
-        </VCol>
-      </div>
-      <section>
-        <VCard class="inputs">
+      <div :class="$style.configure">
+        <div :class="$style.network">
+          <VCol :size="8">
+            <VFieldSet>
+              <VLabel>{{ t("units.create.configure.host") }}</VLabel>
+              <VInput v-model="model['network.host']" autofocus type="text" placeholder="0.0.0.0" />
+            </VFieldSet>
+          </VCol>
+          <VCol :size="4">
+            <VFieldSet>
+              <VLabel>{{ t("units.create.configure.port") }}</VLabel>
+              <VInput v-model="model['network.port']" required="true" type="number" />
+            </VFieldSet>
+          </VCol>
+        </div>
+
+        <VCard v-if="resolution.inputs && resolution.inputs.length > 0" :class="$style.inputs">
           <template v-for="input in resolution.inputs" :key="input.name">
             <BlueprintInputText
               v-if="input.type == 'text'"
@@ -99,34 +103,26 @@ function onSpecLoaded(result: ResolveBlueprintResponse) {
             />
           </template>
         </VCard>
-        <!--                <p class="description">Startup command</p>-->
-        <!--                <BlueprintPropertyInterpolated-->
-        <!--                    :input-values="model"-->
-        <!--                    :property="startup!"-->
-        <!--                    @update:property="(prop) => (startup = prop)"-->
-        <!--                    @removed:property=""-->
-        <!--                />-->
-      </section>
+      </div>
     </template>
   </Resource>
 </template>
 
-<style lang="scss" scoped>
-.description {
-  color: var(--kt-content-neutral);
-  margin-bottom: 0.4rem;
+<style module lang="scss">
+.configure {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
 }
 
-.card.startup {
-  margin-top: 0.8rem;
-  padding: 0;
+.network {
+  display: flex;
+  flex-direction: row;
 }
 
-.content:first-of-type {
-  margin-bottom: 2rem;
-}
-
-fieldset:not(:last-child) {
-  margin-bottom: 3.2rem;
+.inputs {
+  :deep(fieldset:not(:last-child)) {
+    margin-bottom: 3.2rem;
+  }
 }
 </style>

@@ -20,16 +20,17 @@
 </template>
 <script setup lang="ts">
 import VCard from "@/modules/platform/ui/components/card/VCard.vue"
-import { ref } from "vue"
 
-const props = defineProps<{
+defineProps<{
   selected: boolean
-  disabled: boolean
+  disabled?: boolean
 }>()
 
-const selected = ref<boolean>(props.selected)
+const emit = defineEmits<{
+  select: []
+}>()
 
 function onSelect(): void {
-  selected.value = !selected.value
+  emit("select")
 }
 </script>
